@@ -1,0 +1,32 @@
+.header-nav {
+    background-color: #343a40; /* Темно-серый цвет фона */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Тень для добавления глубины */
+}
+
+.navbar-brand-logo {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Шрифт для логотипа */
+    font-weight: bold;
+    color: #fff; /* Белый цвет текста */
+    font-size: 1.5rem; /* Размер шрифта */
+}
+
+.nav-link {
+    margin-right: 15px; /* Отступ справа для ссылок */
+    font-size: 1.1rem; /* Размер шрифта ссылок */
+    color: #f8f9fa !important; /* Цвет ссылок */
+}
+
+.nav-link:hover {
+    color: #adb5bd !important; /* Цвет ссылок при наведении */
+}
+
+.button {
+    padding: 0.375rem 0.75rem; /* Отступы внутри кнопки */
+    border: 1px solid #f8f9fa; /* Граница кнопки */
+    color: #f8f9fa; /* Цвет текста кнопки */
+}
+
+.button:hover {
+    background-color: #dc3545; /* Цвет фона кнопки при наведении */
+    color: #fff; /* Цвет текста кнопки при наведении */
+}
