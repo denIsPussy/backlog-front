@@ -22,7 +22,7 @@ const fetchApi = async (url, method, data, token) => {
     }
 
     const response = await fetch(`${API_BASE_URL}${url}`, config);
-    //console.log(response);
+    console.log(`${API_BASE_URL}${url}`);
 
     let responseData = await response.json();
 
