@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button, Container, Spinner } from 'react-bootstrap';
 import * as APIService from '../Utils/APIService';
 import { useNavigate } from 'react-router-dom';
+import * as VKID from '@vkid/sdk';
 import "./style.css"
 
 const LoginPage = () => {
@@ -9,6 +10,18 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false); // Состояние для индикатора загрузки
     const navigate = useNavigate();
+
+    VKID.Config.set({
+        app: 51934140, // Идентификатор приложения.
+        redirectUrl: "https://backlogshop.ru/two-factor-auth", // Адрес для перехода после авторизации.
+        state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
+    });
+
+    const oneTap = new VKID.OneTap();
+    const container = document.getElementById('VkIdSdkOneTap');
+    if (container) {
+        oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
+    }
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -31,8 +44,8 @@ const LoginPage = () => {
 
     return (
         <div className="login-page">
-            <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
-                <div className="w-100" style={{ maxWidth: "400px" }}>
+            <Container className="d-flex align-items-center justify-content-center" style={{minHeight: "100vh"}}>
+                <div className="w-100" style={{maxWidth: "400px"}}>
                     <Form onSubmit={handleLogin} className="p-4 shadow-lg rounded">
                         <h2 className="text-center mb-4">Авторизация</h2>
                         <Form.Group controlId="formUsername" className="mb-3">
@@ -56,11 +69,13 @@ const LoginPage = () => {
                             />
                         </Form.Group>
                         <Button variant="primary" type="submit" className="w-100" disabled={loading}>
-                            {loading ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : "Войти"}
+                            {loading ? <Spinner as="span" animation="border" size="sm" role="status"
+                                                aria-hidden="true"/> : "Войти"}
                         </Button>
                     </Form>
                 </div>
             </Container>
+            <div id="VkIdSdkOneTap"></div>
         </div>
     );
 };
