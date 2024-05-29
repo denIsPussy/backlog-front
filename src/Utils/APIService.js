@@ -1,5 +1,5 @@
 // const API_BASE_URL = 'https://denispussy-backlog-back-0907.twc1.net'; // Обнови этот URL в соответствии с твоим серверным адресом
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = 'http://backlogshop:8080';
 const fetchApi = async (url, method, data, token) => {
     const headers = new Headers({
         'Content-Type': 'application/json',
