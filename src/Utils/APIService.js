@@ -21,8 +21,9 @@ const fetchApi = async (url, method, data, token) => {
         delete config.body; // Удаляем тело запроса для GET запросов
     }
 
+    let url1 = `${API_BASE_URL}${url}`;
+    console.log("Отправка запроса на:", url1);  // Вывод URL в консоль
     const response = await fetch(`${API_BASE_URL}${url}`, config);
-    console.log(`${API_BASE_URL}${url}`);
 
     let responseData = await response.json();
 
