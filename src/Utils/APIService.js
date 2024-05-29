@@ -40,7 +40,7 @@
 // const getShoppingCart = () => fetchApi('/user/getShopCart', 'GET', null, true);
 //
 // export { register, authenticate, verifyTwoFactorCode, getAllProducts, getShoppingCart };
-const API_BASE_URL = "http://api.backlogshop.ru";
+const API_BASE_URL = "https://api.backlogshop.ru";
 
 const fetchWithToken = async (url, method, data = null, tokenRequired = false) => {
     const headers = new Headers({
