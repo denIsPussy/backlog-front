@@ -32,10 +32,10 @@ const fetchApi = async (url, method, data, token) => {
     return responseData;
 };
 
-const register = (userData) => fetchApi('/register', 'POST', userData, null);
-const authenticate = (loginData) => fetchApi('/authenticate', 'POST', loginData, null);
-const verifyTwoFactorCode = (twoFactorData) => fetchApi('/verifyTwoFactorCode', 'POST', twoFactorData, null);
-const getAllProducts = () => fetchApi('/products/', 'GET', null, true);
+const register = (userData) => fetchApi('/register', 'POST', userData, false);
+const authenticate = (loginData) => fetchApi('/authenticate', 'POST', loginData, false);
+const verifyTwoFactorCode = (twoFactorData) => fetchApi('/verifyTwoFactorCode', 'POST', twoFactorData, false);
+const getAllProducts = () => fetchApi('/products/', 'GET', null, false);
 const getShoppingCart = () => fetchApi('/user/getShopCart', 'GET', null, true);
 
 export { register, authenticate, verifyTwoFactorCode, getAllProducts, getShoppingCart };
