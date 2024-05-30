@@ -93,7 +93,7 @@ const getShoppingCart = () => {
 };
 
 const exchangeToken = (data) => {
-    return fetchWithToken('/exchange-token', 'POST', data, false);
+    return fetchWithToken('/exchangeSilentAuthToken', 'POST', data, false);
 };
 
 export { register, authenticate, verifyTwoFactorCode, getAllProducts, getShoppingCart, exchangeToken };
