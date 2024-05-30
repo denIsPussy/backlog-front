@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { getShoppingCart } from '../Utils/APIService';
 import CartItem from './CartItem';
-import {Container, Row, Col, Button, Card, Image} from 'react-bootstrap';
+import { Container, Row, Col, Button, Card, Image } from 'react-bootstrap';
 import '../css/shoppingCart.css';
 
 const ShoppingCart = ({ username }) => {
@@ -27,54 +27,42 @@ const ShoppingCart = ({ username }) => {
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
+    if (!cart || cart.cartItems.length === 0) return <p>Корзина пуста.</p>;
+
     const product = cart.cartItems[0].product;
     return (
-        <Container className="shadow-sm rounded-4 shopping-cart" style={{backgroundColor: '#FFFFFF', border: '0px solid #007bff'}}>
-            <Row className="px-3 py-3">
-                <Col md={2} sm={12} style={{display: 'flex', alignItems: "center", border: '0px solid #e09a53'}}>
-                    <Image src={`data:image/jpeg;base64,${product.image}`}
-                           style={{maxWidth: "100%", maxHeight: "120px", objectFit: "contain", flexShrink: 0, flexGrow: 0}} alt="BigCo Inc. logo"   />
-                </Col>
-                <Col md={10} sm={0} style={{border: '0px solid #a63539'}}>
-                    <Row>
-                        <div className="fs-3 text-nowrap">
-                            {product.name}
-                        </div>
-                    </Row>
-                    <Row>
-                        <div className="fs-6">
-                            {product.price}
-                        </div>
-                    </Row>
-                    <Row>
-                        <div className="">
-                            <Button className="btn-primary" onClick={() => setLoading(false)}></Button>
-                        </div>
-                    </Row>
-                    <Row className="justify-content-end">
-                        <Col className="px-4 py-3" xs="auto">
-                            <Button className="btn-danger" onClick={() => setLoading(false)}>Удалить</Button>
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>
+        <Container className="shadow-sm rounded-4 shopping-cart" style={{ backgroundColor: '#FFFFFF', border: '0px solid #007bff' }}>
+            {cart.cartItems.map((item, index) => (
+                <Row key={index} className="px-3 py-3">
+                    <Col md={2} sm={12} style={{ display: 'flex', alignItems: "center", border: '0px solid #e09a53' }}>
+                        <Image src={`data:image/jpeg;base64,${item.product.image}`}
+                               style={{ maxWidth: "100%", maxHeight: "120px", objectFit: "contain", flexShrink: 0, flexGrow: 0 }} alt="Product" />
+                    </Col>
+                    <Col md={10} sm={0} style={{ border: '0px solid #a63539' }}>
+                        <Row>
+                            <div className="fs-3 text-nowrap">
+                                {item.product.name}
+                            </div>
+                        </Row>
+                        <Row>
+                            <div className="fs-6">
+                                {item.product.price}
+                            </div>
+                        </Row>
+                        <Row>
+                            <div className="">
+                                <Button className="btn-primary" onClick={() => setLoading(false)}>Изменить количество</Button>
+                            </div>
+                        </Row>
+                        <Row className="justify-content-end">
+                            <Col className="px-4 py-3" xs="auto">
+                                <Button className="btn-danger" onClick={() => setLoading(false)}>Удалить</Button>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+            ))}
         </Container>
-    // <Container className="shopping-cart mt-5">
-        //     <Row className="justify-content-center">
-        //         <Col xs={12} md={8}>
-        //             <h2 className="text-center mb-4">Shopping Cart</h2>
-        //             {cart.cartItems.length === 0 ? (
-        //                 <p className="text-center">Your cart is empty.</p>
-        //             ) : (
-        //                 <div>
-        //                     {cart.cartItems.map(item => (
-        //                         <CartItem key={item.id} item={item} />
-        //                     ))}
-        //                 </div>
-        //             )}
-        //         </Col>
-        //     </Row>
-        // </Container>
     );
 };
 
