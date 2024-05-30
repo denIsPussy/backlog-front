@@ -8,7 +8,7 @@ import TwoFactorAuthPage from './Pages/TwoFactorAuthPage';
 import './transitions.css';
 import Catalog from "./Pages/Catalog";
 import CartPage from "./Pages/CartPage";
-import VkAuthPage from "./Pages/VKAuthPage";
+import VkAuthPage from "./Pages/VkAuthPage";
 
 const AnimatedRoutes = () => {
     const location = useLocation(); // Получаем текущее местоположение для ключа анимации

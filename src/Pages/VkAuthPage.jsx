@@ -4,7 +4,7 @@ import * as APIService from '../Utils/APIService';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Footer from "../Components/Footer";
 
-const VKAuth = () => {
+const VkAuthPage = () => {
     const [formData, setFormData] = useState({
         vkId: '',
         lastName: '',
@@ -115,4 +115,4 @@ const VKAuth = () => {
     );
 };
 
-export default VKAuth;
+export default VkAuthPage;
