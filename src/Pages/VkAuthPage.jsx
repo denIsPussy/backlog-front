@@ -52,14 +52,14 @@ const VkAuthPage = () => {
                 setIsLoading(false); // Выключаем индикатор загрузки
                 try {
                     const payload = JSON.parse(payloadDecoded);
-                    const token = payload.token;
+                    const silentToken = payload.token;
                     const type = payload.type;
                     const uuid = payload.uuid;
                     console.log('Token:', payload.token);
                     console.log('Type:', payload.type);
                     console.log('UUID:', payload.uuid);
                     setIsLoading(true); // Включаем индикатор загрузки
-                    const response = await APIService.exchangeToken({ token, type, uuid });
+                    const response = await APIService.exchangeToken({ silentToken, type, uuid });
                     if (response.vkId == -1){
                         localStorage.setItem('username', response.firstName);
                         navigate("/")
