@@ -26,9 +26,10 @@ const VKAuth = () => {
         event.preventDefault();
         setIsLoading(true); // Включаем индикатор загрузки
         try {
-            const response = await APIService.registerVk(formData);
+            await APIService.registerVk(formData);
             const response2 = await APIService.authenticate({ username: formData.username, password: formData.password });
-            localStorage.setItem('token', response.jwt);
+            localStorage.setItem('token', response2.jwt);
+            localStorage.setItem('username', formData.username);
             navigate('/');
             setIsLoading(false); // Выключаем индикатор загрузки
         } catch (error) {
@@ -51,7 +52,7 @@ const VKAuth = () => {
             } else {
                 try {
                     const response = await APIService.exchangeToken({ token, type, uuid });
-                    setFormData(prev => ({ ...prev, lastName: response.lastName, firstName: response.firstName }));
+                    setFormData(prev => ({ ...prev, lastName: response.lastName, firstName: response.firstName, vkId: response.vkId}));
                     setIsLoading(false); // Выключаем индикатор загрузки
                 } catch (error) {
                     console.error('Ошибка при обмене токена:', error);
