@@ -70,6 +70,7 @@ const VkAuthPage = () => {
                     console.log('firstName:', response.firstName);
                     console.log('vkId:', response.vkId);
                     console.log('formdata:', formData);
+                    setIsLoading(false); // Выключаем индикатор загрузки
                 } catch (error) {
                     console.error('Ошибка при обмене токена:', error);
                     setIsLoading(false); // Выключаем индикатор загрузки
