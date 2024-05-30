@@ -39,6 +39,7 @@ const VkAuthPage = () => {
     };
 
     useEffect(() => {
+        console.log('Текущий URL:', window.location.href);
         const fetchData = async () => {
             setIsLoading(true); // Включаем индикатор загрузки
             const queryParams = new URLSearchParams(location.search);
