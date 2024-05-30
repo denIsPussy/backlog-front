@@ -26,7 +26,7 @@ const VKAuth = () => {
         event.preventDefault();
         setIsLoading(true); // Включаем индикатор загрузки
         try {
-            await APIService.registerVk(formData);
+            await APIService.register(formData);
             const response2 = await APIService.authenticate({ username: formData.username, password: formData.password });
             localStorage.setItem('token', response2.jwt);
             localStorage.setItem('username', formData.username);
