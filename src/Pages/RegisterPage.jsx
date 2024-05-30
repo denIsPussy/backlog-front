@@ -1,8 +1,8 @@
 // RegisterPage.jsx
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Form, Button, Container } from 'react-bootstrap';
 import * as APIService from '../Utils/APIService';
-import { useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import Footer from "../Components/Footer";
 
 const RegisterPage = () => {

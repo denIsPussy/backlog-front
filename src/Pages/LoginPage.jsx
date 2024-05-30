@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Form, Button, Container, Spinner } from 'react-bootstrap';
 import * as APIService from '../Utils/APIService';
-import { useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import * as VKID from '@vkid/sdk';
 import "./style.css"
 
@@ -68,14 +68,14 @@ const LoginPage = () => {
                                 required
                             />
                         </Form.Group>
-                        <Button variant="primary" type="submit" className="w-100" disabled={loading}>
+                        <Button variant="primary" type="submit" className="w-100 mb-3" disabled={loading}>
                             {loading ? <Spinner as="span" animation="border" size="sm" role="status"
                                                 aria-hidden="true"/> : "Войти"}
                         </Button>
+                        <div className="w-100" id="VkIdSdkOneTap"></div>
                     </Form>
                 </div>
             </Container>
-            <div id="VkIdSdkOneTap"></div>
         </div>
     );
 };

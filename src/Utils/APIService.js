@@ -92,4 +92,8 @@ const getShoppingCart = () => {
     return fetchWithToken('/user/getShopCart', 'GET', null, true);
 };
 
-export { register, authenticate, verifyTwoFactorCode, getAllProducts, getShoppingCart };
+const exchangeToken = (data) => {
+    return fetchWithToken('/exchange-token', 'POST', data, false);
+};
+
+export { register, authenticate, verifyTwoFactorCode, getAllProducts, getShoppingCart, exchangeToken };
