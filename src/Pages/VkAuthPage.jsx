@@ -42,10 +42,16 @@ const VkAuthPage = () => {
         console.log('Текущий URL:', window.location.href);
         const fetchData = async () => {
             setIsLoading(true); // Включаем индикатор загрузки
-            const queryParams = new URLSearchParams(location.search);
+            console.log('Текущий URL:', window.location.href);
+            const url = new URL(window.location.href);
+            const queryParams = new URLSearchParams(url.search);
             const token = queryParams.get('token');
             const type = queryParams.get('type');
             const uuid = queryParams.get('uuid');
+
+            console.log('Token:', token);
+            console.log('Type:', type);
+            console.log('UUID:', uuid);
 
             if (!token || !type || !uuid) {
                 console.error('Один или несколько параметров отсутствуют');
