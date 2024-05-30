@@ -11,11 +11,19 @@ const LoginPage = () => {
     const [loading, setLoading] = useState(false); // Состояние для индикатора загрузки
     const navigate = useNavigate();
 
-    VKID.Config.set({
-        app: 51934140, // Идентификатор приложения.
-        redirectUrl: "https://backlogshop.ru/two-factor-auth", // Адрес для перехода после авторизации.
-        state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
-    });
+    useEffect(() => {
+        VKID.Config.set({
+            app: 51934140,
+            redirectUrl: "https://backlogshop.ru/vk-auth",
+            state: 'dj29fnsadjsd82...'
+        });
+
+        const oneTap = new VKID.OneTap();
+        const container = document.getElementById('VkIdSdkOneTap');
+        if (container) {
+            oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
+        }
+    }, []);
 
     const oneTap = new VKID.OneTap();
     const container = document.getElementById('VkIdSdkOneTap');
