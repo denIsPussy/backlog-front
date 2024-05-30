@@ -48,6 +48,7 @@ const VKAuth = () => {
 
             if (!token || !type || !uuid) {
                 console.error('Один или несколько параметров отсутствуют');
+                console.error(`Token: ${token}, Type: ${type}, UUID: ${uuid}`);
                 setIsLoading(false); // Выключаем индикатор загрузки
             } else {
                 try {
