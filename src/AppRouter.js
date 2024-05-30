@@ -31,7 +31,7 @@ const AnimatedRoutes = () => {
                     <Route path="/two-factor-auth" element={<TwoFactorAuthPage />} />
                     <Route path="/catalog" element={<Catalog />} />
                     <Route path="/cart" element={<CartPage />} />
-                    <Route path="/vk-auth" element={<VkAuthPage />} />
+                    <Route path="/vkAuth" element={<VkAuthPage />} />
                 </Routes>
             </div>
         </animated.div>
