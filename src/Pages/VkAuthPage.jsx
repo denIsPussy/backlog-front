@@ -61,6 +61,10 @@ const VkAuthPage = () => {
                     setIsLoading(true); // Включаем индикатор загрузки
                     const response = await APIService.exchangeToken({ token, type, uuid });
                     setFormData(prev => ({ ...prev, lastName: response.lastName, firstName: response.firstName, vkId: response.vkId}));
+                    console.log('lastName:', response.lastName);
+                    console.log('firstName:', response.firstName);
+                    console.log('vkId:', response.vkId);
+                    console.log('formdata:', formData);
                     setIsLoading(false); // Выключаем индикатор загрузки
                 } catch (error) {
                     console.error('Ошибка при обмене токена:', error);
