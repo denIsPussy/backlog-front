@@ -14,8 +14,8 @@ const LoginPage = () => {
     useEffect(() => {
         VKID.Config.set({
             app: 51934140,
-            redirectUrl: "https://backlogshop.ru/vk-auth",
-            state: 'dj29fnsadjsd82...'
+            redirectUrl: 'https://backlogshop.ru/vk-auth',
+            state: 'dj29fnsadjsd82'
         });
 
         const oneTap = new VKID.OneTap();
@@ -24,12 +24,6 @@ const LoginPage = () => {
             oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
         }
     }, []);
-
-    const oneTap = new VKID.OneTap();
-    const container = document.getElementById('VkIdSdkOneTap');
-    if (container) {
-        oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
-    }
 
     const handleLogin = async (event) => {
         event.preventDefault();
