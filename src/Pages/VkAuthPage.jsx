@@ -41,25 +41,24 @@ const VkAuthPage = () => {
     useEffect(() => {
         console.log('Текущий URL:', window.location.href);
         const fetchData = async () => {
-            setIsLoading(true); // Включаем индикатор загрузки
             console.log('Текущий URL:', window.location.href);
             const url = new URL(window.location.href);
-            const queryParams = new URLSearchParams(url.search);
-            console.log('Параметры в URL:', url.search);
-            const token = queryParams.get('token');
-            const type = queryParams.get('type');
-            const uuid = queryParams.get('uuid');
+            const payloadEncoded = url.searchParams.get('payload');
+            const state = url.searchParams.get('state');
 
-            console.log('Token:', token);
-            console.log('Type:', type);
-            console.log('UUID:', uuid);
-
-            if (!token || !type || !uuid) {
-                console.error('Один или несколько параметров отсутствуют');
-                console.error(`Token: ${token}, Type: ${type}, UUID: ${uuid}`);
+            if (payloadEncoded) {
+                const payloadDecoded = decodeURIComponent(payloadEncoded);
+                console.log('Декодированный payload:', payloadDecoded);
                 setIsLoading(false); // Выключаем индикатор загрузки
-            } else {
                 try {
+                    const payload = JSON.parse(payloadDecoded);
+                    const token = payload.token;
+                    const type = payload.type;
+                    const uuid = payload.uuid;
+                    console.log('Token:', payload.token);
+                    console.log('Type:', payload.type);
+                    console.log('UUID:', payload.uuid);
+                    setIsLoading(true); // Включаем индикатор загрузки
                     const response = await APIService.exchangeToken({ token, type, uuid });
                     setFormData(prev => ({ ...prev, lastName: response.lastName, firstName: response.firstName, vkId: response.vkId}));
                     setIsLoading(false); // Выключаем индикатор загрузки
@@ -67,6 +66,8 @@ const VkAuthPage = () => {
                     console.error('Ошибка при обмене токена:', error);
                     setIsLoading(false); // Выключаем индикатор загрузки
                 }
+            } else {
+                setIsLoading(false); // Выключаем индикатор загрузки
             }
         };
 

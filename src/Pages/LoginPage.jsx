@@ -14,8 +14,8 @@ const LoginPage = () => {
     useEffect(() => {
         VKID.Config.set({
             app: 51934140,
-            redirectUrl: 'https://backlogshop.ru',
-            state: 'dj29dfsagfsd23' //было dj29fnsadjsd82, стало dj29dfsagfsd23
+            redirectUrl: 'https://backlogshop.ru/vkAuth',
+            state: 'dj29fnsadjsd82' //было dj29fnsadjsd82, стало dj29dfsagfsd23
         });
 
         const oneTap = new VKID.OneTap();
