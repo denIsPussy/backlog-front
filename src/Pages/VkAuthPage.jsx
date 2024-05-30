@@ -8,6 +8,7 @@ const VkAuthPage = () => {
     const [formData, setFormData] = useState({
         vkId: '',
         lastName: '',
+        patronymic: '',
         username: '',
         password: '',
         email: '',
