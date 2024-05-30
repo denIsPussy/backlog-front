@@ -45,6 +45,7 @@ const VkAuthPage = () => {
             console.log('Текущий URL:', window.location.href);
             const url = new URL(window.location.href);
             const queryParams = new URLSearchParams(url.search);
+            console.log('Параметры в URL:', url.search);
             const token = queryParams.get('token');
             const type = queryParams.get('type');
             const uuid = queryParams.get('uuid');
