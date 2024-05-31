@@ -31,7 +31,7 @@ const LoginPage = () => {
         try {
             const response = await APIService.authenticate({ username, password });
             if (response.success && response.message.includes("2FA")) {
-                navigate('/two-factor-auth');
+                navigate(`/two-factor-auth/${username}`);
             } else {
                 localStorage.setItem('username', response.username);
                 localStorage.setItem('token', response.token);
