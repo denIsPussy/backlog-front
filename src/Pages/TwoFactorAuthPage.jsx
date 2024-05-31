@@ -13,8 +13,13 @@ const TwoFactorAuthPage = () => {
         try {
             const username = localStorage.getItem('username'); // Предполагается, что логин сохранён
             const response = await APIService.verifyTwoFactorCode({ username, code });
-            localStorage.setItem('token', response.jwt);
-            navigate('/');
+            if (response.success){
+                localStorage.setItem('token', response.token);
+                navigate('/');
+            }
+            else{
+                alert(response.message);
+            }
         } catch (error) {
             alert(error.message);
         }

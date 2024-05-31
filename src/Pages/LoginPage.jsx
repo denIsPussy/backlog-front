@@ -30,17 +30,17 @@ const LoginPage = () => {
         setLoading(true); // Активация индикатора загрузки
         try {
             const response = await APIService.authenticate({ username, password });
-            if (response.message != null && response.message.includes("2FA")) {
+            if (response.success && response.message.includes("2FA")) {
                 navigate('/two-factor-auth');
             } else {
-                localStorage.setItem('token', response.jwt);
+                localStorage.setItem('username', response.username);
+                localStorage.setItem('token', response.token);
                 navigate('/');
             }
-            localStorage.setItem('username', username);
         } catch (error) {
             alert(error.message);
         } finally {
-            setLoading(false); // Деактивация индикатора загрузки после получения ответа
+            setLoading(false);
         }
     };
 

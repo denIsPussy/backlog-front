@@ -26,7 +26,12 @@ const RegisterPage = () => {
         try {
             const response = await APIService.register(formData);
             alert(response.message); // Показываем сообщение об успешной регистрации
-            navigate('/login'); // Перенаправляем пользователя на страницу входа
+            if (response.success){
+                navigate('/login'); // Перенаправляем пользователя на страницу входа
+            }
+            else{
+                alert(response.message);
+            }
         } catch (error) {
             alert(error.message); // Показываем ошибку, если что-то пошло не так
         }

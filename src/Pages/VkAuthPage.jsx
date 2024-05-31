@@ -28,10 +28,15 @@ const VkAuthPage = () => {
         setIsLoading(true); // Включаем индикатор загрузки
         try {
             await APIService.register(formData);
-            const response2 = await APIService.authenticate({ username: formData.username, password: formData.password });
-            localStorage.setItem('token', response2.jwt);
-            localStorage.setItem('username', formData.username);
-            navigate('/');
+            const response = await APIService.authenticate({ username: formData.username, password: formData.password });
+            if (response.success) {
+                localStorage.setItem('token', response.token);
+                localStorage.setItem('username', response.username);
+                navigate('/');
+            }
+            else{
+                alert(response.message);
+            }
             setIsLoading(false); // Выключаем индикатор загрузки
         } catch (error) {
             alert(error.message);
@@ -61,17 +66,17 @@ const VkAuthPage = () => {
                     console.log('UUID:', payload.uuid);
                     setIsLoading(true); // Включаем индикатор загрузки
                     const response = await APIService.exchangeToken({ silentToken, type, uuid });
-                    if (response.vkId == -1){
-                        localStorage.setItem('username', response.firstName);
-                        navigate("/")
-                        setIsLoading(false); // Выключаем индикатор загрузки
+                    if ('username' in response && response.success) {
+                        localStorage.setItem('username', response.username);
+                        localStorage.setItem('token', response.token);
+                        navigate("/");
                     }
+                    setIsLoading(false);
                     setFormData(prev => ({ ...prev, lastName: response.lastName, firstName: response.firstName, vkId: response.vkId}));
                     console.log('lastName:', response.lastName);
                     console.log('firstName:', response.firstName);
                     console.log('vkId:', response.vkId);
                     console.log('formdata:', formData);
-                    setIsLoading(false); // Выключаем индикатор загрузки
                 } catch (error) {
                     console.error('Ошибка при обмене токена:', error);
                     setIsLoading(false); // Выключаем индикатор загрузки
