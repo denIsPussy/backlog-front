@@ -2,19 +2,20 @@
 import React, { useState } from 'react';
 import { Form, Button, Container } from 'react-bootstrap';
 import * as APIService from '../Utils/APIService';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 
 const TwoFactorAuthPage = () => {
     const [code, setCode] = useState('');
     const navigate = useNavigate();
+    const { username } = useParams();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const username = localStorage.getItem('username'); // Предполагается, что логин сохранён
             const response = await APIService.verifyTwoFactorCode({ username, code });
             if (response.success){
                 localStorage.setItem('token', response.token);
+                localStorage.setItem('username', username);
                 navigate('/');
             }
             else{
