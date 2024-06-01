@@ -40,13 +40,12 @@
 // const getShoppingCart = () => fetchApi('/user/getShopCart', 'GET', null, true);
 //
 // export { register, authenticate, verifyTwoFactorCode, getAllProducts, getShoppingCart };
-const API_BASE_URL = "https://api.backlogshop.ru";
+const API_BASE_URL = process.env.REACT_APP_BASE_API_URL;
 
 const fetchWithToken = async (url, method, data = null, tokenRequired = false) => {
     const headers = new Headers({
         'Content-Type': 'application/json',
     });
-
     if (tokenRequired) {
         const token = localStorage.getItem('token');
         if (token) {
@@ -62,6 +61,8 @@ const fetchWithToken = async (url, method, data = null, tokenRequired = false) =
     if (data !== null) {
         config.body = JSON.stringify(data);
     }
+
+    console.log(API_BASE_URL);
     const fullUrl = `${API_BASE_URL}${url}`;
     console.log("Отправка запроса на:", fullUrl);  // Вывод URL в консоль
     const response = await fetch(fullUrl, config);
