@@ -11,19 +11,19 @@ const LoginPage = () => {
     const [loading, setLoading] = useState(false); // Состояние для индикатора загрузки
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     VKID.Config.set({
-    //         app: 51934140,
-    //         redirectUrl: 'https://backlogshop.ru/vkAuth',
-    //         state: 'dj29fnsadjsd82' //было dj29fnsadjsd82, стало dj29dfsagfsd23
-    //     });
-    //
-    //     const oneTap = new VKID.OneTap();
-    //     const container = document.getElementById('VkIdSdkOneTap');
-    //     if (container) {
-    //         oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
-    //     }
-    // }, []);
+    useEffect(() => {
+        VKID.Config.set({
+            app: 51934140,
+            redirectUrl: 'https://backlogshop.ru/vkAuth',
+            state: 'dj29fnsadjsd82' //было dj29fnsadjsd82, стало dj29dfsagfsd23
+        });
+
+        const oneTap = new VKID.OneTap();
+        const container = document.getElementById('VkIdSdkOneTap');
+        if (container) {
+            oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
+        }
+    }, []);
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -74,7 +74,7 @@ const LoginPage = () => {
                             {loading ? <Spinner as="span" animation="border" size="sm" role="status"
                                         aria-hidden="true"/> : "Войти"}
                         </Button>
-                        {/*<div className="w-100" id="VkIdSdkOneTap"></div>*/}
+                        <div className="w-100" id="VkIdSdkOneTap"></div>
                     </Form>
                 </div>
             </Container>
