@@ -50,9 +50,10 @@ const ShoppingCart = ({ username }) => {
                             </div>
                         </Row>
                         <Row>
-                            <div className="">
-                                <Button className="btn-primary" onClick={() => setLoading(false)}>Изменить количество</Button>
-                            </div>
+                            <Col>
+                                <Button variant="outline-dark" onClick={() => setLoading(false)}>-</Button>
+                                <Button variant="outline-dark" onClick={() => setLoading(false)}>+  </Button>
+                            </Col>
                         </Row>
                         <Row className="justify-content-end">
                             <Col className="px-4 py-3" xs="auto">
