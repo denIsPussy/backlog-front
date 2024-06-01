@@ -65,18 +65,18 @@ const VkAuthPage = () => {
                     console.log('Type:', payload.type);
                     console.log('UUID:', payload.uuid);
                     setIsLoading(true); // Включаем индикатор загрузки
-                    // const response = await APIService.exchangeToken({ silentToken, type, uuid });
-                    // if ('username' in response && response.success) {
-                    //     localStorage.setItem('username', response.username);
-                    //     localStorage.setItem('token', response.token);
-                    //     navigate("/");
-                    // }
-                    // setIsLoading(false);
-                    // setFormData(prev => ({ ...prev, lastName: response.lastName, firstName: response.firstName, vkId: response.vkId}));
-                    // console.log('lastName:', response.lastName);
-                    // console.log('firstName:', response.firstName);
-                    // console.log('vkId:', response.vkId);
-                    // console.log('formdata:', formData);
+                    const response = await APIService.exchangeToken({ silentToken, type, uuid });
+                    if ('username' in response && response.success) {
+                        localStorage.setItem('username', response.username);
+                        localStorage.setItem('token', response.token);
+                        navigate("/");
+                    }
+                    setIsLoading(false);
+                    setFormData(prev => ({ ...prev, lastName: response.lastName, firstName: response.firstName, vkId: response.vkId}));
+                    console.log('lastName:', response.lastName);
+                    console.log('firstName:', response.firstName);
+                    console.log('vkId:', response.vkId);
+                    console.log('formdata:', formData);
                 } catch (error) {
                     console.error('Ошибка при обмене токена:', error);
                     setIsLoading(false); // Выключаем индикатор загрузки
