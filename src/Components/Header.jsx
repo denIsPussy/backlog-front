@@ -22,8 +22,9 @@ const Header = () => {
                 {/*<Button variant="outline-light" onClick={handleShow}>*/}
                 {/*    Меню*/}
                 {/*</Button>*/}
-                <NavLink as={Link} to="/cart" onClick={handleClose} style={{color: "black"}} className="nav-link">Корзина</NavLink>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
+                    <NavLink as={Link} to="/cart" onClick={handleClose} style={{color: "black"}} className="nav-link">Корзина</NavLink>
                     <Nav className="ms-auto">
                         {username ? (
                             <>
@@ -38,27 +39,6 @@ const Header = () => {
                         )}
                     </Nav>
                 </Navbar.Collapse>
-                {/*<Offcanvas show={show} onHide={handleClose} placement="start">*/}
-                {/*    <Offcanvas.Header closeButton>*/}
-                {/*        <Offcanvas.Title>Меню</Offcanvas.Title>*/}
-                {/*    </Offcanvas.Header>*/}
-                {/*    <Offcanvas.Body>*/}
-                {/*        <Nav className="justify-content-start flex-grow-1 pe-3">*/}
-                {/*            <NavLink as={Link} to="/cart" onClick={handleClose} style={{color: "black"}} className="nav-link">Корзина</NavLink>*/}
-                {/*            {username ? (*/}
-                {/*                <>*/}
-                {/*                    <Nav.Item className="me-3 text-black">Привет, {username}</Nav.Item>*/}
-                {/*                    <Button variant="outline-dark" style={{color: "black"}} onClick={handleLogout}>Выйти</Button>*/}
-                {/*                </>*/}
-                {/*            ) : (*/}
-                {/*                <>*/}
-                {/*                    <NavLink as={Link} to="/login" onClick={handleClose} style={{color: "black"}} className="nav-link">Авторизация</NavLink>*/}
-                {/*                    <NavLink as={Link} to="/register" onClick={handleClose} style={{color: "black"}} className="nav-link">Регистрация</NavLink>*/}
-                {/*                </>*/}
-                {/*            )}*/}
-                {/*        </Nav>*/}
-                {/*    </Offcanvas.Body>*/}
-                {/*</Offcanvas>*/}
             </Container>
         </Navbar>
     );
