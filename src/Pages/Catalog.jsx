@@ -19,6 +19,7 @@ export default function Catalog() {
                 //console.log(data);
             })
             .catch(err => {
+                console.log(process.env.REACT_APP_BASE_API_URL); // Должно вывести 'http://localhost:8080'
                 //console.error('Failed to fetch products:', err);
                 setError('Ошибка при загрузке продуктов.');
             });
