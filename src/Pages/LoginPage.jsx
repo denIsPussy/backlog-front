@@ -48,7 +48,7 @@ const LoginPage = () => {
         <div className="login-page">
             <Container className="d-flex align-items-center justify-content-center" style={{minHeight: "100vh"}}>
                 <div className="w-100" style={{maxWidth: "400px"}}>
-                    <Form onSubmit={handleLogin} className="p-4 shadow-lg rounded">
+                    <Form className="p-4 shadow-lg rounded">
                         <h2 className="text-center mb-4">Авторизация</h2>
                         <Form.Group controlId="formUsername" className="mb-3">
                             <Form.Label>Логин</Form.Label>
@@ -72,7 +72,7 @@ const LoginPage = () => {
                         </Form.Group>
                         <Button variant="primary" type="submit" className="w-100 mb-3" disabled={loading}>
                             {loading ? <Spinner as="span" animation="border" size="sm" role="status"
-                                                aria-hidden="true"/> : "Войти"}
+                                        onClick={handleLogin} aria-hidden="true"/> : "Войти"}
                         </Button>
                         <div className="w-100" id="VkIdSdkOneTap"></div>
                     </Form>
