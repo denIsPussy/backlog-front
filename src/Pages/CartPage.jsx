@@ -13,7 +13,7 @@ const CartPage = () => {
         <>
             <Header/>
             <Container className="cart-page my-5" style={{ boxShadow: "none", backgroundColor: "transparent"}}>
-                <h1 className="text-center mb-4">Your Shopping Cart</h1>
+                <h1 className="text-start mb-4 ms-2">Корзина</h1>
                 <ShoppingCart username={username}/>
             </Container>
             <Footer/>

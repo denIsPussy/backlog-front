@@ -9,6 +9,7 @@ const Header = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('username'); // Удаляем пользователя из localStorage
+        localStorage.removeItem('token'); // Удаляем пользователя из localStorage
         window.location.reload(); // Перезагружаем страницу для обновления состояния
     };
     const [show, setShow] = useState(false);
