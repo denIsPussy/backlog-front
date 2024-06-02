@@ -82,23 +82,22 @@ const ShoppingCart = ({ username }) => {
     return (
         <>
             <Container>
-                <Row>
+                <Row className="shopping-cart">
                     <Col xs={12} lg={8} className="order-2 order-lg-1">
                         {cart.cartItems.map((item, index) => (
-                            <Container className="shadow-sm rounded-3 shopping-cart" style={{ backgroundColor: '#FFFFFF', border: '0px solid #007bff' }}>
-                                <Row key={index} className="px-3 py-3 mb-3" style={{minHeight: '200px'}}>
-                                    <Col sm={3} md={3} xs={12} style={{ display: 'flex', alignItems: "center", border: '0px solid #e09a53' }}>
-                                        <Image className="rounded-1" src={`data:image/jpeg;base64,${item.product.image}`}
-                                               style={{ width: "100%", height: 'auto', maxWidth: "200px", objectFit: "contain", flexShrink: 1, flexGrow: 1}} alt="Product" />
+                            <Container className="shadow-sm rounded-3" style={{ backgroundColor: '#FFFFFF', border: '0px solid #007bff' }}>
+                                <Row key={index} className="px-3 py-3 mb-3 product-card">
+                                    <Col className="product-image" sm={4} md={3}>
+                                        <Image className="rounded-1 image" src={`data:image/jpeg;base64,${item.product.image}`} alt="Product" />
                                     </Col>
-                                    <Col sm={6} md={7} xs={12} style={{display: 'flex', flexDirection: 'column', border: '0px solid #a63539' }}>
+                                    <Col className="product-info" sm={5} md={7}>
                                         <div style={{flexGrow: 1}}>
                                             <Row>
-                                                <div className="text fs-6">
+                                                <div style={{maxWidth:"fit-content"}} className="text fs-6">
                                                     {item.product.name}
                                                 </div>
                                             </Row>
-                                            <Row className="pt-3">
+                                            <Row className="quantity-selectors">
                                                 <Col>
                                                     <Button variant="outline-dark" style={{
                                                         borderWidth: "1px",
@@ -130,29 +129,24 @@ const ShoppingCart = ({ username }) => {
                                             </Row>
                                         </div>
                                         <Row className="" style={{marginTop: 'auto'}}>
-                                            <Col style={{maxWidth: "fit-content"}} className="text fs-6 pe-0">
+                                            <Col xs={12} style={{maxWidth: "fit-content"}} className="text text-nowrap fs-6 pe-0">
                                                 В наличии:
                                             </Col>
-                                            <Col className="text fs-6 ps-1 brighter-text" style={{maxWidth: "fit-content", color: "#1b6ab3"}}>
+                                            <Col xs={12} className="text fs-6 ps-md-1 ps-xs-0 brighter-text" style={{maxWidth: "fit-content", color: "#1b6ab3"}}>
                                                 {getStoreCountText(calculateTotalQuantityShop(item.product))}
                                             </Col>
                                         </Row>
                                     </Col>
-                                    <Col sm={3} md={2} xs={12} className="p-0" style={{display: 'flex', flexDirection: 'column'}}>
-                                        <div className="order-1" style={{flexGrow: 1}}>
-                                            <Row className="m-0">
-                                                <Col style={{
-                                                    paddingRight: "0px",
-                                                    display: 'flex', justifyContent: 'end', alignItems: 'center',
-                                                }}>
-                                                    <Button className="rounded-3 hover-button py-1 px-1">
-                                                        <Image src="/delete.png" alt="Удалить"
-                                                               style={{width: '25px', height: '25px'}}/>
-                                                    </Button>
-                                                </Col>
-                                            </Row>
+                                    <Col className="product-actions" sm={3} md={2}>
+                                        <div className="order-1 btn-del-container">
+                                            <Col className="btn-del-col">
+                                                <Button className="rounded-3 hover-button py-1 px-1">
+                                                    <Image src="/delete.png" alt="Удалить"
+                                                           style={{width: '25px', height: '25px'}}/>
+                                                </Button>
+                                            </Col>
                                         </div>
-                                        <Row className="m-0 order-2" style={{display:"flex", justifyContent:"end", marginTop: 'auto'}}>
+                                        <Row className="m-0 order-2 pricing-actions-container">
                                             <Row className="text-decoration-line-through" style={{ color: "#9d9d9d", display:"flex", justifyContent:"end", fontSize: "small", fontWeight: "normal"}}>
                                                 {item.product.price.toLocaleString('ru-RU')} ₽
                                             </Row>
@@ -169,45 +163,33 @@ const ShoppingCart = ({ username }) => {
                         ))}
                     </Col>
                     <Col xs={12} lg={4} className="order-1 order-lg-2 mb-3 mb-sm-3 mb-md-3">
-                        <Container className="shadow-sm rounded-3 shopping-cart" style={{ backgroundColor: '#FFFFFF', border: '0px solid #007bff' }}>
-                            <Row>
-                                <Col style={{ maxWidth: "100%" }}>
-                                    <div className="title py-2 px-2 text-start fs-5">
-                                        Детали заказа
-                                    </div>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col style={{ maxWidth: "100%" }}>
-                                    <div className="py-2 px-2 text-start fs-6">
-                                        Выгода {calculateBenefit().toLocaleString('ru-RU')} ₽
-                                    </div>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col style={{ maxWidth: "100%" }}>
-                                    <Row className="pb-0 pt-2 px-2">
-                                        <div style={{color: "#9d9d9d", fontSize: "small"}} className="text rounded-1 pb-0 pt-1 px-2 text-nowrap text-start">
+                        <Container className="shadow-sm rounded-3" style={{ backgroundColor: '#FFFFFF', border: '0px solid #007bff' }}>
+                            <Col style={{ maxWidth: "100%" }}>
+                                <div className="title py-2 px-2 text-start fs-5">
+                                    Детали заказа
+                                </div>
+                            </Col>
+                            <Col style={{ maxWidth: "100%" }}>
+                                <div className="py-2 px-2 text-start fs-6">
+                                    Выгода {calculateBenefit().toLocaleString('ru-RU')} ₽
+                                </div>
+                            </Col>
+                            <Row className="total-container">
+                                <Col xs={12} md={6}>
+                                        <div style={{color: "#9d9d9d", fontSize: "small"}} className="text pb-0 pt-1 px-2 text-nowrap text-start">
                                             Итого
                                         </div>
-                                    </Row>
-                                    <Row className="pt-0 pb-2 px-2">
-                                        <div className="text rounded-1 py-1 px-2 text-start fs-6">
+                                        <div className="text rounded-1 py-1 px-2 text-nowrap text-start fs-6">
                                             Товаров: {cart.cartItems.length}
                                         </div>
-                                    </Row>
                                 </Col>
-                                <Col style={{ maxWidth: "100%" }}>
-                                    <Row className="pb-0 pt-2 px-2">
-                                        <div style={{color: "#9d9d9d", fontSize: "small"}} className="text rounded-1 pb-0 pt-1 px-2 text-nowrap text-end text-decoration-line-through">
-                                            {calculateTotalAmountWithoutDiscounts().toLocaleString('ru-RU')} ₽
-                                        </div>
-                                    </Row>
-                                    <Row className="pt-0 pb-2 px-2">
-                                        <div className="text rounded-1 py-1 px-2 text-nowrap text-end fs-6">
+                                <Col xs={12} md={6} className="total-amount-container">
+                                    <div style={{color: "#9d9d9d", fontSize: "small", maxWidth:"100%"}} className="total-amount-discount text-end text rounded-1 pb-0 pt-1 px-2  text-decoration-line-through">
+                                        {calculateTotalAmountWithoutDiscounts().toLocaleString('ru-RU')} ₽
+                                    </div>
+                                    <div style={{maxWidth:"fit-content"}} className="text rounded-1 text-nowrap py-1 px-2 fs-6">
                                         Сумма: {calculateTotalAmount().toLocaleString('ru-RU')} ₽
-                                        </div>
-                                    </Row>
+                                    </div>
                                 </Col>
                             </Row>
                             <Row>
