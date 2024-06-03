@@ -85,12 +85,12 @@ const verifyTwoFactorCode = (twoFactorData) => {
     return fetchWithToken('/verifyTwoFactorCode', 'POST', twoFactorData);
 };
 
-const getAllProducts = () => {
-    return fetchWithToken('/products/', 'GET');
+const getPageProducts = (page, size) => {
+    return fetchWithToken('/products', 'GET');
 };
 
-const getProductsByCategory = (categoryId) => {
-    return fetchWithToken('/products/byCategory/' + categoryId, 'GET');
+const getProductsByCategory = (categoryId, page, size) => {
+    return fetchWithToken(`/products/byCategory/${categoryId}?page=${page-1}&size=${size}`, 'GET');
 };
 
 const getAllCategories = () => {
@@ -105,4 +105,4 @@ const exchangeToken = (data) => {
     return fetchWithToken('/exchangeSilentAuthToken', 'POST', data, false);
 };
 
-export { register, authenticate, verifyTwoFactorCode, getAllProducts, getShoppingCart, exchangeToken, getAllCategories, getProductsByCategory };
+export { register, authenticate, verifyTwoFactorCode, getPageProducts, getShoppingCart, exchangeToken, getAllCategories, getProductsByCategory };

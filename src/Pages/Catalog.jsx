@@ -7,49 +7,61 @@ import {getAllCategories, getProductsByCategory} from '../Utils/APIService';
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import '../css/catalog.css';
-import {Card, Col, Container, Row} from "react-bootstrap";
+import {Button, Card, Col, Container, Row} from "react-bootstrap";
 import SearchableDropdown from "../Components/SearchableDropdown";
-import TestComponent from "../Components/TestComponent";
+import CustomPagination from "../Components/CustomPagination";
 import Template from "../Components/Template";
 
 export default function Catalog() {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(categories[0]);
-    const {categoryId} = useParams();
-    const [error, setError] = useState('');
+    const {categoryId, currentPage} = useParams();
+    const [totalPages, setTotalPages] = useState(0);
+    const [pageSize, setPageSize] = useState(1);
 
     useEffect(() => {
-        getProductsByCategory(categoryId)
+        getProductsByCategory(categoryId, currentPage, pageSize)
             .then(data => {
-                setProducts(data);
-                //console.log(data);
+                setProducts(data.content);
+                setTotalPages(data.totalPages);
+                console.log(data.totalPages);
             })
             .catch(err => {
-                console.log(process.env.REACT_APP_BASE_API_URL); // Должно вывести 'http://localhost:8080'
-                //console.error('Failed to fetch products:', err);
-                setError('Ошибка при загрузке продуктов.');
             });
         getAllCategories()
             .then(data => {
                 setCategories(data);
-                console.log(data);
                 const matchedCategory = data.find(item => item.id.toString() === categoryId); // Проверьте сравнение, возможно нужно приведение типов
                 setSelectedCategory(matchedCategory);
-                console.log(matchedCategory);
-                console.log(selectedCategory);
+
             })
             .catch(err => {
-                console.log(process.env.REACT_APP_BASE_API_URL); // Должно вывести 'http://localhost:8080'
-                //console.error('Failed to fetch products:', err);
-                setError('Ошибка при загрузке категорий.');
             })
     }, []);
+
+    // useEffect(() => {
+    //     getProductsByCategory(categoryId, currentPage, pageSize)
+    //         .then(data => {
+    //             setProducts(data.content);
+    //             setTotalPages(data.totalPages);
+    //             console.log(data.totalPages);
+    //         })
+    //         .catch(err => {
+    //         });
+    // }, []);
     const navigate = useNavigate();
     const handleSelectCategory = (value) => {
-        console.log(value);
+        //console.log(value);
         setSelectedCategory(value);
-        navigate(`/catalog/${value.id}`);
+        navigate(`/catalog/${value.id}/1`);
+    };
+    const onPageChange = (page) => {
+        navigate(`/catalog/${selectedCategory.id}/${page}`);
+    }
+
+    const handleChangePage = (e) => {
+        navigate(`/catalog/${selectedCategory.id}/${e.id}`);
     };
 
     function truncateText(text, maxLength) {
@@ -59,7 +71,8 @@ export default function Catalog() {
 
         return text.slice(0, maxLength).replace(/\s+\S*$/, "") + "...";
     }
-
+    const safeCurrentPage = currentPage ? 1 : 0;
+    const safeTotalPages = totalPages ? 5 : 0;
     return (
         <>
             <Header/>
@@ -117,7 +130,7 @@ export default function Catalog() {
                         {/*</Template>*/}
                     </Row>
                 </Container>
-                    <Row xs={1} md={2} lg={4} className="g-4">
+                <Row xs={1} md={2} lg={4} className="g-4">
                         {products.map(product => (
                             <Col key={product.id}>
                                 <Template product={product} />
@@ -137,39 +150,17 @@ export default function Catalog() {
                             </Col>
                         ))}
                     </Row>
+                <Container className="mt-5">
+                    {/*<Pagination*/}
+                    {/*    pageCount={totalPages ? Number(totalPages) : 1}*/}
+                    {/*    currentPage={currentPage ? currentPage : 1}*/}
+                    {/*    onPageChange={onPageChange}*/}
+                    {/*/>*/}
+                    {/*<PaginationBar currentCategory={selectedCategory} currentPage={Number(currentPage)} totalPages={totalPages}/>*/}
+                    <CustomPagination totalPages={Number(totalPages)} currentPage={Number(currentPage)} onPageChange={onPageChange} />
+                </Container>
             </Container>
             <Footer/>
         </>
     );
 }
-
-// forwardRef again here!
-// Dropdown needs access to the DOM of the Menu to measure it
-const CustomMenu = React.forwardRef(
-    ({children, style, className, 'aria-labelledby': labeledBy}, ref) => {
-        const [value, setValue] = useState('');
-
-        return (
-            <div
-                ref={ref}
-                style={style}
-                className={className}
-                aria-labelledby={labeledBy}
-            >
-                <Form.Control
-                    autoFocus
-                    className="mx-3 my-2 w-auto"
-                    placeholder="Введите для поиска..."
-                    onChange={(e) => setValue(e.target.value)}
-                    value={value}
-                />
-                <ul className="list-unstyled">
-                    {React.Children.toArray(children).filter(
-                        (child) =>
-                            !value || child.props.children.toLowerCase().startsWith(value),
-                    )}
-                </ul>
-            </div>
-        );
-    },
-);

@@ -30,7 +30,7 @@ const AnimatedRoutes = () => {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/two-factor-auth/:username" element={<TwoFactorAuthPage />} />
-                    <Route path="/catalog/:categoryId" element={<Catalog />} />
+                    <Route path="/catalog/:categoryId/:currentPage" element={<Catalog />} />
                     <Route path="/cart" element={<CartPage />} />
                     <Route path="/vkAuth" element={<VkAuthPage />} />
                     <Route path="/categories" element={<CategoriesPage />} />

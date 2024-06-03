@@ -12,7 +12,7 @@ const SearchableDropdown = ({ items, handleSelect}) => {
 
     return (
         <Dropdown show={show} onToggle={() => setShow(!show)}>
-            <Dropdown.Toggle variant="outline-dark" id="dropdown-basic">
+            <Dropdown.Toggle variant={"dark"} style={{backgroundColor:"white", color:"black", borderRadius:"3px", marginBottom:"5px"}} id="dropdown-basic">
                 Выберите категорию
             </Dropdown.Toggle>
 

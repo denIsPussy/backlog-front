@@ -12,7 +12,7 @@ import {
 
 function Template({ product }) {
     return (
-        <MDBContainer fluid className="my-5">
+        <MDBContainer fluid className="mt-3 mb-3">
             <MDBRow className="justify-content-center">
                 <MDBCol>
                     <MDBCard style={{boxShadow:"0 4px 16px rgba(0, 0, 0, 0.1)"}} className="text-black border-0">
