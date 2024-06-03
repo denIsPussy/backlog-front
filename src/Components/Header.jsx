@@ -30,7 +30,7 @@ const Header = () => {
                         {username ? (
                             <>
                                 <Nav.Item className="me-3 text-white d-flex align-items-center">Привет, {username}</Nav.Item>
-                                <Button variant="outline-danger" onClick={handleLogout}>Выйти</Button>
+                                <Button variant="light" onClick={handleLogout}>Выйти</Button>
                             </>
                         ) : (
                             <>

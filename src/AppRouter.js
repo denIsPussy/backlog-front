@@ -9,29 +9,31 @@ import './transitions.css';
 import Catalog from "./Pages/Catalog";
 import CartPage from "./Pages/CartPage";
 import VkAuthPage from "./Pages/VkAuthPage";
+import CategoriesPage from "./Pages/CategoryPage";
 
 const AnimatedRoutes = () => {
     const location = useLocation(); // Получаем текущее местоположение для ключа анимации
 
     const transitions = useTransition(location, {
-        from: { opacity: 0, transform: 'translate3d(20%,0,0)' },
+        from: { opacity: 0, transform: 'translate3d(10%,0,0)' },
         enter: { opacity: 1, transform: 'translate3d(0%,0,0)' },
-        leave: { opacity: 0, transform: 'translate3d(-20%,0,0)' },
+        leave: { opacity: 0, transform: 'translate3d(-10%,0,0)' },
         // config: { duration: 150, clamp: false }, // Настройка продолжительности анимации
         config: config.stiff
     });
 
     return transitions((props, item) => (
         <animated.div style={props}>
-            <div style={{position: 'absolute', width: '100%', backgroundColor: '#f6f6f6'}}>
+            <div style={{position: 'absolute', width: '100%'}}>
                 <Routes location={item}>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/two-factor-auth/:username" element={<TwoFactorAuthPage />} />
-                    <Route path="/catalog" element={<Catalog />} />
+                    <Route path="/catalog/:categoryId" element={<Catalog />} />
                     <Route path="/cart" element={<CartPage />} />
                     <Route path="/vkAuth" element={<VkAuthPage />} />
+                    <Route path="/categories" element={<CategoriesPage />} />
                 </Routes>
             </div>
         </animated.div>

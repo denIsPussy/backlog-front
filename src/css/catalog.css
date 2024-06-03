@@ -18,3 +18,11 @@
 .card-footer {
 	background: rgba(0, 0, 0, 0.03); /* Слегка оттененный фон для подвала карты */
 }
+.dropdown-item.active, .dropdown-item:active {
+	background-color: #2b3035; /* Оранжевый фон */
+	color: white; /* Белый текст */
+}
+.custom-focus:focus {
+	border-color: #0b0b0b;  /* Синий цвет обводки */
+	box-shadow: 0 0 0 0.2rem rgba(11, 11, 11, 0.25); /* Добавляем немного тени с тем же цветом */
+}

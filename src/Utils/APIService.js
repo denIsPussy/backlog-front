@@ -89,6 +89,14 @@ const getAllProducts = () => {
     return fetchWithToken('/products/', 'GET');
 };
 
+const getProductsByCategory = (categoryId) => {
+    return fetchWithToken('/products/byCategory/' + categoryId, 'GET');
+};
+
+const getAllCategories = () => {
+    return fetchWithToken('/products/categories', 'GET');
+};
+
 const getShoppingCart = () => {
     return fetchWithToken('/user/getShopCart', 'GET', null, true);
 };
@@ -97,4 +105,4 @@ const exchangeToken = (data) => {
     return fetchWithToken('/exchangeSilentAuthToken', 'POST', data, false);
 };
 
-export { register, authenticate, verifyTwoFactorCode, getAllProducts, getShoppingCart, exchangeToken };
+export { register, authenticate, verifyTwoFactorCode, getAllProducts, getShoppingCart, exchangeToken, getAllCategories, getProductsByCategory };

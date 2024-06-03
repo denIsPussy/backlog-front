@@ -8,7 +8,7 @@ const HomePage = () => {
     const navigate = useNavigate();
 
     const goToCatalog = () => {
-        navigate("/catalog"); // Используем функцию для перехода на страницу каталога
+        navigate("/categories"); // Используем функцию для перехода на страницу каталога
     };
 
     return (
