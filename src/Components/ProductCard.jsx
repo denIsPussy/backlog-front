@@ -10,7 +10,7 @@ import {
     MDBIcon,
 } from "mdb-react-ui-kit";
 
-function Template({ product }) {
+function ProductCard({ product }) {
     return (
         <MDBContainer fluid className="mt-3 mb-3">
             <MDBRow className="justify-content-center">
@@ -45,4 +45,4 @@ function Template({ product }) {
     );
 }
 
-export default Template;
+export default ProductCard;

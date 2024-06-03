@@ -31,7 +31,7 @@ function CategoriesPage() {
                                 <Card.Body>
                                     <Card.Title>{category.name}</Card.Title>
                                     <Card.Text>{category.description}</Card.Text>
-                                    <Button variant="dark" href={`/catalog/${category.id}/1`}>Посмотреть
+                                    <Button variant="dark" href={`/catalog/${category.id}`}>Посмотреть
                                         товары</Button>
                                 </Card.Body>
                             </Card>

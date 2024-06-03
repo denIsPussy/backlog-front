@@ -85,7 +85,7 @@ const ShoppingCart = ({ username }) => {
                 <Row className="shopping-cart">
                     <Col xs={12} lg={8} className="order-2 order-lg-1">
                         {cart.cartItems.map((item, index) => (
-                            <Container className="shadow-sm rounded-3" style={{ backgroundColor: '#FFFFFF', border: '0px solid #007bff' }}>
+                            <Container className="rounded-3" style={{boxShadow:"0 4px 16px rgba(0, 0, 0, 0.1)", backgroundColor: '#FFFFFF', border: '0px solid #007bff' }}>
                                 <Row key={index} className="px-3 py-3 mb-3 product-card">
                                     <Col className="product-image" sm={4} md={3}>
                                         <Image className="rounded-1 image" src={`data:image/jpeg;base64,${item.product.image}`} alt="Product" />
@@ -163,7 +163,7 @@ const ShoppingCart = ({ username }) => {
                         ))}
                     </Col>
                     <Col xs={12} lg={4} className="order-1 order-lg-2 mb-3 mb-sm-3 mb-md-3">
-                        <Container className="shadow-sm rounded-3" style={{ backgroundColor: '#FFFFFF', border: '0px solid #007bff' }}>
+                        <Container className="rounded-3" style={{ boxShadow:"0 4px 16px rgba(0, 0, 0, 0.1)", backgroundColor: '#FFFFFF', border: '0px solid #007bff' }}>
                             <Col style={{ maxWidth: "100%" }}>
                                 <div className="title py-2 px-2 text-start fs-5">
                                     Детали заказа
