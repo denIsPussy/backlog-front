@@ -1,6 +1,11 @@
 // src/components/ShoppingCart.js
 import React, {useEffect, useState} from 'react';
-import {getShoppingCart} from '../Utils/APIService';
+import {
+    getShoppingCart,
+    increaseProductQuantityInCart,
+    reduceProductQuantityInCart,
+    removeFromCart
+} from '../Utils/APIService';
 import {Button, Col, Container, Image, Row} from 'react-bootstrap';
 import '../css/shoppingCart.css';
 import Skeleton from "react-loading-skeleton";
@@ -107,6 +112,28 @@ const ShoppingCart = ({ username }) => {
         }
     }
 
+    function handleDeleteProduct(productId){
+        removeFromCart(productId)
+            .then(data => {
+                setCart(data);
+            })
+    }
+
+    function handleChangeQuantityProduct(productId, isReduce){
+        if (isReduce){
+            reduceProductQuantityInCart(productId)
+                .then(data => {
+                    setCart(data);
+                })
+        }
+        else{
+            increaseProductQuantityInCart(productId)
+                .then(data => {
+                    setCart(data);
+                })
+        }
+    }
+
 
     return (
         <>
@@ -128,7 +155,9 @@ const ShoppingCart = ({ username }) => {
                                             </Row>
                                             <Row className="quantity-selectors">
                                                 <Col>
-                                                    <Button variant="outline-dark" style={{
+                                                    <Button
+                                                        onClick={() => handleChangeQuantityProduct(item.product.id, true)}
+                                                        variant="outline-dark" style={{
                                                         borderWidth: "1px",
                                                         fontWeight: "bolder",
                                                         borderBottomLeftRadius: "8px",
@@ -145,7 +174,9 @@ const ShoppingCart = ({ username }) => {
                                                         borderLeft: 'none',
                                                         borderRight: 'none'
                                                     }} variant="outline-dark rounded-0">{item.quantity}</Button>
-                                                    <Button variant="outline-dark" style={{
+                                                    <Button
+                                                        onClick={() => handleChangeQuantityProduct(item.product.id, false)}
+                                                        variant="outline-dark" style={{
                                                         borderWidth: "1px",
                                                         fontWeight: "bolder",
                                                         borderBottomRightRadius: "8px",
@@ -169,7 +200,7 @@ const ShoppingCart = ({ username }) => {
                                     <Col className="product-actions" sm={3} md={2}>
                                         <div className="order-1 btn-del-container">
                                             <Col className="btn-del-col">
-                                                <Button className="rounded-3 hover-button py-1 px-1">
+                                                <Button onClick={() => handleDeleteProduct(item.product.id)} className="rounded-3 hover-button py-1 px-1">
                                                     <Image src="/delete.png" alt="Удалить"
                                                            style={{width: '25px', height: '25px'}}/>
                                                 </Button>

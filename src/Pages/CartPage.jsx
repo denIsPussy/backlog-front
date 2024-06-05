@@ -5,6 +5,7 @@ import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import '../css/cartPage.css'
 import { Container } from 'react-bootstrap';
+import {removeFromCart} from "../Utils/APIService";
 
 const CartPage = () => {
     const username = localStorage.getItem("username"); // Замените на актуальный идентификатор корзины
