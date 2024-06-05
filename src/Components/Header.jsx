@@ -1,7 +1,7 @@
 // Header.js
 import React, {useState} from 'react';
-import { Navbar, Nav, Container, Button, NavLink, Offcanvas } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import {Button, Container, Nav, Navbar, NavLink} from 'react-bootstrap';
+import {Link} from 'react-router-dom';
 import "./header.css"
 
 const Header = () => {
@@ -17,19 +17,21 @@ const Header = () => {
     const handleShow = () => setShow(true);
 
     return (
-        <Navbar bg="dark" variant="dark" expand="lg" className="header-nav">
+        <Navbar bg="dark" variant={"dark"} expand="lg" className="header-nav">
             <Container>
                 <Navbar.Brand as={Link} to="/" className="navbar-brand-logo">Backlog</Navbar.Brand>
                 {/*<Button variant="outline-light" onClick={handleShow}>*/}
                 {/*    Меню*/}
                 {/*</Button>*/}
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <NavLink as={Link} to="/cart" onClick={handleClose} style={{color: "black"}} className="nav-link">Корзина</NavLink>
+                    <NavLink as={Link} to="/cart" onClick={handleClose} style={{color: "black"}}
+                             className="nav-link">Корзина</NavLink>
                     <Nav className="ms-auto">
                         {username ? (
                             <>
-                                <Nav.Item className="me-3 text-white d-flex align-items-center">Привет, {username}</Nav.Item>
+                                <Nav.Item
+                                    className="me-3 text-white d-flex align-items-center">Привет, {username}</Nav.Item>
                                 <Button variant="light" onClick={handleLogout}>Выйти</Button>
                             </>
                         ) : (

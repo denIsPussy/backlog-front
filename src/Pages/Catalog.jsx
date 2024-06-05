@@ -10,6 +10,7 @@ import {Col, Container, Row} from "react-bootstrap";
 import SearchableDropdown from "../Components/SearchableDropdown";
 import CustomPagination from "../Components/CustomPagination";
 import ProductCard from "../Components/ProductCard";
+import Skeleton from "react-loading-skeleton";
 
 export default function Catalog() {
     const [products, setProducts] = useState([]);
@@ -19,6 +20,7 @@ export default function Catalog() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const pageSize = 8;
+    const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -36,24 +38,29 @@ export default function Catalog() {
                 setCategories(data);
                 const matchedCategory = data.find(item => item.id.toString() === category);
                 setCurrentCategory(matchedCategory);
+                setIsLoading(false);
             })
             .catch(err => {
             })
     }, []);
 
-    useEffect(() => {
-        getProductsByCategory(currentCategory?.id, currentPage, pageSize)
-            .then(data => {
-                setProducts(data.content);
-                setTotalPages(data.totalPages);
-            })
-            .catch(err => {
-            });
-    }, [currentCategory, currentPage]);
+    // useEffect(() => {
+    //     getProductsByCategory(currentCategory?.id, currentPage, pageSize)
+    //         .then(data => {
+    //             setProducts(data.content);
+    //             setTotalPages(data.totalPages);
+    //         })
+    //         .catch(err => {
+    //         });
+    // }, [currentCategory, currentPage]);
 
     const handleSelectCategory = (category) => {
-        setCurrentCategory(category)
-        //navigate(`/catalog/${value.id}/1`);
+        //setCurrentCategory(category)
+        navigate(`/catalog/${category.id}`);
+    };
+    const handleSelectProduct = (product) => {
+        //setCurrentCategory(category)
+        navigate(`/product/${product.id}`);
     };
     const onPageChange = (page) => {
         setCurrentPage(page);
@@ -76,25 +83,36 @@ export default function Catalog() {
                 <Container fluid>
                     <Row>
                         {
-                            categories.length > 0 &&
-                            <SearchableDropdown items={categories} handleSelect={handleSelectCategory}/>
+                            isLoading ? <Skeleton width={200} height={40} /> :
+                                categories.length > 0 &&
+                                <SearchableDropdown items={categories} handleSelect={handleSelectCategory}/>
                         }
                         <Col md={9}>
-                            <h2>{currentCategory ? currentCategory.name : 'Загрузка...'}</h2>
-                            <p>{currentCategory ? currentCategory.description : 'Загрузка...'}</p>
+                            <h2>{isLoading ? <Skeleton width={200} height={40} /> : currentCategory ? currentCategory.name : 'Нет категории'}</h2>
+                            <p>{isLoading ? <Skeleton width={800} height={80} /> : currentCategory ? currentCategory.description : 'Описание отсутствует'}</p>
                         </Col>
                     </Row>
                 </Container>
                 <Row xs={1} md={2} lg={4} className="g-4">
-                    {products.map(product => (
-                        <Col key={product.id}>
-                            <ProductCard product={product}/>
-                        </Col>
-                    ))}
+                    {isLoading ? (
+                        Array.from({ length: 8 }).map((_, idx) => (
+                            <Col key={idx}>
+                                <Skeleton height={300} />
+                            </Col>
+                        ))
+                    ) : (
+                        products.map(product => (
+                            <Col key={product.id}>
+                                <ProductCard handleSelectProduct={handleSelectProduct} product={product}/>
+                            </Col>
+                        ))
+                    )}
                 </Row>
                 <Container className="mt-5">
-                    <CustomPagination totalPages={Number(totalPages)} currentPage={Number(currentPage)}
-                                      onPageChange={onPageChange}/>
+                    {isLoading ? <Skeleton height={50} width={300} /> :
+                        <CustomPagination totalPages={Number(totalPages)} currentPage={Number(currentPage)}
+                                          onPageChange={onPageChange}/>
+                    }
                 </Container>
             </Container>
             <Footer/>

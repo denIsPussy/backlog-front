@@ -11,6 +11,7 @@ import CartPage from "./Pages/CartPage";
 import VkAuthPage from "./Pages/VkAuthPage";
 import CategoriesPage from "./Pages/CategoryPage";
 import { AnimatePresence, motion } from 'framer-motion';
+import ProductPage from "./Pages/ProductPage";
 
 const AnimatedRoutes = () => {
     const location = useLocation(); // Получаем текущее местоположение для ключа анимации
@@ -59,6 +60,7 @@ const AnimatedRoutes = () => {
                     <Route path="/cart" element={<motion.div {...pageTransition}><CartPage /></motion.div>}/>
                     <Route path="/vkAuth" element={<motion.div {...pageTransition}><VkAuthPage /></motion.div>}/>
                     <Route path="/categories" element={<motion.div {...pageTransition}><CategoriesPage /></motion.div>}/>
+                    <Route path="/product/:productId" element={<motion.div {...pageTransition}><ProductPage /></motion.div>}/>
                 </Routes>
                 {/*</div>*/}
             </AnimatePresence>

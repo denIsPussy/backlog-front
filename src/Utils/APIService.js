@@ -67,6 +67,7 @@ const fetchWithToken = async (url, method, data = null, tokenRequired = false) =
     console.log("Отправка запроса на:", fullUrl);  // Вывод URL в консоль
     const response = await fetch(fullUrl, config);
     const responseData = await response.json();
+    console.log(responseData.content);
     if (!response.ok) {
         throw new Error(responseData.message || 'Что-то пошло не так');
     }
@@ -93,6 +94,10 @@ const getProductsByCategory = (categoryId, page, size) => {
     return fetchWithToken(`/products/byCategory/${categoryId}?page=${page-1}&size=${size}`, 'GET');
 };
 
+const getProductById = (id) => {
+    return fetchWithToken(`/products/get/${id}`, 'GET');
+};
+
 const getAllCategories = () => {
     return fetchWithToken('/products/categories', 'GET');
 };
@@ -105,4 +110,4 @@ const exchangeToken = (data) => {
     return fetchWithToken('/exchangeSilentAuthToken', 'POST', data, false);
 };
 
-export { register, authenticate, verifyTwoFactorCode, getPageProducts, getShoppingCart, exchangeToken, getAllCategories, getProductsByCategory };
+export { register, authenticate, verifyTwoFactorCode, getPageProducts, getShoppingCart, exchangeToken, getAllCategories, getProductsByCategory, getProductById };

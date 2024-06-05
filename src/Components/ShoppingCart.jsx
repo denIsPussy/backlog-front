@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {getShoppingCart} from '../Utils/APIService';
 import {Button, Col, Container, Image, Row} from 'react-bootstrap';
 import '../css/shoppingCart.css';
+import Skeleton from "react-loading-skeleton";
 
 const ShoppingCart = ({ username }) => {
     const [cart, setCart] = useState(null);
@@ -24,7 +25,35 @@ const ShoppingCart = ({ username }) => {
         fetchCart();
     }, [username]);
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) {
+        return (
+            <Container className="mt-5">
+                <Row>
+                    <Col md={8}>
+                        {Array.from({ length: 3 }).map((_, index) => (
+                            <Container key={index} className="rounded-3 mb-3" style={{boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)", backgroundColor: '#FFFFFF'}}>
+                                <Row className="px-3 py-3">
+                                    <Col sm={4} md={3}>
+                                        <Skeleton height={200} />
+                                    </Col>
+                                    <Col sm={8} md={9}>
+                                        <Skeleton height={30} width={`80%`} />
+                                        <Skeleton height={20} width={`90%`} count={3} style={{ marginTop: 10 }} />
+                                    </Col>
+                                </Row>
+                            </Container>
+                        ))}
+                    </Col>
+                    <Col md={4}>
+                        <Container className="rounded-3" style={{boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)", backgroundColor: '#FFFFFF'}}>
+                            <Skeleton height={30} width={`90%`} />
+                            <Skeleton height={20} width={`90%`} count={3} style={{ marginTop: 10 }} />
+                        </Container>
+                    </Col>
+                </Row>
+            </Container>
+        );
+    }
     if (error) return <p>Error: {error.message}</p>;
     if (!cart || cart.cartItems.length === 0) return <p>Корзина пуста.</p>;
 

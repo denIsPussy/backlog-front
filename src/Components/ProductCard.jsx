@@ -10,12 +10,13 @@ import {
     MDBIcon,
 } from "mdb-react-ui-kit";
 
-function ProductCard({ product }) {
+import "../css/productPage.css"
+function ProductCard({ product, handleSelectProduct }) {
     return (
         <MDBContainer fluid className="mt-3 mb-3">
             <MDBRow className="justify-content-center">
                 <MDBCol>
-                    <MDBCard style={{boxShadow:"0 4px 16px rgba(0, 0, 0, 0.1)"}} className="text-black border-0">
+                    <MDBCard onClick={() => handleSelectProduct(product)} style={{boxShadow:"0 4px 16px rgba(0, 0, 0, 0.1)"}} className="text-black border-0">
                         <MDBCardImage
                             style={{objectFit: "contain", maxWidth: "200px", margin: "0 auto"}}
                             src={`data:image/jpeg;base64,${product.image}`}
@@ -24,7 +25,7 @@ function ProductCard({ product }) {
                         />
                         <MDBCardBody>
                             <div className="text-center">
-                                <MDBCardTitle>{product.name}</MDBCardTitle>
+                                <MDBCardTitle className="hover-text">{product.name}</MDBCardTitle>
                                 <p className="text-muted mb-4">RTX 4090</p>
                             </div>
                             <div>
