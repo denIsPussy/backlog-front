@@ -113,6 +113,18 @@ const getProductById = (id) => {
     return fetchWithToken(`/products/get/${id}`, 'GET');
 };
 
+const updateReview = (data) => {
+    return fetchWithToken(`/products/updateReview`, 'PUT', data, true);
+};
+
+const deleteReview = (reviewId) => {
+    return fetchWithToken(`/products/deleteReview/${reviewId}`, 'DELETE', null, true);
+};
+
+const createReview = (data) => {
+    return fetchWithToken(`/products/createReview`, 'POST', data, true);
+};
+
 const getAllCategories = () => {
     return fetchWithToken('/products/categories', 'GET');
 };
@@ -125,4 +137,4 @@ const exchangeToken = (data) => {
     return fetchWithToken('/exchangeSilentAuthToken', 'POST', data, false);
 };
 
-export { register, authenticate, verifyTwoFactorCode, getPageProducts, getShoppingCart, exchangeToken, getAllCategories, getProductsByCategory, getProductById, addToCart, removeFromCart, reduceProductQuantityInCart, increaseProductQuantityInCart };
+export { createReview, deleteReview, updateReview, register, authenticate, verifyTwoFactorCode, getPageProducts, getShoppingCart, exchangeToken, getAllCategories, getProductsByCategory, getProductById, addToCart, removeFromCart, reduceProductQuantityInCart, increaseProductQuantityInCart };

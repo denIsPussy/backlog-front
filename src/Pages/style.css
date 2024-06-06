@@ -47,3 +47,8 @@
     font-size: 1.1em; /* Больший текст в кнопке */
     box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Тень кнопки для добавления глубины */
 }
+
+input, textarea, select, form.form-control {
+    border: 1px solid #ffc107; /* Синий цвет обводки */
+    border-radius: 4px; /* Скругленные углы для эстетики */
+}
