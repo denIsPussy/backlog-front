@@ -16,7 +16,7 @@ const MyYandexMap = ({ data }) => {
     const center = getMapCenter(data);
     return (
         <YMaps query={{ apikey: '09a76de6-b926-497a-a0b6-bfb200a7e3d7' }}>
-            <Map defaultState={{ center: center, zoom: 9 }}>
+            <Map defaultState={{ center: center, zoom: 9 }} style={{ width: '100%', height: '600px'}}>
                 {data.map((item, index) => {
                     // Извлекаем строки широты и долготы
                     const { latitude, longitude } = item.storeNestedDTO.address;
@@ -34,11 +34,15 @@ const MyYandexMap = ({ data }) => {
                     return (
                         <Placemark
                             key={item.id}
-                            geometry={[lat, lon]} // Используем преобразованные числовые координаты
+                            geometry={[lat, lon]}
                             properties={{
-                                hintContent: `${item.storeNestedDTO.address.street}, ${item.storeNestedDTO.address.city}`,
-                                balloonContent: `${item.name} количество: ${item.quantity}`
+                                hintContent: `Нажмите для информации о ${item.name}`, // Подсказка при наведении
+                                balloonContent: `
+                                    <strong>${item.name}</strong><br />
+                                    Адрес: ${item.storeNestedDTO.address.street}, ${item.storeNestedDTO.address.city}<br />
+                                    Количество: ${item.quantity}` // Содержимое всплывающего окна
                             }}
+                            modules={['geoObject.addon.balloon', 'geoObject.addon.hint']} // Модули для включения всплывающих окон и подсказок
                         />
                     );
                 })}

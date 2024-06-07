@@ -322,13 +322,7 @@ const ProductPage = () => {
                         </Col>
                     </Row>
                     <Row className="mt-4">
-                        <Container style={{width: "400px", height: "400px"}} >
-                            <Row>
-                                <Col>
-                                    <MyYandexMap data={product.storeList} />
-                                </Col>
-                            </Row>
-                        </Container>
+                        <MyYandexMap data={product.storeList} />
                     </Row>
                 </Container>
             ) : (
