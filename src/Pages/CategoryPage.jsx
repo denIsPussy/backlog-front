@@ -1,9 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Card, Col, Container, Row} from 'react-bootstrap';
 import {getAllCategories} from '../Utils/APIService';
-import Header from '../Components/Header';
-import Footer from '../Components/Footer';
-import Skeleton, {SkeletonTheme} from 'react-loading-skeleton';
+import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 function CategoriesPage() {
@@ -27,8 +25,8 @@ function CategoriesPage() {
 
     return (
         <>
-            <Header/>
-            <Container className="mt-5">
+
+            <Container className="mt-5 flex-grow-1">
                 <h1 className="text-center mb-4">Выберите категорию товаров</h1>
                 <Row xs={1} md={2} lg={3} className="g-4">
                     {isLoading ? (
@@ -37,9 +35,9 @@ function CategoriesPage() {
                             <Col key={idx}>
                                 <Card>
                                     <Card.Body>
-                                            <Skeleton height={30} width={`70%`}/>
-                                            <Skeleton height={15} width={`90%`} style={{marginTop: 10}} count={2}/>
-                                            <Skeleton height={40} width={`50%`} style={{marginTop: 20}}/>
+                                        <Skeleton height={30} width={`70%`}/>
+                                        <Skeleton height={15} width={`90%`} style={{marginTop: 10}} count={2}/>
+                                        <Skeleton height={40} width={`50%`} style={{marginTop: 20}}/>
                                     </Card.Body>
                                 </Card>
                             </Col>
@@ -48,11 +46,11 @@ function CategoriesPage() {
                         // Показываем данные после загрузки
                         categories.map((category) => (
                             <Col key={category.id}>
-                                <Card>
-                                    <Card.Body>
+                                <Card style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
+                                    <Card.Body style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
                                         <Card.Title>{category.name}</Card.Title>
-                                        <Card.Text>{category.description}</Card.Text>
-                                        <Button variant="dark" href={`/catalog/${category.id}`}>Посмотреть
+                                        <Card.Text style={{flex: 1}}>{category.description}</Card.Text>
+                                        <Button variant="primary" href={`/catalog/${category.id}`}>Посмотреть
                                             товары</Button>
                                     </Card.Body>
                                 </Card>
@@ -61,7 +59,6 @@ function CategoriesPage() {
                     )}
                 </Row>
             </Container>
-            <Footer/>
         </>
     );
 }

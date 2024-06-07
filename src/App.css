@@ -28,6 +28,19 @@
   color: #61dafb;
 }
 
+.d-flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.min-vh-100 {
+  min-height: 100vh;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

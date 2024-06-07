@@ -5,6 +5,8 @@ import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import {addToCart, createReview, deleteReview, getProductById, updateReview} from "../Utils/APIService";
 import StarRatings from 'react-star-ratings';
+import "leaflet/dist/leaflet.css";
+import MyYandexMap from "../Components/MyYandexMap";
 
 const ProductPage = () => {
     const {productId} = useParams();
@@ -17,7 +19,7 @@ const ProductPage = () => {
     const [showModal, setShowModal] = useState(false);
     const [editRating, setEditRating] = useState(0);
     const [sortedReviews, setSortedReviews] = useState([]);
-    
+
     const username = localStorage.getItem("username");
 
     useEffect(() => {
@@ -42,7 +44,6 @@ const ProductPage = () => {
             setSortedReviews(sortedReviews);
         }
     }, [reviews]); // Добавление username в зависимости, чтобы реагировать на изменения текущего пользователя
-
 
     function handleAddToCartProduct(product) {
         addToCart({product: product, quantity: 1})
@@ -109,6 +110,8 @@ const ProductPage = () => {
         setEditContent("");
         setEditRating(0);
         handleShowModal();
+        console.log("Нажата кнопка оставить отзыв");
+        console.log(showModal);
     };
 
     const handleSaveCreateClick = () => {
@@ -134,7 +137,6 @@ const ProductPage = () => {
 
     return (
         <>
-            <Header/>
             {product ? (
                 <Container className="my-5 px-4">
                     <Row>
@@ -146,7 +148,7 @@ const ProductPage = () => {
                         <Col style={{display:"flex", flexDirection:"column"}} md={6}>
                             <h2>{product.name}</h2>
                             <Row style={{display: "flex", alignItems: "center"}}>
-                                <Col style={{alignSelf: "center", maxWidth: "fit-content"}}>
+                                <div className={"pb-2"} style={{width:'fit-content'}}>
                                     <StarRatings
                                         rating={product.rating}
                                         starRatedColor="#fd920f"
@@ -155,17 +157,17 @@ const ProductPage = () => {
                                         starDimension="20px"
                                         starSpacing="1px"
                                     />
-                                </Col>
-                                <Col style={{maxWidth: "fit-content", display: 'flex', flexDirection: 'column', justifyContent: 'stretch'}} className="text-center">
-                                    24
-                                </Col>
+                                </div>
+                                <div style={{display:"flex", alignItems:"center", width:'fit-content', height:'100%'}}>
+                                    {product.reviewList.length}
+                                </div>
                             </Row>
-                            <Row className={"mt-3"} style={{display:"flex", flexDirection: 'row', justifyContent: 'center'}}>
+                            <Row className={"mt-2"} style={{display:"flex", flexDirection: 'row', justifyContent: 'center', alignItems:"center"}}>
                                 <Col style={{maxHeight: "min-content"}}>
                                     <h5 style={{textWrap: "nowrap"}}>{product.price.toLocaleString('ru-RU')} ₽</h5>
                                 </Col>
                                 <Col style={{maxHeight: "min-content"}}>
-                                    <Button onClick={() => handleAddToCartProduct(product)} variant="warning" style={{textWrap: "nowrap"}}>Добавить в корзину</Button>
+                                    <Button onClick={() => handleAddToCartProduct(product)} variant="primary" style={{textWrap: "nowrap"}}>Добавить в корзину</Button>
                                 </Col>
                             </Row>
                         </Col>
@@ -192,61 +194,61 @@ const ProductPage = () => {
                     </Row>
                     <Row className="mt-4">
                         <Col md={12}>
+                            <Modal show={showModal} onHide={handleCloseModal}>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>Новый отзыв</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <Form>
+                                        <div className={"mb-3"}>
+                                            <StarRatings
+                                                rating={editRating}
+                                                starRatedColor="#fd920f"
+                                                numberOfStars={5}
+                                                name='rating'
+                                                starDimension="25px"
+                                                starSpacing="1px"
+                                                changeRating={(newRating) => handleChangeRating(newRating)} // Добавьте обработчик для изменения рейтинга
+                                            />
+                                        </div>
+                                        <FloatingLabel controlId="floatingInputHeader" label="Заголовок" className="mb-3">
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Введите заголовок"
+                                                value={editHeader}
+                                                onChange={e => setEditHeader(e.target.value)}
+                                            />
+                                        </FloatingLabel>
+                                        <FloatingLabel controlId="floatingTextareaContent" label="Содержание">
+                                            <Form.Control
+                                                as="textarea"
+                                                placeholder="Введите содержание отзыва"
+                                                style={{ height: '100px' }}
+                                                value={editContent}
+                                                onChange={e => setEditContent(e.target.value)}
+                                            />
+                                        </FloatingLabel>
+                                    </Form>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button variant="secondary" onClick={handleCloseModal}>
+                                        Закрыть
+                                    </Button>
+                                    <Button variant="primary" onClick={handleSaveCreateClick}>
+                                        Сохранить
+                                    </Button>
+                                </Modal.Footer>
+                            </Modal>
                             <h4>Отзывы:</h4>
                             {username && !sortedReviews.some(review => review.user.username === username) && (
-                                <Button className={"mb-3"} variant="warning" onClick={handleCreateClick}>Оставить отзыв</Button>
+                                <Button className={"mb-3"} variant="primary" onClick={handleCreateClick}>Оставить отзыв</Button>
                             )}
                             {(sortedReviews && sortedReviews.length > 0) ? (
                                 <div className="review-list">
-                                    <Modal show={showModal} onHide={handleCloseModal}>
-                                        <Modal.Header closeButton>
-                                            <Modal.Title>Новый отзыв</Modal.Title>
-                                        </Modal.Header>
-                                        <Modal.Body>
-                                            <Form>
-                                                <div className={"mb-3"}>
-                                                    <StarRatings
-                                                        rating={editRating}
-                                                        starRatedColor="#fd920f"
-                                                        numberOfStars={5}
-                                                        name='rating'
-                                                        starDimension="25px"
-                                                        starSpacing="1px"
-                                                        changeRating={(newRating) => handleChangeRating(newRating)} // Добавьте обработчик для изменения рейтинга
-                                                    />
-                                                </div>
-                                                <FloatingLabel controlId="floatingInputHeader" label="Заголовок" className="mb-3">
-                                                    <Form.Control
-                                                        type="text"
-                                                        placeholder="Введите заголовок"
-                                                        value={editHeader}
-                                                        onChange={e => setEditHeader(e.target.value)}
-                                                    />
-                                                </FloatingLabel>
-                                                <FloatingLabel controlId="floatingTextareaContent" label="Содержание">
-                                                    <Form.Control
-                                                        as="textarea"
-                                                        placeholder="Введите содержание отзыва"
-                                                        style={{ height: '100px' }}
-                                                        value={editContent}
-                                                        onChange={e => setEditContent(e.target.value)}
-                                                    />
-                                                </FloatingLabel>
-                                            </Form>
-                                        </Modal.Body>
-                                        <Modal.Footer>
-                                            <Button variant="secondary" onClick={handleCloseModal}>
-                                                Закрыть
-                                            </Button>
-                                            <Button variant="warning" onClick={handleSaveCreateClick}>
-                                                Сохранить
-                                            </Button>
-                                        </Modal.Footer>
-                                    </Modal>
                                     {sortedReviews.map((review, index) => (
                                         <div
                                             key={index}
-                                            className={`card mb-3 ${username === review.user.username ? "border border-2 border-warning" : "border border-2"}`}
+                                            className={`card mb-3 ${username === review.user.username ? "border border-2 border-primary" : "border border-2"}`}
                                             style={{ padding: "15px" }}
                                         >
                                             {editingReview && editingReview.id === review.id ? (
@@ -281,7 +283,7 @@ const ProductPage = () => {
                                                             />
                                                         </FloatingLabel>
                                                         <div className="mt-3">
-                                                            <Button variant="warning" onClick={handleSaveClick}>Сохранить</Button>
+                                                            <Button variant="primary" onClick={handleSaveClick}>Сохранить</Button>
                                                             <Button variant="danger" onClick={() => setEditingReview(null)} className="ms-2">Отмена</Button>
                                                         </div>
                                                     </Form>
@@ -300,7 +302,7 @@ const ProductPage = () => {
                                                     <p>{review.content}</p>
                                                     {username === review.user.username && (
                                                         <>
-                                                            <button onClick={() => handleEditClick(review)} className="btn btn-warning">Редактировать</button>
+                                                            <button onClick={() => handleEditClick(review)} className="btn btn-primary">Редактировать</button>
                                                             <button onClick={() => handleDeleteClick(review.id)} className="btn btn-danger ms-2">Удалить</button>
                                                         </>
                                                     )}
@@ -319,11 +321,19 @@ const ProductPage = () => {
                             )}
                         </Col>
                     </Row>
+                    <Row className="mt-4">
+                        <Container style={{width: "400px", height: "400px"}} >
+                            <Row>
+                                <Col>
+                                    <MyYandexMap data={product.storeList} />
+                                </Col>
+                            </Row>
+                        </Container>
+                    </Row>
                 </Container>
             ) : (
                 <div>Товар не найден.</div>
             )}
-            <Footer/>
         </>
     );
 };

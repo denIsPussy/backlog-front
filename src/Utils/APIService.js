@@ -133,8 +133,24 @@ const getShoppingCart = () => {
     return fetchWithToken('/user/getShopCart', 'GET', null, true);
 };
 
+const getOrdersByUser = (username) => {
+    return fetchWithToken(`/order/byUser?username=${username}`, 'GET', null, true);
+};
+
+const getPaymentMethods = () => {
+    return fetchWithToken(`/order/getPaymentMethods`, 'GET', null, true);
+};
+
+const getShippingMethods = () => {
+    return fetchWithToken(`/order/getShippingMethods`, 'GET', null, true);
+};
+
+const createOrder = (data) => {
+    return fetchWithToken(`/order/create`, 'POST', data, true);
+};
+
 const exchangeToken = (data) => {
     return fetchWithToken('/exchangeSilentAuthToken', 'POST', data, false);
 };
 
-export { createReview, deleteReview, updateReview, register, authenticate, verifyTwoFactorCode, getPageProducts, getShoppingCart, exchangeToken, getAllCategories, getProductsByCategory, getProductById, addToCart, removeFromCart, reduceProductQuantityInCart, increaseProductQuantityInCart };
+export { createOrder, getShippingMethods, getPaymentMethods, getOrdersByUser, createReview, deleteReview, updateReview, register, authenticate, verifyTwoFactorCode, getPageProducts, getShoppingCart, exchangeToken, getAllCategories, getProductsByCategory, getProductById, addToCart, removeFromCart, reduceProductQuantityInCart, increaseProductQuantityInCart };

@@ -12,9 +12,6 @@ const Header = () => {
         localStorage.removeItem('token'); // Удаляем пользователя из localStorage
         window.location.reload(); // Перезагружаем страницу для обновления состояния
     };
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
 
     return (
         <Navbar bg="dark" variant={"dark"} expand="lg" className="header-nav">
@@ -25,8 +22,10 @@ const Header = () => {
                 {/*</Button>*/}
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <NavLink as={Link} to="/cart" onClick={handleClose} style={{color: "black"}}
+                    <NavLink as={Link} to="/cart" style={{color: "black"}}
                              className="nav-link">Корзина</NavLink>
+                    <NavLink as={Link} to="/orders" style={{color: "black"}}
+                             className="nav-link">Заказы</NavLink>
                     <Nav className="ms-auto">
                         {username ? (
                             <>

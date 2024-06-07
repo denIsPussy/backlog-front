@@ -9,11 +9,13 @@ import {
 import {Button, Col, Container, Image, Row} from 'react-bootstrap';
 import '../css/shoppingCart.css';
 import Skeleton from "react-loading-skeleton";
+import { useNavigate } from "react-router-dom"; // Убедитесь, что путь к Header корректен
 
 const ShoppingCart = ({ username }) => {
     const [cart, setCart] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCart = async () => {
@@ -254,7 +256,7 @@ const ShoppingCart = ({ username }) => {
                             </Row>
                             <Row>
                                 <Col className="pb-3 pt-1" style={{display: "flex", justifyContent: "center"}}>
-                                <Button className="rounded-3 w-100" variant="dark">Оформление заказа</Button>
+                                <Button className="rounded-3 w-100" variant="dark" onClick={() => navigate("/checkout")}>Оформление заказа</Button>
                                 </Col>
                             </Row>
                         </Container>

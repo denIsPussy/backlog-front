@@ -13,7 +13,6 @@ const HomePage = () => {
 
     return (
         <div className="home-page">
-            <Header/>
             <div className="hero-section text-center">
                 <h1 className="display-4">Добро пожаловать в наш онлайн-магазин{username ? `, ${username}` : ''}!</h1>
                 <p>Это домашняя страница нашего сайта. Вы можете просматривать товары и делать заказы.</p>

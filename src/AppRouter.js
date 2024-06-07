@@ -10,8 +10,12 @@ import Catalog from "./Pages/Catalog";
 import CartPage from "./Pages/CartPage";
 import VkAuthPage from "./Pages/VkAuthPage";
 import CategoriesPage from "./Pages/CategoryPage";
-import { AnimatePresence, motion } from 'framer-motion';
+import {AnimatePresence, motion} from 'framer-motion';
 import ProductPage from "./Pages/ProductPage";
+import OrdersPage from "./Pages/OrdersPage";
+import Header from "./Components/Header";
+import Footer from "./Components/Footer";
+import CheckoutPage from "./Pages/CheckoutPage";
 
 const AnimatedRoutes = () => {
     const location = useLocation(); // Получаем текущее местоположение для ключа анимации
@@ -25,10 +29,10 @@ const AnimatedRoutes = () => {
     });
 
     const pageTransition = {
-        initial: { opacity: 0 },
-        animate: { opacity: 1 },
-        exit: { opacity: 0 },
-        transition: { duration: 0.3, delay: 0 }
+        initial: {opacity: 0},
+        animate: {opacity: 1},
+        exit: {opacity: 0},
+        transition: {duration: 0.3, delay: 0}
 
         // initial: { opacity: 0 },
         // animate: { opacity: 1 },
@@ -52,15 +56,19 @@ const AnimatedRoutes = () => {
             <AnimatePresence mode="wait">
                 {/*<div style={{position: 'absolute', width: '100%'}}>*/}
                 <Routes location={location} key={location.pathname}>
-                    <Route path="/" element={<motion.div {...pageTransition}><HomePage /></motion.div>}/>
-                    <Route path="/login" element={<motion.div {...pageTransition}><LoginPage /></motion.div>}/>
-                    <Route path="/register" element={<motion.div {...pageTransition}><RegisterPage /></motion.div>}/>
-                    <Route path="/two-factor-auth/:username" element={<motion.div {...pageTransition}><TwoFactorAuthPage /></motion.div>}/>
-                    <Route path="/catalog/:category" element={<motion.div {...pageTransition}><Catalog /></motion.div>}/>
-                    <Route path="/cart" element={<motion.div {...pageTransition}><CartPage /></motion.div>}/>
-                    <Route path="/vkAuth" element={<motion.div {...pageTransition}><VkAuthPage /></motion.div>}/>
-                    <Route path="/categories" element={<motion.div {...pageTransition}><CategoriesPage /></motion.div>}/>
-                    <Route path="/product/:productId" element={<motion.div {...pageTransition}><ProductPage /></motion.div>}/>
+                    <Route path="/" element={<motion.div {...pageTransition}><HomePage/></motion.div>}/>
+                    <Route path="/login" element={<motion.div {...pageTransition}><LoginPage/></motion.div>}/>
+                    <Route path="/register" element={<motion.div {...pageTransition}><RegisterPage/></motion.div>}/>
+                    <Route path="/two-factor-auth/:username"
+                           element={<motion.div {...pageTransition}><TwoFactorAuthPage/></motion.div>}/>
+                    <Route path="/catalog/:category" element={<motion.div {...pageTransition}><Catalog/></motion.div>}/>
+                    <Route path="/cart" element={<motion.div {...pageTransition}><CartPage/></motion.div>}/>
+                    <Route path="/vkAuth" element={<motion.div {...pageTransition}><VkAuthPage/></motion.div>}/>
+                    <Route path="/categories" element={<motion.div {...pageTransition}><CategoriesPage/></motion.div>}/>
+                    <Route path="/product/:productId"
+                           element={<motion.div {...pageTransition}><ProductPage/></motion.div>}/>
+                    <Route path="/orders" element={<motion.div {...pageTransition}><OrdersPage/></motion.div>}/>
+                    <Route path="/checkout" element={<motion.div {...pageTransition}><CheckoutPage/></motion.div>}/>
                 </Routes>
                 {/*</div>*/}
             </AnimatePresence>
@@ -74,7 +82,13 @@ const AnimatedRoutes = () => {
 const AppRouter = () => {
     return (
         <Router>
-            <AnimatedRoutes/>
+            <div className="main-content">
+                <Header/>
+                <main className="flex-grow-1">
+                    <AnimatedRoutes/>
+                </main>
+                <Footer/>
+            </div>
         </Router>
     );
 };
