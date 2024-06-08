@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Container, Dropdown, Nav, Navbar, NavLink, Offcanvas } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import "./header.css";
-import { getNotifications } from "../Utils/APIService";
+import {getDeposit, getNotifications} from "../Utils/APIService";
 import Badge from 'react-bootstrap/Badge';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faBell, faShoppingCart, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
@@ -10,8 +10,10 @@ import { faUser, faBell, faShoppingCart, faSignOutAlt } from '@fortawesome/free-
 const Header = () => {
     const username = localStorage.getItem('username');
     const [notificationCount, setNotificationCount] = useState(0);
+    const [deposit, setDeposit] = useState(0);
     const [showOffCanvas, setShowOffCanvas] = useState(false);
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 992);
+    const navigate = useNavigate();
 
     const handleLogout = () => {
         localStorage.removeItem('username');
@@ -30,7 +32,18 @@ const Header = () => {
                 });
         };
 
+        const fetchDeposit = () => {
+            getDeposit()
+                .then(data => {
+                    setDeposit(data);
+                })
+                .catch(error => {
+                    console.error('Ошибка при получении депозита:', error);
+                });
+        };
+
         fetchNotifications();
+        fetchDeposit();
         const intervalId = setInterval(fetchNotifications, 3000);
         const resizeListener = () => {
             setIsLargeScreen(window.innerWidth >= 992);
@@ -55,19 +68,27 @@ const Header = () => {
                             <Nav className="ms-auto">
                                 {username ? (
                                     <>
+                                        <NavLink as={Link} to="/deposit" className="nav-link d-flex align-items-center">
+                                            Текущий депозит: {deposit.toLocaleString('ru-RU')} ₽
+                                        </NavLink>
                                         <Dropdown as={Nav.Item}>
                                             <Dropdown.Toggle as={Nav.Link} className="d-flex align-items-center">
-                                                <Button variant="dark" className="profile-button">
-                                                    Денис
-                                                    <Badge bg="light" className="ms-2" style={{ color: 'black' }}>{notificationCount}</Badge>
-                                                    <span className="visually-hidden">unread messages</span>
+                                                <Button className={" profile-button"} variant="light">
+                                                    {notificationCount > 0 && (
+                                                        <Badge onClick={() => navigate("/notifications")} bg="light" style={{ color: 'black' }} className="badge">
+                                                            {notificationCount}
+                                                            <span className="visually-hidden">unread messages</span>
+                                                        </Badge>
+                                                    )}
+                                                    <FontAwesomeIcon icon={faUser} aria-hidden="true" />
                                                 </Button>
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu align="end">
                                                 <Dropdown.Item as={Link} to="/orders">Заказы</Dropdown.Item>
                                                 <Dropdown.Item as={Link} to="/profile">Профиль</Dropdown.Item>
                                                 <Dropdown.Item as={Link} to="/notifications">Уведомления</Dropdown.Item>
-                                                <Dropdown.Divider/>
+                                                <Dropdown.Item as={Link} to="/cart">Корзина</Dropdown.Item>
+                                                <Dropdown.Divider />
                                                 <Dropdown.Item onClick={handleLogout}>Выйти</Dropdown.Item>
                                             </Dropdown.Menu>
                                         </Dropdown>
@@ -82,6 +103,7 @@ const Header = () => {
                         </Navbar.Collapse>
                     </Container>
                 </Navbar>
+
             ) : (
                 <>
                     <Navbar bg="dark" variant="dark" expand="lg" className="header-nav">

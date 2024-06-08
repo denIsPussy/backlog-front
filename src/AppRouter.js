@@ -17,6 +17,7 @@ import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 import CheckoutPage from "./Pages/CheckoutPage";
 import DiscountNotifications from "./Pages/DiscountNotifications";
+import ProfilePage from "./Pages/ProfilePage";
 
 const AnimatedRoutes = () => {
     const location = useLocation(); // Получаем текущее местоположение для ключа анимации
@@ -71,6 +72,7 @@ const AnimatedRoutes = () => {
                     <Route path="/orders" element={<motion.div {...pageTransition}><OrdersPage/></motion.div>}/>
                     <Route path="/checkout" element={<motion.div {...pageTransition}><CheckoutPage/></motion.div>}/>
                     <Route path="/notifications" element={<motion.div {...pageTransition}><DiscountNotifications/></motion.div>}/>
+                    <Route path="/profile" element={<motion.div {...pageTransition}><ProfilePage/></motion.div>}/>
                 </Routes>
                 {/*</div>*/}
             </AnimatePresence>

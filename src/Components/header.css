@@ -5,17 +5,34 @@
 }
 
 .profile-button {
-    background-color: #343a40; /* Темный фон, соответствующий теме bootstrap 'dark' */
-    border: none; /* Убираем стандартную рамку кнопки */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Добавляем тень для выделения */
-    color: white; /* Цвет текста */
+    /*background-color: #343a40; !* Темный фон, соответствующий теме bootstrap 'dark' *!*/
+    /*border: none; !* Убираем стандартную рамку кнопки *!*/
+    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); !* Добавляем тень для выделения *!*/
+    /*color: white; !* Цвет текста *!*/
+    width: 50px;   /* Диаметр кнопки */
+    height: 50px;  /* Высота равна ширине для создания круга */
+    border-radius: 50%; /* Радиус границы для круглой формы */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative; /* Для позиционирования бэйджа */
+    padding: 0; /* Убираем стандартные отступы */
+    border: none;
 }
 
-.profile-button:hover, .profile-button:focus {
+.profile-button .badge {
+    position: absolute; /* Позиционируем бэйдж */
+    top: -10px; /* Поднимаем над кнопкой */
+    right: -10px; /* Сдвигаем вправо */
+    border: 2px solid #343a40; /* Добавляем границу, цвет фона родительской кнопки */
     background-color: #495057; /* Чуть светлее цвет при наведении для интерактивности */
-    color: #ffffff;
-    text-decoration: none; /* Убираем подчеркивание ссылки, если таковое имеется */
 }
+
+/*.profile-button:hover, .profile-button:focus {*/
+/*    background-color: #495057;*/
+/*    color: #ffffff;*/
+/*    text-decoration: none;*/
+/*}*/
 
 
 .header-nav {
@@ -73,4 +90,3 @@
         opacity: 1;
     }
 }
-

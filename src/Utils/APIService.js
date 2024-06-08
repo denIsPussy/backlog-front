@@ -90,7 +90,7 @@ const getPageProducts = (page, size) => {
 };
 
 const getProductsByCategory = (categoryId, page, size) => {
-    return fetchWithToken(`/products/byCategory/${categoryId}?page=${page-1}&size=${size}`, 'GET');
+    return fetchWithToken(`/products/byCategory/${categoryId}?page=${page - 1}&size=${size}`, 'GET');
 };
 
 const addToCart = (data) => {
@@ -157,4 +157,36 @@ const getNotifications = () => {
     return fetchWithToken('/notifications/', 'GET', null, true);
 };
 
-export { getNotifications, createOrder, getShippingMethods, getPaymentMethods, getOrdersByUser, createReview, deleteReview, updateReview, register, authenticate, verifyTwoFactorCode, getPageProducts, getShoppingCart, exchangeToken, getAllCategories, getProductsByCategory, getProductById, addToCart, removeFromCart, reduceProductQuantityInCart, increaseProductQuantityInCart };
+const getDeposit = () => {
+    return fetchWithToken('/user/deposit', 'GET', null, true);
+};
+
+const getUserInfo = () => {
+    return fetchWithToken('/user/getUserInfo', 'GET', null, true);
+};
+
+export {
+    getUserInfo,
+    getDeposit,
+    getNotifications,
+    createOrder,
+    getShippingMethods,
+    getPaymentMethods,
+    getOrdersByUser,
+    createReview,
+    deleteReview,
+    updateReview,
+    register,
+    authenticate,
+    verifyTwoFactorCode,
+    getPageProducts,
+    getShoppingCart,
+    exchangeToken,
+    getAllCategories,
+    getProductsByCategory,
+    getProductById,
+    addToCart,
+    removeFromCart,
+    reduceProductQuantityInCart,
+    increaseProductQuantityInCart
+};
