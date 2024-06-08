@@ -57,10 +57,10 @@ const Header = () => {
                                     <>
                                         <Dropdown as={Nav.Item}>
                                             <Dropdown.Toggle as={Nav.Link} className="d-flex align-items-center">
-                                                <Button variant="dark" style={{border: 'none'}}>
+                                                <Button variant="dark" className="profile-button">
                                                     Денис
                                                     <Badge bg="light" className="ms-2" style={{ color: 'black' }}>{notificationCount}</Badge>
-                                                    <span className="visually-hidden" style={{color:"black"}}>unread messages</span>
+                                                    <span className="visually-hidden">unread messages</span>
                                                 </Button>
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu align="end">
@@ -90,7 +90,7 @@ const Header = () => {
                             <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setShowOffCanvas(true)}/>
                         </Container>
                     </Navbar>
-                    <Offcanvas show={showOffCanvas} onHide={() => setShowOffCanvas(false)} placement="end">
+                    <Offcanvas className={"custom-container"} show={showOffCanvas} onHide={() => setShowOffCanvas(false)} placement="end">
                         <Offcanvas.Header closeButton>
                             <Offcanvas.Title>Меню</Offcanvas.Title>
                         </Offcanvas.Header>
@@ -98,15 +98,15 @@ const Header = () => {
                             <Nav className="flex-column">
                                 {username ? (
                                     <>
-                                        <Nav.Link as={Link} to="/orders" className="d-flex align-items-center">
+                                        <Nav.Link as={Link} to="/orders" className="d-flex align-items-center custom-black-text">
                                             <FontAwesomeIcon icon={faShoppingCart} className="me-2"/> Заказы
                                         </Nav.Link>
-                                        <Nav.Link as={Link} to="/profile" className="d-flex align-items-center">
+                                        <Nav.Link as={Link} to="/profile" className="d-flex align-items-center custom-black-text">
                                             <FontAwesomeIcon icon={faUser} className="me-2"/> Профиль
                                         </Nav.Link>
-                                        <Nav.Link as={Link} to="/notifications" className="d-flex align-items-center">
+                                        <Nav.Link as={Link} to="/notifications" className="d-flex align-items-center custom-black-text">
                                             <FontAwesomeIcon icon={faBell} className="me-2"/> Уведомления
-                                            <Badge bg="warning" text="dark" className="ms-auto">{notificationCount}</Badge>
+                                            <Badge bg="danger" text="dark" className="ms-2">{notificationCount}</Badge>
                                         </Nav.Link>
                                         <Nav.Item className="mt-3">
                                             <Button variant="outline-danger" onClick={handleLogout} style={{width: '100%'}}>

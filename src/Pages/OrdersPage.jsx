@@ -37,6 +37,7 @@ const OrdersPage = () => {
 
     return (
         <>
+            <Header/>
             <Container>
                 <h1 className="my-4">Список заказов</h1>
                 {orders.map(order => (
@@ -55,7 +56,6 @@ const HorizontalOrderCard = ({order, onShowDetails}) => {
     };
     return (
         <>
-            <Header/>
             <Card className="mb-3">
                 <Card.Body className="d-flex justify-content-between align-items-end">
                     <div>

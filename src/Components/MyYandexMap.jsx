@@ -1,5 +1,6 @@
 import React from 'react';
-import { YMaps, Map, Placemark } from 'react-yandex-maps';
+import {YMaps, Map, Placemark} from "@pbe/react-yandex-maps";
+// import { YMaps, Map, Placemark } from 'react-yandex-maps';
 
 const MyYandexMap = ({ data }) => {
     //console.log(data); // Для отладки: проверьте вывод данных в консоль.

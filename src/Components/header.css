@@ -1,3 +1,23 @@
+@media (max-width: 575.98px) {
+    .custom-container {
+        max-width: 80vw;
+    }
+}
+
+.profile-button {
+    background-color: #343a40; /* Темный фон, соответствующий теме bootstrap 'dark' */
+    border: none; /* Убираем стандартную рамку кнопки */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Добавляем тень для выделения */
+    color: white; /* Цвет текста */
+}
+
+.profile-button:hover, .profile-button:focus {
+    background-color: #495057; /* Чуть светлее цвет при наведении для интерактивности */
+    color: #ffffff;
+    text-decoration: none; /* Убираем подчеркивание ссылки, если таковое имеется */
+}
+
+
 .header-nav {
     background-color: #343a40; /* Темно-серый цвет фона */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Тень для добавления глубины */
@@ -35,6 +55,10 @@
     animation: pulse 2s infinite;
 }
 
+.offcanvas-body .nav-link, .offcanvas-body .nav-link:hover {
+    color: black !important;
+}
+
 @keyframes pulse {
     0% {
         transform: scale(1);
@@ -49,5 +73,4 @@
         opacity: 1;
     }
 }
-
 
