@@ -137,6 +137,7 @@ const ProductPage = () => {
 
     return (
         <>
+            <Header/>
             {product ? (
                 <Container className="my-5 px-4">
                     <Row>

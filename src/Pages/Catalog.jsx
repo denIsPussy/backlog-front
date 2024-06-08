@@ -77,6 +77,7 @@ export default function Catalog() {
 
     return (
         <>
+            <Header/>
             <Container className="mt-5">
                 <h1 className="text-center mb-4">Каталог</h1>
                 <Container fluid>

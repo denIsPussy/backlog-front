@@ -16,6 +16,7 @@ import OrdersPage from "./Pages/OrdersPage";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 import CheckoutPage from "./Pages/CheckoutPage";
+import DiscountNotifications from "./Pages/DiscountNotifications";
 
 const AnimatedRoutes = () => {
     const location = useLocation(); // Получаем текущее местоположение для ключа анимации
@@ -69,6 +70,7 @@ const AnimatedRoutes = () => {
                            element={<motion.div {...pageTransition}><ProductPage/></motion.div>}/>
                     <Route path="/orders" element={<motion.div {...pageTransition}><OrdersPage/></motion.div>}/>
                     <Route path="/checkout" element={<motion.div {...pageTransition}><CheckoutPage/></motion.div>}/>
+                    <Route path="/notifications" element={<motion.div {...pageTransition}><DiscountNotifications/></motion.div>}/>
                 </Routes>
                 {/*</div>*/}
             </AnimatePresence>
@@ -82,13 +84,7 @@ const AnimatedRoutes = () => {
 const AppRouter = () => {
     return (
         <Router>
-            <div className="main-content">
-                <Header/>
-                <main className="flex-grow-1">
-                    <AnimatedRoutes/>
-                </main>
-                <Footer/>
-            </div>
+            <AnimatedRoutes/>
         </Router>
     );
 };

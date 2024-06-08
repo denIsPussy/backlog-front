@@ -4,6 +4,7 @@ import * as APIService from '../Utils/APIService';
 import {useLocation, useNavigate} from 'react-router-dom';
 import * as VKID from '@vkid/sdk';
 import "./style.css"
+import Header from "../Components/Header";
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
@@ -45,40 +46,43 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="login-page">
-            <Container className="d-flex align-items-center justify-content-center" style={{minHeight: "100vh"}}>
-                <div className="w-100" style={{maxWidth: "400px"}}>
-                    <Form className="p-4 shadow-lg rounded">
-                        <h2 className="text-center mb-4">Авторизация</h2>
-                        <Form.Group controlId="formUsername" className="mb-3">
-                            <Form.Label>Логин</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                placeholder="Введите логин"
-                                required
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="formPassword" className="mb-3">
-                            <Form.Label>Пароль</Form.Label>
-                            <Form.Control
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Пароль"
-                                required
-                            />
-                        </Form.Group>
-                        <Button variant="primary" type="submit" className="w-100 mb-3" disabled={loading} onClick={handleLogin} >
-                            {loading ? <Spinner as="span" animation="border" size="sm" role="status"
-                                        aria-hidden="true"/> : "Войти"}
-                        </Button>
-                        <div className="w-100" id="VkIdSdkOneTap"></div>
-                    </Form>
-                </div>
-            </Container>
-        </div>
+        <>
+            <Header/>
+            <div className="login-page">
+                <Container className="d-flex align-items-center justify-content-center" style={{minHeight: "100vh"}}>
+                    <div className="w-100" style={{maxWidth: "400px"}}>
+                        <Form className="p-4 shadow-lg rounded">
+                            <h2 className="text-center mb-4">Авторизация</h2>
+                            <Form.Group controlId="formUsername" className="mb-3">
+                                <Form.Label>Логин</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    placeholder="Введите логин"
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group controlId="formPassword" className="mb-3">
+                                <Form.Label>Пароль</Form.Label>
+                                <Form.Control
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="Пароль"
+                                    required
+                                />
+                            </Form.Group>
+                            <Button variant="primary" type="submit" className="w-100 mb-3" disabled={loading} onClick={handleLogin} >
+                                {loading ? <Spinner as="span" animation="border" size="sm" role="status"
+                                            aria-hidden="true"/> : "Войти"}
+                            </Button>
+                            <div className="w-100" id="VkIdSdkOneTap"></div>
+                        </Form>
+                    </div>
+                </Container>
+            </div>
+        </>
     );
 };
 

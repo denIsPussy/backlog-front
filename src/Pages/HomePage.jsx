@@ -12,13 +12,16 @@ const HomePage = () => {
     };
 
     return (
-        <div className="home-page">
-            <div className="hero-section text-center">
-                <h1 className="display-4">Добро пожаловать в наш онлайн-магазин{username ? `, ${username}` : ''}!</h1>
-                <p>Это домашняя страница нашего сайта. Вы можете просматривать товары и делать заказы.</p>
-                <button onClick={goToCatalog} className="btn btn-primary btn-lg">Посмотреть товары</button>
+        <>
+            <Header/>
+            <div className="home-page">
+                <div className="hero-section text-center">
+                    <h1 className="display-4">Добро пожаловать в наш онлайн-магазин{username ? `, ${username}` : ''}!</h1>
+                    <p>Это домашняя страница нашего сайта. Вы можете просматривать товары и делать заказы.</p>
+                    <button onClick={goToCatalog} className="btn btn-primary btn-lg">Посмотреть товары</button>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

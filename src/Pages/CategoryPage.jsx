@@ -3,6 +3,7 @@ import {Button, Card, Col, Container, Row} from 'react-bootstrap';
 import {getAllCategories} from '../Utils/APIService';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import Header from "../Components/Header";
 
 function CategoriesPage() {
 
@@ -25,7 +26,7 @@ function CategoriesPage() {
 
     return (
         <>
-
+            <Header/>
             <Container className="mt-5 flex-grow-1">
                 <h1 className="text-center mb-4">Выберите категорию товаров</h1>
                 <Row xs={1} md={2} lg={3} className="g-4">

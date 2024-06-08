@@ -12,6 +12,7 @@ const CartPage = () => {
 
     return (
         <>
+            <Header/>
             <Container className="cart-page my-5" style={{ boxShadow: "none", backgroundColor: "transparent"}}>
                 <h1 className="text-start mb-4 ms-2">Корзина</h1>
                 <ShoppingCart username={username}/>

@@ -153,4 +153,8 @@ const exchangeToken = (data) => {
     return fetchWithToken('/exchangeSilentAuthToken', 'POST', data, false);
 };
 
-export { createOrder, getShippingMethods, getPaymentMethods, getOrdersByUser, createReview, deleteReview, updateReview, register, authenticate, verifyTwoFactorCode, getPageProducts, getShoppingCart, exchangeToken, getAllCategories, getProductsByCategory, getProductById, addToCart, removeFromCart, reduceProductQuantityInCart, increaseProductQuantityInCart };
+const getNotifications = () => {
+    return fetchWithToken('/notifications/', 'GET', null, true);
+};
+
+export { getNotifications, createOrder, getShippingMethods, getPaymentMethods, getOrdersByUser, createReview, deleteReview, updateReview, register, authenticate, verifyTwoFactorCode, getPageProducts, getShoppingCart, exchangeToken, getAllCategories, getProductsByCategory, getProductById, addToCart, removeFromCart, reduceProductQuantityInCart, increaseProductQuantityInCart };

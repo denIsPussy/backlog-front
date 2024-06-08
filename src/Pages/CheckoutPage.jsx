@@ -3,6 +3,7 @@ import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import OrderSummary from "../Components/OrderSummary";
 import {createOrder, getPaymentMethods, getShippingMethods, getShoppingCart} from "../Utils/APIService";
 import {useNavigate} from "react-router-dom";
+import Header from "../Components/Header";
 
 const CheckoutPage = () => {
     const [cartItems, setCartItems] = useState(null);
@@ -81,6 +82,8 @@ const CheckoutPage = () => {
     };
 
     return (
+        <>
+        <Header/>
         <Container className="my-5">
             <Row>
                 <Col md={7}>
@@ -140,6 +143,7 @@ const CheckoutPage = () => {
                 </Col>
             </Row>
         </Container>
+        </>
     );
 };
 

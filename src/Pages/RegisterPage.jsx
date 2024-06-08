@@ -4,6 +4,7 @@ import { Form, Button, Container } from 'react-bootstrap';
 import * as APIService from '../Utils/APIService';
 import {useLocation, useNavigate} from 'react-router-dom';
 import Footer from "../Components/Footer";
+import Header from "../Components/Header";
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({
@@ -38,7 +39,9 @@ const RegisterPage = () => {
     };
 
     return (
-        <div className="registration-page">
+        <>
+            <Header/>
+            <div className="registration-page">
             <Container className="d-flex align-items-center justify-content-center" style={{minHeight: "100vh"}}>
                 <div className="w-100" style={{maxWidth: "400px"}}>
                     <Form onSubmit={handleSubmit} className="p-4 shadow-lg rounded">
@@ -115,6 +118,7 @@ const RegisterPage = () => {
                 </div>
             </Container>
         </div>
+        </>
     );
 };
 

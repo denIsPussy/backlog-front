@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {Button, Card, Col, Container, Modal, Row} from 'react-bootstrap';
 import {getOrdersByUser} from "../Utils/APIService";
 import Header from "../Components/Header";
-import Footer from "../Components/Footer";
 import {format, parseISO} from 'date-fns'
 import {Badge} from "@mui/material";
 import {Link} from "react-router-dom";
@@ -41,44 +40,47 @@ const OrdersPage = () => {
             <Container>
                 <h1 className="my-4">Список заказов</h1>
                 {orders.map(order => (
-                    <HorizontalOrderCard key={order.id} order={order} onShowDetails={handleShowDetails} />
+                    <HorizontalOrderCard key={order.id} order={order} onShowDetails={handleShowDetails}/>
                 ))}
-                <OrderDetailsModal show={showModal} onHide={() => setShowModal(false)} order={selectedOrder} />
+                <OrderDetailsModal show={showModal} onHide={() => setShowModal(false)} order={selectedOrder}/>
             </Container>
         </>
     );
 };
 
-const HorizontalOrderCard = ({ order, onShowDetails }) => {
+const HorizontalOrderCard = ({order, onShowDetails}) => {
     const formatDate = (dateString) => {
         const date = parseISO(dateString);
         return format(date, 'dd.MM.yyyy HH:mm');
     };
     return (
-        <Card className="mb-3">
-            <Card.Body className="d-flex justify-content-between align-items-end">
-                <div>
-                    <Card.Title>Заказ #{order.id}</Card.Title>
-                    <Card.Text>
-                        <strong>Дата создания:</strong> {formatDate(order.creationDate)}<br />
-                        <strong>Дата завершения:</strong> {order.completionDate || 'Не завершён'}<br />
-                        <strong>Сумма:</strong> {order.totalAmount.toFixed(2)} ₽<br />
-                        <strong>Статус:</strong> {order.status.description}<br />
-                        <strong>Способ оплаты:</strong> {order.paymentMethod.description}<br />
-                        <strong>Способ доставки:</strong> {order.shippingMethod.description}
-                    </Card.Text>
-                </div>
-                <div>
-                    <Button variant="primary" onClick={() => onShowDetails(order)}>
-                        Подробнее
-                    </Button>
-                </div>
-            </Card.Body>
-        </Card>
+        <>
+            <Header/>
+            <Card className="mb-3">
+                <Card.Body className="d-flex justify-content-between align-items-end">
+                    <div>
+                        <Card.Title>Заказ #{order.id}</Card.Title>
+                        <Card.Text>
+                            <strong>Дата создания:</strong> {formatDate(order.creationDate)}<br/>
+                            <strong>Дата завершения:</strong> {order.completionDate || 'Не завершён'}<br/>
+                            <strong>Сумма:</strong> {order.totalAmount.toFixed(2)} ₽<br/>
+                            <strong>Статус:</strong> {order.status.description}<br/>
+                            <strong>Способ оплаты:</strong> {order.paymentMethod.description}<br/>
+                            <strong>Способ доставки:</strong> {order.shippingMethod.description}
+                        </Card.Text>
+                    </div>
+                    <div>
+                        <Button variant="primary" onClick={() => onShowDetails(order)}>
+                            Подробнее
+                        </Button>
+                    </div>
+                </Card.Body>
+            </Card>
+        </>
     );
 };
 
-const OrderDetailsModal = ({ show, onHide, order }) => {
+const OrderDetailsModal = ({show, onHide, order}) => {
     if (!order) return null;
 
     return (
@@ -96,11 +98,12 @@ const OrderDetailsModal = ({ show, onHide, order }) => {
                                     <Col xs={12}>
                                         {/*<h5 className="mb-0">{index + 1}. {item.product.name}</h5>*/}
                                         <h5>
-                                            <Link to={`/product/${item.product.id}`} className="hover-link">{index + 1}. {item.product.name}</Link>
+                                            <Link to={`/product/${item.product.id}`}
+                                                  className="hover-link">{index + 1}. {item.product.name}</Link>
                                         </h5>
                                     </Col>
                                     <Col xs={12} className="text-right">
-                                    <Badge variant="primary">Количество: {item.quantity}</Badge>
+                                        <Badge variant="primary">Количество: {item.quantity}</Badge>
                                     </Col>
                                 </Row>
                             </Card.Body>

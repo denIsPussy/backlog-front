@@ -3,6 +3,7 @@ import {Form, Button, Container, Spinner} from 'react-bootstrap';
 import * as APIService from '../Utils/APIService';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Footer from "../Components/Footer";
+import Header from "../Components/Header";
 
 const VkAuthPage = () => {
     const [formData, setFormData] = useState({
@@ -90,52 +91,55 @@ const VkAuthPage = () => {
     }, [location]);
 
     return (
-        <div className="registration-page">
-            <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
-                <div className="w-100" style={{ maxWidth: "400px" }}>
-                    <Form onSubmit={handleSubmit} className="p-4 shadow-lg rounded">
-                        <h2 className="text-center mb-4">Регистрация</h2>
-                        {formData.firstName && <p className="text-center">Добро пожаловать {formData.firstName}</p>}
-                        <Form.Group controlId="formUsername" className="mb-3">
-                            <Form.Label>Логин</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Введите логин"
-                                name="username"
-                                value={formData.username}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="formPassword" className="mb-3">
-                            <Form.Label>Пароль</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Пароль"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="formEmail" className="mb-3">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                type="email"
-                                placeholder="Введите email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
-                        <Button variant="primary" type="submit" className="w-100" disabled={isLoading}>
-                            {isLoading ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : 'Завершить регистрацию'}
-                        </Button>
-                    </Form>
-                </div>
-            </Container>
-        </div>
+        <>
+            <Header/>
+            <div className="registration-page">
+                <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
+                    <div className="w-100" style={{ maxWidth: "400px" }}>
+                        <Form onSubmit={handleSubmit} className="p-4 shadow-lg rounded">
+                            <h2 className="text-center mb-4">Регистрация</h2>
+                            {formData.firstName && <p className="text-center">Добро пожаловать {formData.firstName}</p>}
+                            <Form.Group controlId="formUsername" className="mb-3">
+                                <Form.Label>Логин</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Введите логин"
+                                    name="username"
+                                    value={formData.username}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group controlId="formPassword" className="mb-3">
+                                <Form.Label>Пароль</Form.Label>
+                                <Form.Control
+                                    type="password"
+                                    placeholder="Пароль"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group controlId="formEmail" className="mb-3">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control
+                                    type="email"
+                                    placeholder="Введите email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </Form.Group>
+                            <Button variant="primary" type="submit" className="w-100" disabled={isLoading}>
+                                {isLoading ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : 'Завершить регистрацию'}
+                            </Button>
+                        </Form>
+                    </div>
+                </Container>
+            </div>
+        </>
     );
 };
 

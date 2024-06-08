@@ -38,8 +38,8 @@ const MyYandexMap = ({ data }) => {
                             properties={{
                                 hintContent: `Нажмите для информации о ${item.name}`, // Подсказка при наведении
                                 balloonContent: `
-                                    <strong>${item.name}</strong><br />
-                                    Адрес: ${item.storeNestedDTO.address.street}, ${item.storeNestedDTO.address.city}<br />
+                                    <strong>${item.storeNestedDTO.name}</strong><br />
+                                    Адрес: ул. ${item.storeNestedDTO.address.street}, ${item.storeNestedDTO.address.houseNumber}<br />
                                     Количество: ${item.quantity}` // Содержимое всплывающего окна
                             }}
                             modules={['geoObject.addon.balloon', 'geoObject.addon.hint']} // Модули для включения всплывающих окон и подсказок
