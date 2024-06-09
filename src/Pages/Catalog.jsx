@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {getAllCategories, getProductsByCategory} from '../Utils/APIService';
+import {containsInCart, getAllCategories, getProductsByCategory} from '../Utils/APIService';
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import '../css/catalog.css';

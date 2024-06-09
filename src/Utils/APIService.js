@@ -145,9 +145,9 @@ const changeSettings = (data, parameter) => {
     return fetchWithToken('/user/' + path, 'POST', data, true);
 };
 
-// const settingTwoFactorAuth = (data) => {
-//     return fetchWithToken('/user/settingTwoFactorAuth', 'POST', data, true);
-// };
+const containsInCart = (productId) => {
+    return fetchWithToken(`/user/containsInCart/${productId}`, 'GET', null, true);
+};
 
 const changeUserData = (data) => {
     return fetchWithToken('/user/changeUserData', 'POST', data, true);
@@ -155,6 +155,7 @@ const changeUserData = (data) => {
 
 
 export {
+    containsInCart,
     changeUserData,
     changeSettings,
     changePassword,

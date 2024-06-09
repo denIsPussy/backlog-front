@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Col, Container, FloatingLabel, Form, Image, Modal, Row, Table} from 'react-bootstrap';
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import Header from '../Components/Header';
-import Footer from '../Components/Footer';
-import {addToCart, createReview, deleteReview, getProductById, updateReview} from "../Utils/APIService";
+import {addToCart, containsInCart, createReview, deleteReview, getProductById, updateReview} from "../Utils/APIService";
 import StarRatings from 'react-star-ratings';
 // import "leaflet/dist/leaflet.css";
 import MyYandexMap from "../Components/MyYandexMap";
@@ -19,6 +18,9 @@ const ProductPage = () => {
     const [showModal, setShowModal] = useState(false);
     const [editRating, setEditRating] = useState(0);
     const [sortedReviews, setSortedReviews] = useState([]);
+    const [isContain, setIsContain] = useState(false);
+    const [reload, setReload] = useState(false);
+    const navigate = useNavigate();
 
     const username = localStorage.getItem("username");
 
@@ -33,23 +35,33 @@ const ProductPage = () => {
     }, []);
 
     useEffect(() => {
+        containsInCart(productId).then((res) => {
+            if (res.success) setIsContain(true);
+            else setIsContain(false);
+        })
+    }, [reload])
+
+    useEffect(() => {
         if (reviews && reviews.length > 0) {
             const sortedReviews = [...reviews].sort((a, b) => {
-                // Сначала проверяем, является ли отзыв от текущего пользователя
                 if (a.user.username === username && b.user.username !== username) return -1;
                 if (b.user.username === username && a.user.username !== username) return 1;
-                // Затем сортируем остальные отзывы по дате
                 return new Date(b.createdAt) - new Date(a.createdAt);
             });
             setSortedReviews(sortedReviews);
         }
-    }, [reviews]); // Добавление username в зависимости, чтобы реагировать на изменения текущего пользователя
+    }, [reviews]);
 
     function handleAddToCartProduct(product) {
         addToCart({product: product, quantity: 1})
-            .then(
-                alert("Товар добавлен в корзину!")
-            )
+            .then(() => {
+                setReload(!reload);
+                alert("Reload сделан");
+            })
+    }
+
+    function handleGoToCart() {
+        navigate("/cart");
     }
 
     const handleEditClick = (review) => {
@@ -83,7 +95,7 @@ const ProductPage = () => {
             });
     };
 
-    const handleChangeRating = (newRating) =>{
+    const handleChangeRating = (newRating) => {
         setEditRating(newRating);
         console.log(editRating);
     }
@@ -142,14 +154,14 @@ const ProductPage = () => {
                 <Container className="my-5 px-4">
                     <Row>
                         <Col md={6} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-                            <Image className="" style={{width:'80%'}}
+                            <Image className="" style={{width: '80%'}}
                                    src={`data:image/jpeg;base64,${product.image}`}
                                    alt={product.name}/>
                         </Col>
-                        <Col style={{display:"flex", flexDirection:"column"}} md={6}>
+                        <Col style={{display: "flex", flexDirection: "column"}} md={6}>
                             <h2>{product.name}</h2>
                             <Row style={{display: "flex", alignItems: "center"}}>
-                                <div className={"pb-2"} style={{width:'fit-content'}}>
+                                <div className={"pb-2"} style={{width: 'fit-content'}}>
                                     <StarRatings
                                         rating={product.rating}
                                         starRatedColor="#fd920f"
@@ -159,16 +171,30 @@ const ProductPage = () => {
                                         starSpacing="1px"
                                     />
                                 </div>
-                                <div style={{display:"flex", alignItems:"center", width:'fit-content', height:'100%'}}>
+                                <div style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    width: 'fit-content',
+                                    height: '100%'
+                                }}>
                                     {product.reviewList.length}
                                 </div>
                             </Row>
-                            <Row className={"mt-2"} style={{display:"flex", flexDirection: 'row', justifyContent: 'center', alignItems:"center"}}>
+                            <Row className={"mt-2"} style={{
+                                display: "flex",
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                alignItems: "center"
+                            }}>
                                 <Col style={{maxHeight: "min-content"}}>
                                     <h5 style={{textWrap: "nowrap"}}>{product.price.toLocaleString('ru-RU')} ₽</h5>
                                 </Col>
                                 <Col style={{maxHeight: "min-content"}}>
-                                    <Button onClick={() => handleAddToCartProduct(product)} variant="primary" style={{textWrap: "nowrap"}}>Добавить в корзину</Button>
+                                    {isContain ?
+                                        <Button onClick={() => handleGoToCart()} variant="primary"
+                                                style={{textWrap: "nowrap"}}>В корзине</Button> :
+                                        <Button onClick={() => handleAddToCartProduct(product)} variant="primary"
+                                                style={{textWrap: "nowrap"}}>Добавить в корзину</Button>}
                                 </Col>
                             </Row>
                         </Col>
@@ -212,7 +238,8 @@ const ProductPage = () => {
                                                 changeRating={(newRating) => handleChangeRating(newRating)} // Добавьте обработчик для изменения рейтинга
                                             />
                                         </div>
-                                        <FloatingLabel controlId="floatingInputHeader" label="Заголовок" className="mb-3">
+                                        <FloatingLabel controlId="floatingInputHeader" label="Заголовок"
+                                                       className="mb-3">
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Введите заголовок"
@@ -224,7 +251,7 @@ const ProductPage = () => {
                                             <Form.Control
                                                 as="textarea"
                                                 placeholder="Введите содержание отзыва"
-                                                style={{ height: '100px' }}
+                                                style={{height: '100px'}}
                                                 value={editContent}
                                                 onChange={e => setEditContent(e.target.value)}
                                             />
@@ -242,7 +269,8 @@ const ProductPage = () => {
                             </Modal>
                             <h4>Отзывы:</h4>
                             {username && !sortedReviews.some(review => review.user.username === username) && (
-                                <Button className={"mb-3"} variant="primary" onClick={handleCreateClick}>Оставить отзыв</Button>
+                                <Button className={"mb-3"} variant="primary" onClick={handleCreateClick}>Оставить
+                                    отзыв</Button>
                             )}
                             {(sortedReviews && sortedReviews.length > 0) ? (
                                 <div className="review-list">
@@ -250,7 +278,7 @@ const ProductPage = () => {
                                         <div
                                             key={index}
                                             className={`card mb-3 ${username === review.user.username ? "border border-2 border-primary" : "border border-2"}`}
-                                            style={{ padding: "15px" }}
+                                            style={{padding: "15px"}}
                                         >
                                             {editingReview && editingReview.id === review.id ? (
                                                 <Col>
@@ -266,7 +294,8 @@ const ProductPage = () => {
                                                                 changeRating={(newRating) => handleChangeRating(newRating)} // Добавьте обработчик для изменения рейтинга
                                                             />
                                                         </div>
-                                                        <FloatingLabel controlId="floatingInputHeader" label="Заголовок" className="mb-3">
+                                                        <FloatingLabel controlId="floatingInputHeader" label="Заголовок"
+                                                                       className="mb-3">
                                                             <Form.Control
                                                                 type="text"
                                                                 placeholder="Введите заголовок"
@@ -274,18 +303,22 @@ const ProductPage = () => {
                                                                 onChange={e => setEditHeader(e.target.value)}
                                                             />
                                                         </FloatingLabel>
-                                                        <FloatingLabel controlId="floatingTextareaContent" label="Содержание">
+                                                        <FloatingLabel controlId="floatingTextareaContent"
+                                                                       label="Содержание">
                                                             <Form.Control
                                                                 as="textarea"
                                                                 placeholder="Введите содержание отзыва"
-                                                                style={{ height: '100px' }}
+                                                                style={{height: '100px'}}
                                                                 value={editContent}
                                                                 onChange={e => setEditContent(e.target.value)}
                                                             />
                                                         </FloatingLabel>
                                                         <div className="mt-3">
-                                                            <Button variant="primary" onClick={handleSaveClick}>Сохранить</Button>
-                                                            <Button variant="danger" onClick={() => setEditingReview(null)} className="ms-2">Отмена</Button>
+                                                            <Button variant="primary"
+                                                                    onClick={handleSaveClick}>Сохранить</Button>
+                                                            <Button variant="danger"
+                                                                    onClick={() => setEditingReview(null)}
+                                                                    className="ms-2">Отмена</Button>
                                                         </div>
                                                     </Form>
                                                 </Col>
@@ -303,13 +336,18 @@ const ProductPage = () => {
                                                     <p>{review.content}</p>
                                                     {username === review.user.username && (
                                                         <>
-                                                            <button onClick={() => handleEditClick(review)} className="btn btn-primary">Редактировать</button>
-                                                            <button onClick={() => handleDeleteClick(review.id)} className="btn btn-danger ms-2">Удалить</button>
+                                                            <button onClick={() => handleEditClick(review)}
+                                                                    className="btn btn-primary">Редактировать
+                                                            </button>
+                                                            <button onClick={() => handleDeleteClick(review.id)}
+                                                                    className="btn btn-danger ms-2">Удалить
+                                                            </button>
                                                         </>
                                                     )}
                                                     {username !== review.user.username && (
                                                         <footer className="blockquote-footer">
-                                                            Оставлен <cite title="Source Title">{review.user.firstName} {review.user.lastName}</cite>
+                                                            Оставлен <cite
+                                                            title="Source Title">{review.user.firstName} {review.user.lastName}</cite>
                                                         </footer>
                                                     )}
                                                 </div>
@@ -323,7 +361,7 @@ const ProductPage = () => {
                         </Col>
                     </Row>
                     <Row className="mt-4">
-                        <MyYandexMap data={product.storeList} />
+                        <MyYandexMap data={product.storeList}/>
                     </Row>
                 </Container>
             ) : (

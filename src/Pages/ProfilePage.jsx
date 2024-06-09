@@ -50,7 +50,8 @@ const ProfilePage = () => {
         setCurrentSetting(setting);
     }
 
-    const handleConfirm = () => {
+    const handleConfirm = (e) => {
+        e.preventDefault();  // Предотвращение стандартной отправки формы
         //setUser({...user, [setting]: !user[setting]});
         const updSetting = {
             isEnabled: !user[currentSetting],
@@ -69,7 +70,8 @@ const ProfilePage = () => {
         setConfirmMode(false);
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = (e) => {
+        e.preventDefault();  // Предотвращение стандартной отправки формы
         const updUser = {
             firstname: user.firstName,
             lastname: user.lastName,
