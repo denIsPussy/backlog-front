@@ -1,45 +1,3 @@
-// // const API_BASE_URL = 'https://denispussy-backlog-back-0907.twc1.net'; // Обнови этот URL в соответствии с твоим серверным адресом
-// const API_BASE_URL = 'http://api.backlogshop.ru';
-// const fetchApi = async (url, method, data, token) => {
-//     const headers = new Headers({
-//         'Content-Type': 'application/json',
-//     });
-//
-//     // Добавляем токен в заголовки, если он передан и не равен null
-//     if (token) {
-//         const token = localStorage.getItem('token');
-//         headers.append('Authorization', `Bearer ${token}`);
-//     }
-//
-//     const config = {
-//         method: method,
-//         headers: headers,
-//         body: JSON.stringify(data),
-//     };
-//
-//     if (method === 'GET') {
-//         delete config.body; // Удаляем тело запроса для GET запросов
-//     }
-//
-//     let url1 = `${API_BASE_URL}${url}`;
-//     console.log("Отправка запроса на:", url1);  // Вывод URL в консоль
-//     const response = await fetch(`${API_BASE_URL}${url}`, config);
-//
-//     let responseData = await response.json();
-//
-//     if (!response.ok) {
-//         throw new Error(responseData.message || 'Что-то пошло не так');
-//     }
-//     return responseData;
-// };
-//
-// const register = (userData) => fetchApi('/register', 'POST', userData, false);
-// const authenticate = (loginData) => fetchApi('/authenticate', 'POST', loginData, false);
-// const verifyTwoFactorCode = (twoFactorData) => fetchApi('/verifyTwoFactorCode', 'POST', twoFactorData, false);
-// const getAllProducts = () => fetchApi('/products/', 'GET', null, false);
-// const getShoppingCart = () => fetchApi('/user/getShopCart', 'GET', null, true);
-//
-// export { register, authenticate, verifyTwoFactorCode, getAllProducts, getShoppingCart };
 const API_BASE_URL = process.env.REACT_APP_BASE_API_URL;
 
 const fetchWithToken = async (url, method, data = null, tokenRequired = false) => {
@@ -67,7 +25,7 @@ const fetchWithToken = async (url, method, data = null, tokenRequired = false) =
     console.log("Отправка запроса на:", fullUrl);  // Вывод URL в консоль
     const response = await fetch(fullUrl, config);
     const responseData = await response.json();
-    if (!response.ok) {
+    if (!response.ok || (response.success && !response.success)) {
         throw new Error(responseData.message || 'Что-то пошло не так');
     }
     return responseData;
@@ -165,7 +123,41 @@ const getUserInfo = () => {
     return fetchWithToken('/user/getUserInfo', 'GET', null, true);
 };
 
+const changePassword = (data) => {
+    return fetchWithToken('/user/changePassword', 'POST', data, true);
+};
+
+const getSettingsPath = (parameter) => {
+    switch (parameter) {
+        case "twoFactorEnabled":
+            return "settingTwoFactorAuth";
+        case "areNotificationsEnabled":
+            return "settingNotifications";
+        case "childModeEnabled":  // Предполагая, что это правильный параметр
+            return "settingChildMode";
+        default:
+            throw new Error("Unsupported setting parameter");
+    }
+};
+
+const changeSettings = (data, parameter) => {
+    const path = getSettingsPath(parameter);
+    return fetchWithToken('/user/' + path, 'POST', data, true);
+};
+
+// const settingTwoFactorAuth = (data) => {
+//     return fetchWithToken('/user/settingTwoFactorAuth', 'POST', data, true);
+// };
+
+const changeUserData = (data) => {
+    return fetchWithToken('/user/changeUserData', 'POST', data, true);
+};
+
+
 export {
+    changeUserData,
+    changeSettings,
+    changePassword,
     getUserInfo,
     getDeposit,
     getNotifications,

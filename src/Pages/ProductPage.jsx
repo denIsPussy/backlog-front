@@ -5,7 +5,7 @@ import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import {addToCart, createReview, deleteReview, getProductById, updateReview} from "../Utils/APIService";
 import StarRatings from 'react-star-ratings';
-import "leaflet/dist/leaflet.css";
+// import "leaflet/dist/leaflet.css";
 import MyYandexMap from "../Components/MyYandexMap";
 
 const ProductPage = () => {

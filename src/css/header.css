@@ -47,13 +47,13 @@
     font-size: 1.5rem; /* Размер шрифта */
 }
 
-.nav-link {
+.custom-nav-link {
     margin-right: 15px; /* Отступ справа для ссылок */
     font-size: 1.1rem; /* Размер шрифта ссылок */
     color: #f8f9fa !important; /* Цвет ссылок */
 }
 
-.nav-link:hover {
+.custom-nav-link:hover {
     color: #adb5bd !important; /* Цвет ссылок при наведении */
 }
 

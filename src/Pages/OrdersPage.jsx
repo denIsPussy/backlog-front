@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Button, Card, Col, Container, Modal, Row} from 'react-bootstrap';
 import {getOrdersByUser} from "../Utils/APIService";
 import Header from "../Components/Header";
@@ -7,11 +7,14 @@ import {Badge} from "@mui/material";
 import {Link} from "react-router-dom";
 
 import "../css/ordersPage.css"
+import OrderReceipt from "../Components/OrderReceipt";
+import {useReactToPrint} from "react-to-print";
 
 const OrdersPage = () => {
     const [orders, setOrders] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [showReceiptModal, setShowReceiptModal] = useState(false);
 
     useEffect(() => {
         fetchOrders();
@@ -21,6 +24,17 @@ const OrdersPage = () => {
         setSelectedOrder(order);
         setShowModal(true);
     };
+
+    const handleShowReceipt = (order) => {
+        setSelectedOrder(order);
+        setShowReceiptModal(true);
+    };
+
+    const componentRef = useRef();
+
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+    });
 
     const fetchOrders = async () => {
         const username = localStorage.getItem("username");
@@ -35,25 +49,30 @@ const OrdersPage = () => {
         }
     };
 
+    const formatDate = (dateString) => {
+        if (!dateString) return;
+        const date = parseISO(dateString);
+        return format(date, 'dd.MM.yyyy HH:mm');
+    };
+
     return (
         <>
             <Header/>
             <Container>
                 <h1 className="my-4">Список заказов</h1>
                 {orders.map(order => (
-                    <HorizontalOrderCard key={order.id} order={order} onShowDetails={handleShowDetails}/>
+                    <HorizontalOrderCard key={order.id} order={order} onShowDetails={handleShowDetails}
+                                         onReceipt={handleShowReceipt} formatDate={formatDate}/>
                 ))}
                 <OrderDetailsModal show={showModal} onHide={() => setShowModal(false)} order={selectedOrder}/>
+                <OrderReceiptModal show={showReceiptModal} onHide={() => setShowReceiptModal(false)} on
+                                   order={selectedOrder} handlePrint={handlePrint} componentRef={componentRef} formatDate={formatDate}/>
             </Container>
         </>
     );
 };
 
-const HorizontalOrderCard = ({order, onShowDetails}) => {
-    const formatDate = (dateString) => {
-        const date = parseISO(dateString);
-        return format(date, 'dd.MM.yyyy HH:mm');
-    };
+const HorizontalOrderCard = ({order, onShowDetails, onReceipt, formatDate}) => {
     return (
         <>
             <Card className="mb-3">
@@ -62,7 +81,7 @@ const HorizontalOrderCard = ({order, onShowDetails}) => {
                         <Card.Title>Заказ #{order.id}</Card.Title>
                         <Card.Text>
                             <strong>Дата создания:</strong> {formatDate(order.creationDate)}<br/>
-                            <strong>Дата завершения:</strong> {order.completionDate || 'Не завершён'}<br/>
+                            <strong>Дата завершения:</strong> {formatDate(order.completionDate) || 'Не завершён'}<br/>
                             <strong>Сумма:</strong> {order.totalAmount.toFixed(2)} ₽<br/>
                             <strong>Статус:</strong> {order.status.description}<br/>
                             <strong>Способ оплаты:</strong> {order.paymentMethod.description}<br/>
@@ -70,6 +89,9 @@ const HorizontalOrderCard = ({order, onShowDetails}) => {
                         </Card.Text>
                     </div>
                     <div>
+                        <Button variant="primary" onClick={() => onReceipt(order)}>
+                            Чек
+                        </Button>
                         <Button variant="primary" onClick={() => onShowDetails(order)}>
                             Подробнее
                         </Button>
@@ -77,6 +99,25 @@ const HorizontalOrderCard = ({order, onShowDetails}) => {
                 </Card.Body>
             </Card>
         </>
+    );
+};
+
+const OrderReceiptModal = ({show, onHide, order, componentRef, formatDate, handlePrint}) => {
+    if (!order) return null;
+
+    return (
+        <Modal show={show} onHide={onHide} size="lg">
+            <Modal.Header closeButton>
+                <Modal.Title>Детали заказа #{order.id}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <OrderReceipt ref={componentRef} order={order} formatDate={formatDate}/>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={onHide}>Закрыть</Button>
+                <Button onClick={handlePrint}>Печать чека</Button>
+            </Modal.Footer>
+        </Modal>
     );
 };
 

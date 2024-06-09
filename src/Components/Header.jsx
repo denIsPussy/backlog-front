@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Container, Dropdown, Nav, Navbar, NavLink, Offcanvas } from 'react-bootstrap';
 import {Link, useNavigate} from 'react-router-dom';
-import "./header.css";
+import "../css/header.css";
 import {getDeposit, getNotifications} from "../Utils/APIService";
 import Badge from 'react-bootstrap/Badge';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -68,7 +68,7 @@ const Header = () => {
                             <Nav className="ms-auto">
                                 {username ? (
                                     <>
-                                        <NavLink as={Link} to="/deposit" className="nav-link d-flex align-items-center">
+                                        <NavLink as={Link} to="/deposit" className="custom-nav-link d-flex align-items-center">
                                             Текущий депозит: {deposit.toLocaleString('ru-RU')} ₽
                                         </NavLink>
                                         <Dropdown as={Nav.Item}>
@@ -95,8 +95,8 @@ const Header = () => {
                                     </>
                                 ) : (
                                     <>
-                                        <NavLink as={Link} to="/login" className="nav-link">Авторизация</NavLink>
-                                        <NavLink as={Link} to="/register" className="nav-link">Регистрация</NavLink>
+                                        <NavLink as={Link} to="/login" className="custom-nav-link">Авторизация</NavLink>
+                                        <NavLink as={Link} to="/register" className="custom-nav-link">Регистрация</NavLink>
                                     </>
                                 )}
                             </Nav>
@@ -138,10 +138,10 @@ const Header = () => {
                                     </>
                                 ) : (
                                     <>
-                                        <NavLink as={Link} to="/login" className="nav-link">
+                                        <NavLink as={Link} to="/login" className="custom-nav-link">
                                             <FontAwesomeIcon icon={faUser} className="me-2"/> Авторизация
                                         </NavLink>
-                                        <NavLink as={Link} to="/register" className="nav-link">
+                                        <NavLink as={Link} to="/register" className="custom-nav-link">
                                             <FontAwesomeIcon icon={faUser} className="me-2"/> Регистрация
                                         </NavLink>
                                     </>
