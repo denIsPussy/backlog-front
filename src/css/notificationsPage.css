@@ -1,0 +1,36 @@
+.notifications-container {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.notifications-container h1 {
+    color: #333;
+    font-size: 24px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.notification-item {
+    padding: 10px;
+    margin-bottom: 8px;
+    background-color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: 1px solid #ccc;
+}
+
+.notification-item:hover {
+    background-color: #e8e8e8;
+}
+
+.unread {
+    background-color: #accaff; /* Светло-голубой фон для непрочитанных уведомлений */
+    font-weight: bold; /* Делаем текст жирным */
+}

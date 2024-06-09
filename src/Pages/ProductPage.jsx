@@ -2,7 +2,15 @@ import React, {useEffect, useState} from 'react';
 import {Button, Col, Container, FloatingLabel, Form, Image, Modal, Row, Table} from 'react-bootstrap';
 import {useNavigate, useParams} from "react-router-dom";
 import Header from '../Components/Header';
-import {addToCart, containsInCart, createReview, deleteReview, getProductById, updateReview} from "../Utils/APIService";
+import {
+    addToCart,
+    checkingForReviewUser,
+    containsInCart,
+    createReview,
+    deleteReview,
+    getProductById,
+    updateReview
+} from "../Utils/APIService";
 import StarRatings from 'react-star-ratings';
 // import "leaflet/dist/leaflet.css";
 import MyYandexMap from "../Components/MyYandexMap";
@@ -19,6 +27,7 @@ const ProductPage = () => {
     const [editRating, setEditRating] = useState(0);
     const [sortedReviews, setSortedReviews] = useState([]);
     const [isContain, setIsContain] = useState(false);
+    const [reviewPresent, setReviewPresent] = useState(0);
     const [reload, setReload] = useState(false);
     const navigate = useNavigate();
 
@@ -32,7 +41,7 @@ const ProductPage = () => {
             })
             .catch(err => {
             });
-    }, []);
+    }, [reload]);
 
     useEffect(() => {
         containsInCart(productId).then((res) => {
@@ -42,10 +51,18 @@ const ProductPage = () => {
     }, [reload])
 
     useEffect(() => {
+        checkingForReviewUser(productId)
+            .then(data => {
+                if (data.success) setReviewPresent(+data.message);
+                console.log(+data.message);
+            })
+            .catch(err =>{
+                console.log(err);
+            })
         if (reviews && reviews.length > 0) {
             const sortedReviews = [...reviews].sort((a, b) => {
-                if (a.user.username === username && b.user.username !== username) return -1;
-                if (b.user.username === username && a.user.username !== username) return 1;
+                if (!reviewPresent && a.id === reviewPresent && b.id !== reviewPresent) return -1;
+                if (!reviewPresent && b.id === reviewPresent && a.id !== reviewPresent) return 1;
                 return new Date(b.createdAt) - new Date(a.createdAt);
             });
             setSortedReviews(sortedReviews);
@@ -86,8 +103,7 @@ const ProductPage = () => {
         updateReview(reviewData)
             .then(() => getProductById(productId))
             .then(data => {
-                setProduct(data);
-                setReviews(data.reviewList);
+                setReload(!reload);
                 setEditingReview(null);
             })
             .catch(err => {
@@ -103,7 +119,7 @@ const ProductPage = () => {
     const handleDeleteClick = (reviewId) => {
         deleteReview(reviewId)
             .then(data => {
-                setReviews(data);
+                setReload(!reload);
                 alert("Отзыв удалён");
             })
             .catch(error => {
@@ -138,7 +154,7 @@ const ProductPage = () => {
             .then(data => {
                 setEditingReview(null);
                 setNewReview(false);
-                setReviews(data)
+                setReload(!reload);
                 handleCloseModal();
                 alert('Отзыв сохранён');
             })
@@ -220,6 +236,9 @@ const ProductPage = () => {
                         </Col>
                     </Row>
                     <Row className="mt-4">
+                        <MyYandexMap data={product.storeList}/>
+                    </Row>
+                    <Row className="mt-4">
                         <Col md={12}>
                             <Modal show={showModal} onHide={handleCloseModal}>
                                 <Modal.Header closeButton>
@@ -268,7 +287,7 @@ const ProductPage = () => {
                                 </Modal.Footer>
                             </Modal>
                             <h4>Отзывы:</h4>
-                            {username && !sortedReviews.some(review => review.user.username === username) && (
+                            {!reviewPresent && !sortedReviews.some(review => review.id === reviewPresent) && (
                                 <Button className={"mb-3"} variant="primary" onClick={handleCreateClick}>Оставить
                                     отзыв</Button>
                             )}
@@ -277,7 +296,7 @@ const ProductPage = () => {
                                     {sortedReviews.map((review, index) => (
                                         <div
                                             key={index}
-                                            className={`card mb-3 ${username === review.user.username ? "border border-2 border-primary" : "border border-2"}`}
+                                            className={`card mb-3 ${reviewPresent === review.id ? "border border-2 border-primary" : "border border-2"}`}
                                             style={{padding: "15px"}}
                                         >
                                             {editingReview && editingReview.id === review.id ? (
@@ -334,7 +353,7 @@ const ProductPage = () => {
                                                     />
                                                     <h5>{review.header}</h5>
                                                     <p>{review.content}</p>
-                                                    {username === review.user.username && (
+                                                    {reviewPresent && reviewPresent === review.id && (
                                                         <>
                                                             <button onClick={() => handleEditClick(review)}
                                                                     className="btn btn-primary">Редактировать
@@ -344,7 +363,7 @@ const ProductPage = () => {
                                                             </button>
                                                         </>
                                                     )}
-                                                    {username !== review.user.username && (
+                                                    {reviewPresent && reviewPresent !== review.id && (
                                                         <footer className="blockquote-footer">
                                                             Оставлен <cite
                                                             title="Source Title">{review.user.firstName} {review.user.lastName}</cite>
@@ -359,9 +378,6 @@ const ProductPage = () => {
                                 <p>Отзывов пока нет.</p>
                             )}
                         </Col>
-                    </Row>
-                    <Row className="mt-4">
-                        <MyYandexMap data={product.storeList}/>
                     </Row>
                 </Container>
             ) : (

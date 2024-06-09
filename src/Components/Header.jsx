@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Container, Dropdown, Nav, Navbar, NavLink, Offcanvas } from 'react-bootstrap';
 import {Link, useNavigate} from 'react-router-dom';
 import "../css/header.css";
-import {getDeposit, getNotifications} from "../Utils/APIService";
+import {getDeposit, getNewNotifications} from "../Utils/APIService";
 import Badge from 'react-bootstrap/Badge';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faBell, faShoppingCart, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
@@ -23,7 +23,7 @@ const Header = () => {
 
     useEffect(() => {
         const fetchNotifications = () => {
-            getNotifications()
+            getNewNotifications()
                 .then(data => {
                     setNotificationCount(data.length);
                 })
@@ -44,7 +44,7 @@ const Header = () => {
 
         fetchNotifications();
         fetchDeposit();
-        const intervalId = setInterval(fetchNotifications, 3000);
+        // const intervalId = setInterval(fetchNotifications, 3000);
         const resizeListener = () => {
             setIsLargeScreen(window.innerWidth >= 992);
         };
@@ -52,7 +52,7 @@ const Header = () => {
         window.addEventListener('resize', resizeListener);
 
         return () => {
-            clearInterval(intervalId);
+            // clearInterval(intervalId);
             window.removeEventListener('resize', resizeListener);
         };
     }, []);

@@ -25,7 +25,7 @@ const fetchWithToken = async (url, method, data = null, tokenRequired = false) =
     console.log("Отправка запроса на:", fullUrl);  // Вывод URL в консоль
     const response = await fetch(fullUrl, config);
     const responseData = await response.json();
-    if (!response.ok || (response.success && !response.success)) {
+    if (!response.ok) {
         throw new Error(responseData.message || 'Что-то пошло не так');
     }
     return responseData;
@@ -115,6 +115,10 @@ const getNotifications = () => {
     return fetchWithToken('/notifications/', 'GET', null, true);
 };
 
+const getNewNotifications = () => {
+    return fetchWithToken('/notifications/new', 'GET', null, true);
+};
+
 const getDeposit = () => {
     return fetchWithToken('/user/deposit', 'GET', null, true);
 };
@@ -126,6 +130,32 @@ const getUserInfo = () => {
 const changePassword = (data) => {
     return fetchWithToken('/user/changePassword', 'POST', data, true);
 };
+
+const changeSettings = (data, parameter) => {
+    const path = getSettingsPath(parameter);
+    return fetchWithToken('/user/' + path, 'POST', data, true);
+};
+
+const containsInCart = (productId) => {
+    return fetchWithToken(`/user/containsInCart/${productId}`, 'GET', null, true);
+};
+
+const checkingForReviewUser = (productId) => {
+    return fetchWithToken(`/user/checkingForReview/${productId}`, 'GET', null, true);
+};
+
+const changeUserData = (data) => {
+    return fetchWithToken('/user/changeUserData', 'POST', data, true);
+};
+
+const readNotification = (noitificationId) => {
+    return fetchWithToken(`/notifications/read/${noitificationId}`, 'POST', null, true);
+};
+
+const topUpDeposit = (amount) => {
+    return fetchWithToken(`/user/topUpDeposit?amount=${amount}`, 'POST', null, true);
+};
+
 
 const getSettingsPath = (parameter) => {
     switch (parameter) {
@@ -140,21 +170,11 @@ const getSettingsPath = (parameter) => {
     }
 };
 
-const changeSettings = (data, parameter) => {
-    const path = getSettingsPath(parameter);
-    return fetchWithToken('/user/' + path, 'POST', data, true);
-};
-
-const containsInCart = (productId) => {
-    return fetchWithToken(`/user/containsInCart/${productId}`, 'GET', null, true);
-};
-
-const changeUserData = (data) => {
-    return fetchWithToken('/user/changeUserData', 'POST', data, true);
-};
-
-
 export {
+    topUpDeposit,
+    checkingForReviewUser,
+    getNewNotifications,
+    readNotification,
     containsInCart,
     changeUserData,
     changeSettings,

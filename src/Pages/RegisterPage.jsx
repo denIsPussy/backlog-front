@@ -1,10 +1,11 @@
 // RegisterPage.jsx
 import React, {useEffect, useState} from 'react';
-import { Form, Button, Container } from 'react-bootstrap';
+import {Form, Button, Container, Alert} from 'react-bootstrap';
 import * as APIService from '../Utils/APIService';
 import {useLocation, useNavigate} from 'react-router-dom';
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
+import validator from 'validator';
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({
@@ -15,26 +16,76 @@ const RegisterPage = () => {
         password: '',
         email: ''
     });
-    const navigate = useNavigate();  // Используйте useNavigate вместо useHistory
+    const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
+    const navigate = useNavigate();
+
+    const validateField = (name, value) => {
+        let error = '';
+        switch (name) {
+            case 'username':
+                if (!validator.isAlphanumeric(value, 'en-US')) {
+                    error = 'Логин должен содержать только английские буквы и цифры';
+                }
+                break;
+            case 'password':
+                if (!validator.isStrongPassword(value, {
+                    minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1
+                })) {
+                    error = 'Пароль должен быть длиннее 8 символов и содержать хотя бы одну заглавную букву, одну строчную букву, одну цифру и один специальный символ';
+                }
+                break;
+            case 'patronymic':
+                if (value && !validator.matches(value, /^[A-Za-zА-Яа-яЁё\s-]+$/)) {
+                    error = 'Должно содержать только буквы';
+                }
+                break;
+            case 'firstName':
+            case 'lastName':
+                if (!validator.matches(value, /^[A-Za-zА-Яа-яЁё\s-]+$/)) {
+                    error = 'Должно содержать только буквы';
+                }
+                break;
+            case 'email':
+                if (!validator.isEmail(value)) {
+                    error = 'Некорректный email';
+                }
+                break;
+            default:
+                break;
+        }
+        setErrors(prev => ({ ...prev, [name]: error }));
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+        validateField(name, value);
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        try {
-            const response = await APIService.register(formData);
-            alert(response.message); // Показываем сообщение об успешной регистрации
-            if (response.success){
-                navigate('/login'); // Перенаправляем пользователя на страницу входа
+
+        // Проверка всех полей на валидацию перед отправкой
+        const formErrors = Object.keys(formData).map(key => validateField(key, formData[key]));
+        if (formErrors.every(error => !error) && Object.values(formData).every(value => value.trim() !== '')) {
+            console.log('Форма валидна, отправляем данные...');
+            setLoading(true);
+            try {
+                const response = await APIService.register(formData);
+                if (response.success) {
+                    navigate('/login');
+                } else {
+                    alert(response.message);
+                }
+            } catch (error) {
+                alert(error.message);
+            } finally {
+                setLoading(false);
             }
-            else{
-                alert(response.message);
-            }
-        } catch (error) {
-            alert(error.message); // Показываем ошибку, если что-то пошло не так
+        } else {
+            console.log('Форма содержит ошибки:', errors);
         }
     };
 
@@ -54,8 +105,11 @@ const RegisterPage = () => {
                                 name="firstName"
                                 value={formData.firstName}
                                 onChange={handleChange}
-                                required
+                                isInvalid={!!errors.firstName}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.firstName}
+                            </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="formLastName" className="mb-3">
                             <Form.Label>Фамилия</Form.Label>
@@ -65,18 +119,25 @@ const RegisterPage = () => {
                                 name="lastName"
                                 value={formData.lastName}
                                 onChange={handleChange}
-                                required
+                                isInvalid={!!errors.lastName}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.lastName}
+                            </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="formPatronymic" className="mb-3">
-                            <Form.Label>Отчество</Form.Label>
+                            <Form.Label>Отчество (необязательно)</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Введите отчество"
                                 name="patronymic"
                                 value={formData.patronymic}
                                 onChange={handleChange}
+                                isInvalid={!!errors.patronymic}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.patronymic}
+                            </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="formUsername" className="mb-3">
                             <Form.Label>Логин</Form.Label>
@@ -86,19 +147,24 @@ const RegisterPage = () => {
                                 name="username"
                                 value={formData.username}
                                 onChange={handleChange}
-                                required
-                            />
+                                isInvalid={!!errors.username}
+                            /><Form.Control.Feedback type="invalid">
+                            {errors.username}
+                        </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="formPassword" className="mb-3">
                             <Form.Label>Пароль</Form.Label>
                             <Form.Control
                                 type="password"
-                                placeholder="Пароль"
+                                placeholder="Введите пароль"
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                required
+                                isInvalid={!!errors.password}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.password}
+                            </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="formEmail" className="mb-3">
                             <Form.Label>Email</Form.Label>
@@ -108,10 +174,13 @@ const RegisterPage = () => {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                required
+                                isInvalid={!!errors.email}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.email}
+                            </Form.Control.Feedback>
                         </Form.Group>
-                        <Button variant="primary" type="submit" className="w-100">
+                        <Button disabled={loading || Object.values(errors).some(value => value !== '')} variant="primary" type="submit" className="w-100">
                             Зарегистрироваться
                         </Button>
                     </Form>

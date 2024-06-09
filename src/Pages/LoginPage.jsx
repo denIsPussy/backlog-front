@@ -1,15 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import { Form, Button, Container, Spinner } from 'react-bootstrap';
+import {Button, Container, Form, Spinner} from 'react-bootstrap';
 import * as APIService from '../Utils/APIService';
-import {useLocation, useNavigate} from 'react-router-dom';
-import * as VKID from '@vkid/sdk';
-import "./style.css"
+import {useNavigate} from 'react-router-dom';
 import Header from "../Components/Header";
+import validator from "validator";
+import * as VKID from '@vkid/sdk';
 
 const LoginPage = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false); // Состояние для индикатора загрузки
+    const [formData, setFormData] = useState({
+        username: '',
+        password: ''
+    });
+    const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -26,62 +29,100 @@ const LoginPage = () => {
         }
     }, []);
 
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+        validateField(name, value);
+    };
+
+    const validateField = (name, value) => {
+        let error = '';
+        switch (name) {
+            case 'username':
+                if (!validator.isAlphanumeric(value, 'en-US')) {
+                    error = 'Логин должен содержать только английские буквы и цифры';
+                }
+                break;
+            case 'password':
+                if (!validator.isStrongPassword(value, {
+                    minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1
+                })) {
+                    error = 'Пароль должен быть длиннее 8 символов и содержать хотя бы одну заглавную букву, одну строчную букву, одну цифру и один специальный символ';
+                }
+                break;
+            default:
+                break;
+        }
+        setErrors(prev => ({ ...prev, [name]: error }));
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
     const handleLogin = async (event) => {
         event.preventDefault();
-        setLoading(true); // Активация индикатора загрузки
-        try {
-            const response = await APIService.authenticate({ username, password });
-            if (response.success && response.message.includes("2FA")) {
-                navigate(`/two-factor-auth/${username}`);
-            } else {
-                localStorage.setItem('username', response.username);
-                localStorage.setItem('token', response.token);
-                navigate('/');
+        const formErrors = Object.keys(formData).map(key => validateField(key, formData[key]));
+        if (formErrors.every(error => !error) && Object.values(formData).every(value => value.trim() !== '')) {
+            setLoading(true);
+            try {
+                const response = await APIService.authenticate(formData);
+                if (response.success && response.message.includes("2FA")) {
+                    navigate(`/two-factor-auth/${formData.username}`);
+                } else {
+                    localStorage.setItem('username', response.username);
+                    localStorage.setItem('token', response.token);
+                    navigate('/');
+                }
+            } catch (error) {
+                alert(error.message);
+            } finally {
+                setLoading(false);
             }
-        } catch (error) {
-            alert(error.message);
-        } finally {
-            setLoading(false);
         }
     };
 
     return (
         <>
             <Header/>
-            <div className="login-page">
-                <Container className="d-flex align-items-center justify-content-center" style={{minHeight: "100vh"}}>
-                    <div className="w-100" style={{maxWidth: "400px"}}>
-                        <Form className="p-4 shadow-lg rounded">
-                            <h2 className="text-center mb-4">Авторизация</h2>
-                            <Form.Group controlId="formUsername" className="mb-3">
-                                <Form.Label>Логин</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    placeholder="Введите логин"
-                                    required
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="formPassword" className="mb-3">
-                                <Form.Label>Пароль</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="Пароль"
-                                    required
-                                />
-                            </Form.Group>
-                            <Button variant="primary" type="submit" className="w-100 mb-3" disabled={loading} onClick={handleLogin} >
-                                {loading ? <Spinner as="span" animation="border" size="sm" role="status"
-                                            aria-hidden="true"/> : "Войти"}
-                            </Button>
-                            <div className="w-100" id="VkIdSdkOneTap"></div>
-                        </Form>
-                    </div>
-                </Container>
-            </div>
+            <Container className="d-flex align-items-center justify-content-center" style={{minHeight: "100vh"}}>
+                <div className="w-100" style={{maxWidth: "400px"}}>
+                    <Form onSubmit={handleLogin} className="p-4 shadow-lg rounded">
+                        <h2 className="text-center mb-4">Авторизация</h2>
+                        <Form.Group controlId="formUsername" className="mb-3">
+                            <Form.Label>Логин</Form.Label>
+                            <Form.Control
+                                name="username"
+                                type="text"
+                                value={formData.username}
+                                onChange={handleChange}
+                                placeholder="Введите логин"
+                                isInvalid={!!errors.username}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.username}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group controlId="formPassword" className="mb-3">
+                            <Form.Label>Пароль</Form.Label>
+                            <Form.Control
+                                name="password"
+                                type="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                placeholder="Введите пароль"
+                                isInvalid={!!errors.password}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.password}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Button variant="primary" type="submit" className="w-100 mb-3"
+                                disabled={loading || Object.values(errors).some(value => value !== '')}>
+                            {loading ? <Spinner as="span" animation="border" size="sm" role="status"
+                                                aria-hidden="true"/> : "Войти"}
+                        </Button>
+                        <div className="w-100" id="VkIdSdkOneTap"></div>
+                    </Form>
+                </div>
+            </Container>
         </>
     );
 };

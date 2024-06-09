@@ -3,6 +3,7 @@ import React from 'react';
 import Header from '../Components/Header';
 import { useNavigate } from "react-router-dom";
 import {Container} from "react-bootstrap"; // Убедитесь, что путь к Header корректен
+import "./style.css"
 
 const HomePage = () => {
     const username = localStorage.getItem('username'); // Получаем имя пользователя из localStorage
