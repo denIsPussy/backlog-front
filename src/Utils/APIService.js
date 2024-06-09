@@ -163,7 +163,7 @@ const getSettingsPath = (parameter) => {
             return "settingTwoFactorAuth";
         case "areNotificationsEnabled":
             return "settingNotifications";
-        case "childModeEnabled":  // Предполагая, что это правильный параметр
+        case "isChildModeEnabled":  // Предполагая, что это правильный параметр
             return "settingChildMode";
         default:
             throw new Error("Unsupported setting parameter");

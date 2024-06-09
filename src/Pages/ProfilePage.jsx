@@ -27,7 +27,7 @@ const ProfilePage = () => {
         patronymic: "",
         twoFactorEnabled: true,
         deposit: 0,
-        childModeEnabled: false,
+        isChildModeEnabled: false,
         areNotificationsEnabled: true,
         orderList: null
     });
@@ -54,6 +54,7 @@ const ProfilePage = () => {
         getUserInfo()
             .then(data => {
                 setUser(data);
+                localStorage.setItem("isChildModeEnabled", JSON.stringify(data.isChildModeEnabled));
                 console.log(data);
             })
             .catch(err => {
@@ -284,8 +285,8 @@ const ProfilePage = () => {
                                                     Детский режим
                                                 </>
                                             }
-                                            checked={user.childModeEnabled}
-                                            onChange={() => handleToggle('childModeEnabled')}
+                                            checked={user.isChildModeEnabled}
+                                            onChange={() => handleToggle('isChildModeEnabled')}
                                         />
                                         <Form.Check
                                             type="switch"
@@ -304,12 +305,12 @@ const ProfilePage = () => {
                             </Card>
                         </Col>
                     </Tab>
-                    {/*<Tab eventKey="charts" title="Графики">*/}
-                    {/*    <Col md={12}>*/}
-                    {/*        <OrdersOverTimeChart orders={user.orderList}/>*/}
-                    {/*        <OrdersOverTimeChart orders={user.orderList}/>*/}
-                    {/*    </Col>*/}
-                    {/*</Tab>*/}
+                    <Tab eventKey="charts" title="Графики">
+                        <Col md={12}>
+                            <OrdersOverTimeChart orders={user.orderList}/>
+                            <OrdersOverTimeChart orders={user.orderList}/>
+                        </Col>
+                    </Tab>
                 </Tabs>
 
                 <Modal show={confirmMode} onHide={() => setConfirmMode(false)}>

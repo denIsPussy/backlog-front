@@ -10,6 +10,7 @@ function ProductCard({product, handleSelectProduct}) {
     const [isContain, setIsContain] = useState(false);
     const navigate = useNavigate();
     const [reload, setReload] = useState(false);
+    const isChildModeEnabled = JSON.parse(localStorage.getItem('isChildModeEnabled'));
 
     useEffect(() => {
         containsInCart(product.id).then((res) => {
@@ -56,14 +57,16 @@ function ProductCard({product, handleSelectProduct}) {
                                     <span>Цена</span>
                                     <span>{product.price}</span>
                                 </div>
-                                <Row className={"mt-2"} style={{width:'100%', margin:'auto'}}>
-                                    {isContain ?
-                                        <Button onClick={() => handleGoToCart()} variant="primary"
-                                                style={{textWrap: "nowrap"}}>В корзине</Button> :
-                                        <Button onClick={() => handleAddToCartProduct(product)} variant="primary"
-                                                style={{textWrap: "nowrap"}}>Купить</Button>
-                                    }
-                                </Row>
+                                {!isChildModeEnabled &&
+                                    <Row className={"mt-2"} style={{width:'100%', margin:'auto'}}>
+                                        {isContain ?
+                                            <Button onClick={() => handleGoToCart()} variant="primary"
+                                                    style={{textWrap: "nowrap"}}>В корзине</Button> :
+                                            <Button onClick={() => handleAddToCartProduct(product)} variant="primary"
+                                                    style={{textWrap: "nowrap"}}>Купить</Button>
+                                        }
+                                    </Row>
+                                }
                             </div>
                         </MDBCardBody>
                     </MDBCard>

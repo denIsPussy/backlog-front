@@ -5,7 +5,7 @@ import "../css/header.css";
 import {getDeposit, getNewNotifications} from "../Utils/APIService";
 import Badge from 'react-bootstrap/Badge';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faBell, faShoppingCart, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import {faUser, faBell, faShoppingCart, faSignOutAlt, faCartShopping} from '@fortawesome/free-solid-svg-icons';
 
 const Header = () => {
     const username = localStorage.getItem('username');
@@ -13,6 +13,7 @@ const Header = () => {
     const [deposit, setDeposit] = useState(0);
     const [showOffCanvas, setShowOffCanvas] = useState(false);
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 992);
+    const isChildModeEnabled = JSON.parse(localStorage.getItem('isChildModeEnabled'));
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -68,9 +69,11 @@ const Header = () => {
                             <Nav className="ms-auto">
                                 {username ? (
                                     <>
-                                        <NavLink as={Link} to="/deposit" className="custom-nav-link d-flex align-items-center">
-                                            Текущий депозит: {deposit.toLocaleString('ru-RU')} ₽
-                                        </NavLink>
+                                        {!isChildModeEnabled &&
+                                            <NavLink as={Link} to="/deposit" className="custom-nav-link d-flex align-items-center">
+                                                Текущий депозит: {deposit.toLocaleString('ru-RU')} ₽
+                                            </NavLink>
+                                        }
                                         <Dropdown as={Nav.Item}>
                                             <Dropdown.Toggle as={Nav.Link} className="d-flex align-items-center">
                                                 <Button className={" profile-button"} variant="light">
@@ -87,7 +90,9 @@ const Header = () => {
                                                 <Dropdown.Item as={Link} to="/orders">Заказы</Dropdown.Item>
                                                 <Dropdown.Item as={Link} to="/profile">Профиль</Dropdown.Item>
                                                 <Dropdown.Item as={Link} to="/notifications">Уведомления</Dropdown.Item>
-                                                <Dropdown.Item as={Link} to="/cart">Корзина</Dropdown.Item>
+                                                {!isChildModeEnabled &&
+                                                    <Dropdown.Item as={Link} to="/cart">Корзина</Dropdown.Item>
+                                                }
                                                 <Dropdown.Divider />
                                                 <Dropdown.Item onClick={handleLogout}>Выйти</Dropdown.Item>
                                             </Dropdown.Menu>
@@ -126,9 +131,16 @@ const Header = () => {
                                         <Nav.Link as={Link} to="/profile" className="d-flex align-items-center custom-black-text">
                                             <FontAwesomeIcon icon={faUser} className="me-2"/> Профиль
                                         </Nav.Link>
+                                        {!isChildModeEnabled &&
+                                            <Nav.Link as={Link} to="/cart" className="d-flex align-items-center custom-black-text">
+                                                <FontAwesomeIcon icon={faCartShopping} className="me-2"/> Корзина
+                                            </Nav.Link>
+                                        }
                                         <Nav.Link as={Link} to="/notifications" className="d-flex align-items-center custom-black-text">
                                             <FontAwesomeIcon icon={faBell} className="me-2"/> Уведомления
-                                            <Badge bg="danger" text="dark" className="ms-2">{notificationCount}</Badge>
+                                            {notificationCount > 0 && (
+                                                <Badge bg="danger" text="dark" className="ms-2">{notificationCount}</Badge>
+                                            )}
                                         </Nav.Link>
                                         <Nav.Item className="mt-3">
                                             <Button variant="outline-danger" onClick={handleLogout} style={{width: '100%'}}>

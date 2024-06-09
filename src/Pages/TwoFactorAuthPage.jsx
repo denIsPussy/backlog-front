@@ -17,6 +17,7 @@ const TwoFactorAuthPage = () => {
             if (response.success){
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('username', username);
+                localStorage.setItem('isChildModeEnabled', response.isChildModeEnabled);
                 navigate('/');
             }
             else{

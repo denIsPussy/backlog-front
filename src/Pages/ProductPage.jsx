@@ -29,6 +29,7 @@ const ProductPage = () => {
     const [isContain, setIsContain] = useState(false);
     const [reviewPresent, setReviewPresent] = useState(0);
     const [reload, setReload] = useState(false);
+    const isChildModeEnabled = JSON.parse(localStorage.getItem('isChildModeEnabled'));
     const navigate = useNavigate();
 
     const username = localStorage.getItem("username");
@@ -41,14 +42,11 @@ const ProductPage = () => {
             })
             .catch(err => {
             });
-    }, [reload]);
-
-    useEffect(() => {
         containsInCart(productId).then((res) => {
             if (res.success) setIsContain(true);
             else setIsContain(false);
         })
-    }, [reload])
+    }, [reload]);
 
     useEffect(() => {
         checkingForReviewUser(productId)
@@ -205,13 +203,15 @@ const ProductPage = () => {
                                 <Col style={{maxHeight: "min-content"}}>
                                     <h5 style={{textWrap: "nowrap"}}>{product.price.toLocaleString('ru-RU')} ₽</h5>
                                 </Col>
-                                <Col style={{maxHeight: "min-content"}}>
-                                    {isContain ?
-                                        <Button onClick={() => handleGoToCart()} variant="primary"
-                                                style={{textWrap: "nowrap"}}>В корзине</Button> :
-                                        <Button onClick={() => handleAddToCartProduct(product)} variant="primary"
-                                                style={{textWrap: "nowrap"}}>Добавить в корзину</Button>}
-                                </Col>
+                                {!isChildModeEnabled &&
+                                    <Col style={{maxHeight: "min-content"}}>
+                                        {isContain ?
+                                            <Button onClick={() => handleGoToCart()} variant="primary"
+                                                    style={{textWrap: "nowrap"}}>В корзине</Button> :
+                                            <Button onClick={() => handleAddToCartProduct(product)} variant="primary"
+                                                    style={{textWrap: "nowrap"}}>Добавить в корзину</Button>}
+                                    </Col>
+                                }
                             </Row>
                         </Col>
                     </Row>
@@ -287,7 +287,7 @@ const ProductPage = () => {
                                 </Modal.Footer>
                             </Modal>
                             <h4>Отзывы:</h4>
-                            {!reviewPresent && !sortedReviews.some(review => review.id === reviewPresent) && (
+                            {!isChildModeEnabled && !reviewPresent && !sortedReviews.some(review => review.id === reviewPresent) && (
                                 <Button className={"mb-3"} variant="primary" onClick={handleCreateClick}>Оставить
                                     отзыв</Button>
                             )}
@@ -353,7 +353,7 @@ const ProductPage = () => {
                                                     />
                                                     <h5>{review.header}</h5>
                                                     <p>{review.content}</p>
-                                                    {reviewPresent && reviewPresent === review.id && (
+                                                    {!isChildModeEnabled && reviewPresent && reviewPresent === review.id && (
                                                         <>
                                                             <button onClick={() => handleEditClick(review)}
                                                                     className="btn btn-primary">Редактировать
