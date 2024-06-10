@@ -4,11 +4,14 @@ import { Form, Button, Container } from 'react-bootstrap';
 import * as APIService from '../Utils/APIService';
 import {useNavigate, useParams} from 'react-router-dom';
 import Header from "../Components/Header";
+import MyAlert from "../Components/MyAlert";
 
 const TwoFactorAuthPage = () => {
     const [code, setCode] = useState('');
     const navigate = useNavigate();
     const { username } = useParams();
+    const [showAlert, setShowAlert] = useState(false);
+    const [errorResponse, setErrorResponse] = useState(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -20,11 +23,9 @@ const TwoFactorAuthPage = () => {
                 localStorage.setItem('isChildModeEnabled', response.isChildModeEnabled);
                 navigate('/');
             }
-            else{
-                alert(response.message);
-            }
         } catch (error) {
-            alert(error.message);
+            setErrorResponse(error.message);
+            setShowAlert(true);
         }
     };
 
@@ -52,6 +53,7 @@ const TwoFactorAuthPage = () => {
                         </Form>
                     </div>
                 </Container>
+                <MyAlert show={showAlert} variant={"danger"} handleHide={() => setShowAlert(false)} message={errorResponse} header={"Ooops"}/>
             </div>
         </>
     );

@@ -1,3 +1,9 @@
+.alert {
+    margin-top: 70px;
+    white-space: normal;
+    width: 40vw;
+}
+
 .login-page {
     background-color: #f8f9fa; /* Светлый фон для страницы */
     height: 100vh; /* Высота на весь экран */
@@ -51,4 +57,11 @@
 input, textarea, select, form.form-control {
     border: 1px solid #ffc107; /* Синий цвет обводки */
     border-radius: 4px; /* Скругленные углы для эстетики */
+}
+
+@media (max-width: 575.98px) {
+    .alert {
+        width: 80vw;
+        box-sizing: border-box;
+    }
 }

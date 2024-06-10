@@ -51,9 +51,9 @@ const getProductsByCategory = (categoryId, page, size) => {
     return fetchWithToken(`/products/byCategory/${categoryId}?page=${page - 1}&size=${size}`, 'GET');
 };
 
-const addToCart = (data) => {
-    return fetchWithToken(`/cart/addToCart`, 'POST', data, true);
-};
+    const addToCart = (data) => {
+        return fetchWithToken(`/cart/addToCart`, 'POST', data, true);
+    };
 
 const removeFromCart = (productId) => {
     return fetchWithToken(`/cart/removeFromCart/${productId}`, 'DELETE', null, true);

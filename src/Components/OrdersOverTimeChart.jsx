@@ -43,9 +43,9 @@ const OrdersOverTimeChart = ({ orders }) => {
     };
 
     return (
-        <div style={{ width: '80%', height: 300 }} className="mb-5">
+        <div className="mb-5">
             <h3><FontAwesomeIcon icon={faChartLine} /> Динамика заказов</h3>
-            <ResponsiveContainer>
+            <ResponsiveContainer width={"80%"} height={"300px"}>
                 <LineChart data={data}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="date" tickFormatter={getMonthName} />

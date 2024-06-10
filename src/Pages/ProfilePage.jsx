@@ -308,7 +308,6 @@ const ProfilePage = () => {
                     <Tab eventKey="charts" title="Графики">
                         <Col md={12}>
                             <OrdersOverTimeChart orders={user.orderList}/>
-                            <OrdersOverTimeChart orders={user.orderList}/>
                         </Col>
                     </Tab>
                 </Tabs>

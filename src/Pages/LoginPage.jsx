@@ -3,6 +3,7 @@ import {Button, Container, Form, Spinner} from 'react-bootstrap';
 import * as APIService from '../Utils/APIService';
 import {useNavigate} from 'react-router-dom';
 import Header from "../Components/Header";
+import MyAlert from "../Components/MyAlert";
 import validator from "validator";
 import * as VKID from '@vkid/sdk';
 
@@ -14,6 +15,8 @@ const LoginPage = () => {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const [showAlert, setShowAlert] = useState(false);
+    const [errorResponse, setErrorResponse] = useState(null);
 
     useEffect(() => {
         VKID.Config.set({
@@ -28,6 +31,14 @@ const LoginPage = () => {
             oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
         }
     }, []);
+
+    // useEffect(() => {
+    //     const timer = setTimeout(() => {
+    //         setShowAlert(false);
+    //     }, 10000); // Alert исчезнет через 3000 мс (3 секунды)
+    //
+    //     return () => clearTimeout(timer);
+    // }, [showAlert]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -75,7 +86,8 @@ const LoginPage = () => {
                     navigate('/');
                 }
             } catch (error) {
-                alert(error.message);
+                setErrorResponse(error.message);
+                setShowAlert(true);
             } finally {
                 setLoading(false);
             }
@@ -125,6 +137,7 @@ const LoginPage = () => {
                         <div className="w-100" id="VkIdSdkOneTap"></div>
                     </Form>
                 </div>
+                <MyAlert show={showAlert} variant={"danger"} handleHide={() => setShowAlert(false)} message={errorResponse} header={"Ooops"}/>
             </Container>
         </>
     );
