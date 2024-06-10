@@ -3,20 +3,24 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tool
 import { faChartLine } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const aggregateOrdersByMonth = (orders) => {
+const aggregateOrdersByMonth = (orders, startYear, endYear) => {
     const ordersByMonth = {};
 
-    {
-        orders &&
-        orders.forEach(order => {
-            const month = order.creationDate.substring(0, 7);  // 'YYYY-MM'
-            if (ordersByMonth[month]) {
-                ordersByMonth[month] += 1;
-            } else {
-                ordersByMonth[month] = 1;
-            }
-        });
+    // Инициализация всех месяцев с нулевым количеством заказов
+    for (let year = startYear; year <= endYear; year++) {
+        for (let month = 1; month <= 12; month++) {
+            const key = `${year}-${month.toString().padStart(2, '0')}`;  // формат 'YYYY-MM'
+            ordersByMonth[key] = 0;
+        }
     }
+
+    // Считаем заказы по месяцам
+    orders.forEach(order => {
+        const month = order.creationDate.substring(0, 7);  // 'YYYY-MM'
+        if (ordersByMonth.hasOwnProperty(month)) {
+            ordersByMonth[month] += 1;
+        }
+    });
 
     return Object.keys(ordersByMonth).map(month => ({
         date: month, // Изменено имя ключа на 'date' для согласованности
@@ -28,7 +32,8 @@ const OrdersOverTimeChart = ({ orders }) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        setData(aggregateOrdersByMonth(orders));
+        const currentYear = new Date().getFullYear(); // или укажите конкретные года, если нужно
+        setData(aggregateOrdersByMonth(orders, currentYear, currentYear));
     }, [orders]);
 
     // Функция для получения названия месяца по 'YYYY-MM'
@@ -43,7 +48,7 @@ const OrdersOverTimeChart = ({ orders }) => {
     };
 
     return (
-        <div style={{ width: '80%', height: 300 }} className="mb-5">
+        <div style={{ width: '100%', height: 300 }} className="mb-5">
             <h3><FontAwesomeIcon icon={faChartLine} /> Динамика заказов</h3>
             <ResponsiveContainer>
                 <LineChart data={data}>
@@ -58,6 +63,5 @@ const OrdersOverTimeChart = ({ orders }) => {
         </div>
     );
 };
-
 
 export default OrdersOverTimeChart;
