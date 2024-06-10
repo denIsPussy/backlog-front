@@ -103,6 +103,10 @@ const getShippingMethods = () => {
     return fetchWithToken(`/order/getShippingMethods`, 'GET', null, true);
 };
 
+const getStores = () => {
+    return fetchWithToken(`/order/getStore`, 'GET', null, true);
+};
+
 const createOrder = (data) => {
     return fetchWithToken(`/order/create`, 'POST', data, true);
 };
@@ -171,6 +175,7 @@ const getSettingsPath = (parameter) => {
 };
 
 export {
+    getStores,
     topUpDeposit,
     checkingForReviewUser,
     getNewNotifications,

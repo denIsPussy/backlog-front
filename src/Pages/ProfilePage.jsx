@@ -18,6 +18,7 @@ import {
     faWallet
 } from '@fortawesome/free-solid-svg-icons';
 import validator from "validator";
+import {format, parseISO} from "date-fns";
 
 const ProfilePage = () => {
     const [reload, setReload] = useState(false);
@@ -29,8 +30,10 @@ const ProfilePage = () => {
         deposit: 0,
         isChildModeEnabled: false,
         areNotificationsEnabled: true,
-        orderList: null
+        orderList: []
     });
+
+    const [orders, setOrders] = useState([])
 
     const [formData, setFormData] = useState({
         firstName: "",
@@ -54,12 +57,24 @@ const ProfilePage = () => {
         getUserInfo()
             .then(data => {
                 setUser(data);
+                // const formattedOrders = data.orderList.map(order => ({
+                //     ...order,
+                //     creationDate: formatDate(order.creationDate)
+                // }));
+                setOrders(data.orderList);
                 localStorage.setItem("isChildModeEnabled", JSON.stringify(data.isChildModeEnabled));
                 console.log(data);
             })
             .catch(err => {
             });
     }, [reload]);
+
+
+    const formatDate = (dateString) => {
+        if (!dateString) return;
+        const date = parseISO(dateString);
+        return format(date, 'dd.MM.yyyy HH:mm');
+    };
 
     useEffect(() => {
         setFormData({
@@ -307,7 +322,8 @@ const ProfilePage = () => {
                     </Tab>
                     <Tab eventKey="charts" title="Графики">
                         <Col md={12}>
-                            <OrdersOverTimeChart orders={user.orderList}/>
+                            <OrdersOverTimeChart orders={orders}/>
+                            <OrdersOverTimeChart orders={orders}/>
                         </Col>
                     </Tab>
                 </Tabs>

@@ -6,7 +6,7 @@ import {
     reduceProductQuantityInCart,
     removeFromCart
 } from '../Utils/APIService';
-import {Button, Col, Container, Image, Row} from 'react-bootstrap';
+import {Button, Col, Container, Form, Image, Row} from 'react-bootstrap';
 import '../css/shoppingCart.css';
 import Skeleton from "react-loading-skeleton";
 import { useNavigate } from "react-router-dom"; // Убедитесь, что путь к Header корректен
