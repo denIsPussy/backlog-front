@@ -3,57 +3,78 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tool
 import { faChartLine } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const aggregateOrdersByMonth = (orders, startYear, endYear) => {
-    const ordersByMonth = {};
+const aggregateOrdersByMonth = (orders, startYear, endYear, selectedMonth) => {
+    const ordersByDate = {};
 
-    // Инициализация всех месяцев с нулевым количеством заказов
+    // Инициализация всех месяцев или дней
     for (let year = startYear; year <= endYear; year++) {
-        for (let month = 1; month <= 12; month++) {
-            const key = `${year}-${month.toString().padStart(2, '0')}`;  // формат 'YYYY-MM'
-            ordersByMonth[key] = 0;
+        if (selectedMonth) {
+            const monthIndex = selectedMonth.split('-')[1];
+            const daysInMonth = new Date(year, monthIndex, 0).getDate();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const key = `${selectedMonth}-${day.toString().padStart(2, '0')}`;
+                ordersByDate[key] = 0;
+            }
+        } else {
+            for (let month = 1; month <= 12; month++) {
+                const key = `${year}-${month.toString().padStart(2, '0')}`;
+                ordersByDate[key] = 0;
+            }
         }
     }
 
-    // Считаем заказы по месяцам
+    // Считаем заказы
     orders.forEach(order => {
-        const month = order.creationDate.substring(0, 7);  // 'YYYY-MM'
-        if (ordersByMonth.hasOwnProperty(month)) {
-            ordersByMonth[month] += 1;
+        const orderDate = order.creationDate;
+        const key = selectedMonth ? orderDate.substring(0, 10) : orderDate.substring(0, 7);
+        if (ordersByDate.hasOwnProperty(key)) {
+            ordersByDate[key] += 1;
         }
     });
 
-    return Object.keys(ordersByMonth).map(month => ({
-        date: month, // Изменено имя ключа на 'date' для согласованности
-        orders: ordersByMonth[month]
-    })).sort((a, b) => a.date.localeCompare(b.date)); // Сортировка по месяцам
+    return Object.keys(ordersByDate).map(date => ({
+        date,
+        orders: ordersByDate[date]
+    })).sort((a, b) => a.date.localeCompare(b.date));
 };
 
 const OrdersOverTimeChart = ({ orders }) => {
     const [data, setData] = useState([]);
+    const [selectedMonth, setSelectedMonth] = useState('');
 
     useEffect(() => {
-        const currentYear = new Date().getFullYear(); // или укажите конкретные года, если нужно
-        setData(aggregateOrdersByMonth(orders, currentYear, currentYear));
-    }, [orders]);
+        const currentYear = new Date().getFullYear();
+        setData(aggregateOrdersByMonth(orders, currentYear, currentYear, selectedMonth));
+    }, [orders, selectedMonth]);
 
-    // Функция для получения названия месяца по 'YYYY-MM'
-    const getMonthName = (dateStr) => {
-        const months = [
-            'Январь', 'Февраль', 'Март', 'Апрель',
-            'Май', 'Июнь', 'Июль', 'Август',
-            'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
-        ];
-        const [, month] = dateStr.split('-');
-        return months[parseInt(month, 10) - 1];
+    const handleMonthChange = (event) => {
+        setSelectedMonth(event.target.value);
+    };
+
+    const monthOrDayFormatter = (dateStr) => {
+        if (selectedMonth) {
+            return parseInt(dateStr.split('-')[2], 10); // Показываем дни
+        } else {
+            const months = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+            return months[parseInt(dateStr.split('-')[1], 10) - 1]; // Показываем месяцы
+        }
     };
 
     return (
         <div style={{ width: '100%', height: 300 }} className="mb-5">
             <h3><FontAwesomeIcon icon={faChartLine} /> Динамика заказов</h3>
+            <select onChange={handleMonthChange} value={selectedMonth}>
+                <option value="">Выбрать месяц</option>
+                {Array.from({ length: 12 }, (_, i) => (
+                    <option key={i} value={`${new Date().getFullYear()}-${(i + 1).toString().padStart(2, '0')}`}>
+                        {['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'][i]}
+                    </option>
+                ))}
+            </select>
             <ResponsiveContainer>
                 <LineChart data={data}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" tickFormatter={getMonthName} />
+                    <XAxis dataKey="date" tickFormatter={monthOrDayFormatter} />
                     <YAxis allowDecimals={false} />
                     <Tooltip />
                     <Legend />
