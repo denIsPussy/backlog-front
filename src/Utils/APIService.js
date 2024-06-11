@@ -168,8 +168,8 @@ const topUpDeposit = (amount) => {
     return fetchWithToken(`/user/topUpDeposit?amount=${amount}`, 'POST', null, true);
 };
 
-const resetPassword = (amount) => {
-    return fetchWithToken(`/resetPassword`, 'POST', null, false);
+const resetPassword = (email) => {
+    return fetchWithToken(`/resetPassword?email=${email}`, 'POST', null, false);
 };
 
 

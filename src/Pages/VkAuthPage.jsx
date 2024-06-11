@@ -13,7 +13,7 @@ const VkAuthPage = () => {
         username: '',
         password: '',
         email: '',
-        firstName: '' // Добавлено для хранения имени
+        firstName: ''
     });
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();

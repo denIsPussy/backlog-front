@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Container, Form, Spinner} from 'react-bootstrap';
+import {Button, Container, Form, Modal, Spinner} from 'react-bootstrap';
 import * as APIService from '../Utils/APIService';
 import {useNavigate} from 'react-router-dom';
 import Header from "../Components/Header";
 import MyAlert from "../Components/MyAlert";
 import validator from "validator";
 import * as VKID from '@vkid/sdk';
+import {resetPassword} from "../Utils/APIService";
 
 const LoginPage = () => {
     const [formData, setFormData] = useState({
@@ -17,6 +18,9 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const [showAlert, setShowAlert] = useState(false);
     const [errorResponse, setErrorResponse] = useState(null);
+    const [successResponse, setSuccessResponse] = useState(null);
+    const [showReset, setShowReset] = useState(false);
+    const [email, setEmail] = useState(null);
 
     useEffect(() => {
         VKID.Config.set({
@@ -44,6 +48,23 @@ const LoginPage = () => {
         const { name, value } = event.target;
         setFormData(prev => ({ ...prev, [name]: value }));
         validateField(name, value);
+    };
+
+
+    const handleReset = (event) => {
+        event.preventDefault();
+        resetPassword(email)
+            .then(data => {
+                setSuccessResponse(data.message);
+                setShowAlert(true);
+            })
+            .catch(err => {
+                setErrorResponse(err.message);
+                setShowAlert(true);
+            })
+            .finally(() => {
+                setShowReset(false)
+            });
     };
 
     const validateField = (name, value) => {
@@ -135,10 +156,40 @@ const LoginPage = () => {
                             {loading ? <Spinner as="span" animation="border" size="sm" role="status"
                                                 aria-hidden="true"/> : "Войти"}
                         </Button>
+                        <Button onClick={() => setShowReset(true)} variant="primary" type="button" className="w-100 mb-3">
+                           Сбросить пароль
+                        </Button>
                         <div className="w-100" id="VkIdSdkOneTap"></div>
                     </Form>
                 </div>
-                <MyAlert show={showAlert} variant={"danger"} handleHide={() => setShowAlert(false)} message={errorResponse} header={"Уведомление"}/>
+                <Modal show={showReset} onHide={() => setShowReset(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Подтверждение действия</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form onSubmit={handleReset}>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Введите почту</Form.Label>
+                                <Form.Control
+                                    type="email"
+                                    name="email"
+                                    value={email}
+                                    onChange={e => {
+                                        setEmail(e.target.value)
+                                    }}
+                                />
+                            </Form.Group>
+                            <Button variant="primary" type="submit">
+                                Сбросить
+                            </Button>
+                        </Form>
+                    </Modal.Body>
+                </Modal>
+                <MyAlert show={showAlert} variant={successResponse ? "success" : "danger"}
+                         handleHide={() => {
+                             setShowAlert(false)
+                         }} message={successResponse ? successResponse : errorResponse}
+                         header={"Уведомление"}/>
             </Container>
         </>
     );
