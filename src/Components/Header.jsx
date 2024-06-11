@@ -19,7 +19,8 @@ const Header = () => {
     const handleLogout = () => {
         localStorage.removeItem('username');
         localStorage.removeItem('token');
-        window.location.reload();
+        navigate("/");
+        // window.location.reload();
     };
 
     useEffect(() => {
@@ -45,7 +46,7 @@ const Header = () => {
 
         fetchNotifications();
         fetchDeposit();
-        // const intervalId = setInterval(fetchNotifications, 3000);
+        const intervalId = setInterval(fetchNotifications, 5000);
         const resizeListener = () => {
             setIsLargeScreen(window.innerWidth >= 992);
         };
@@ -53,7 +54,7 @@ const Header = () => {
         window.addEventListener('resize', resizeListener);
 
         return () => {
-            // clearInterval(intervalId);
+            clearInterval(intervalId);
             window.removeEventListener('resize', resizeListener);
         };
     }, []);
