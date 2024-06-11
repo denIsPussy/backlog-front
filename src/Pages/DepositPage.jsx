@@ -2,20 +2,40 @@ import React, { useState } from 'react';
 import { Button, Card, Container, Form, InputGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Header from "../Components/Header";
+import PaymentPage from "./PaymentPage";
+import MyAlert from "../Components/MyAlert";
+import {topUpDeposit} from "../Utils/APIService";
 
 const DepositPage = () => {
     const [amount, setAmount] = useState('');
     const navigate = useNavigate();
 
+    const [showModal, setShowModal] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
+    const [errorResponse, setErrorResponse] = useState(null);
+    const [successResponse, setSuccessResponse] = useState(null);
+
     const handleAmountChange = (event) => {
         setAmount(event.target.value);
     };
 
+    const handleSubmitCurr = (event) => {
+        event.preventDefault();
+        setShowModal(true);
+    };
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(`Пополнение на сумму: ${amount}`);
-        navigate("/payment/" + amount);
-        setAmount(''); // Очистка поля после отправки формы
+        topUpDeposit(amount)
+            .then((data) => {
+                setShowModal(false);
+                setSuccessResponse(data.message);
+                setShowAlert(true);
+            })
+            .catch(error => {
+                setErrorResponse(error.message);
+                setShowAlert(true);
+            });
     };
 
     const handleBack = () => {
@@ -29,7 +49,7 @@ const DepositPage = () => {
                 <Card style={{ width: '400px' }} className="shadow-lg p-4 mb-5 bg-white rounded">
                     <Card.Body>
                         <Card.Title className="text-center">Пополнение депозита</Card.Title>
-                        <Form onSubmit={handleSubmit}>
+                        <Form onSubmit={handleSubmitCurr}>
                             <Form.Group controlId="depositAmount">
                                 <Form.Label>Сумма пополнения</Form.Label>
                                 <InputGroup className="mb-3">
@@ -53,6 +73,8 @@ const DepositPage = () => {
                         </Form>
                     </Card.Body>
                 </Card>
+                <PaymentPage show={showModal} handleSubmit={handleSubmit} onHide={() => setShowModal(false)}/>
+                <MyAlert show={showAlert} variant={successResponse ? "success" : "danger"} handleHide={() => setShowAlert(false)} message={successResponse ? successResponse : errorResponse} header="Уведомление"/>
             </Container>
         </>
     );

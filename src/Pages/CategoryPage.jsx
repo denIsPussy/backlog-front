@@ -4,12 +4,15 @@ import {getAllCategories} from '../Utils/APIService';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Header from "../Components/Header";
+import MyAlert from "../Components/MyAlert";
 
 function CategoriesPage() {
 
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [showAlert, setShowAlert] = useState(false);
+    const [errorResponse, setErrorResponse] = useState(null);
 
     useEffect(() => {
         setIsLoading(true);
@@ -21,6 +24,8 @@ function CategoriesPage() {
                 console.log(data);
             })
             .catch(err => {
+                setErrorResponse(err.message);
+                setShowAlert(true);
             })
     }, []);
 
@@ -31,7 +36,6 @@ function CategoriesPage() {
                 <h1 className="text-center mb-4">Выберите категорию товаров</h1>
                 <Row xs={1} md={2} lg={3} className="g-4">
                     {isLoading ? (
-                        // Показываем скелетоны во время загрузки
                         Array.from({length: 6}).map((_, idx) => (
                             <Col key={idx}>
                                 <Card>
@@ -44,7 +48,6 @@ function CategoriesPage() {
                             </Col>
                         ))
                     ) : (
-                        // Показываем данные после загрузки
                         categories.map((category) => (
                             <Col key={category.id}>
                                 <Card style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
@@ -59,6 +62,7 @@ function CategoriesPage() {
                         ))
                     )}
                 </Row>
+                <MyAlert show={showAlert} variant={"danger"} handleHide={() => setShowAlert(false)} message={errorResponse} header={"Уведомление"}/>
             </Container>
         </>
     );

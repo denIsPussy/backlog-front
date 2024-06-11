@@ -5,6 +5,8 @@ import {createOrder, getPaymentMethods, getShippingMethods, getShoppingCart, get
 import {useNavigate} from "react-router-dom";
 import Header from "../Components/Header";
 import MyAlert from "../Components/MyAlert";
+import {CalculateProductPriceWithDiscounts} from "../Components/ShoppingCart";
+import PaymentPage from "./PaymentPage";
 
 const CheckoutPage = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -15,9 +17,10 @@ const CheckoutPage = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [errorResponse, setErrorResponse] = useState(null);
     const [successResponse, setSuccessResponse] = useState(null);
+    const [showModal, setShowModal] = useState(false);
 
     const calculateTotal = (cartItems) => {
-        return cartItems && cartItems.length > 0 ? cartItems.reduce((total, item) => total + item.quantity * item.product.price, 0) : 0;
+        return cartItems && cartItems.length > 0 ? cartItems.reduce((total, item) => total + item.quantity * CalculateProductPriceWithDiscounts(item.product), 0) : 0;
     };
 
     const [orderDetails, setOrderDetails] = useState({
@@ -25,7 +28,8 @@ const CheckoutPage = () => {
         paymentMethod: null,
         shippingMethod: null,
         orderItems: null,
-        store: null
+        store: null,
+        deliveryAddress: ""
     });
 
     useEffect(() => {
@@ -90,17 +94,27 @@ const CheckoutPage = () => {
         e.preventDefault();
         const fetchOrder = async () => {
             try {
-                console.log(orderDetails)
                 const data = await createOrder(orderDetails);
                 setSuccessResponse(data.message);
             } catch (error) {
                 setErrorResponse(error.message);
             } finally {
                 setShowAlert(true);
+                setShowModal(false);
             }
         };
 
         fetchOrder();
+    };
+
+    const handleSubmitCurr = (e) => {
+        e.preventDefault();
+        if (orderDetails.paymentMethod.description === "Картой"){
+            setShowModal(true);
+        }
+        else {
+            handleSubmit(e);
+        }
     };
 
     return (
@@ -117,7 +131,7 @@ const CheckoutPage = () => {
                             <Card style={{boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)"}} className="border-0">
                                 <Card.Body>
                                     <Card.Title>Оформление заказа</Card.Title>
-                                    <Form onSubmit={handleSubmit}>
+                                    <Form onSubmit={handleSubmitCurr}>
                                         <Form.Group className="mb-3">
                                             <Form.Label>Общая сумма</Form.Label>
                                             <Form.Control
@@ -171,6 +185,22 @@ const CheckoutPage = () => {
                                                 </Form.Select>
                                             </Form.Group>
                                         }
+                                        {orderDetails.shippingMethod && orderDetails.shippingMethod?.description === "Доставкой" &&
+                                            <Form.Group className="mb-3">
+                                                <Form.Label>Адрес доставки</Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    value={orderDetails.deliveryAddress}
+                                                    onChange={(event) => {
+                                                        setOrderDetails(prevState => ({
+                                                            ...prevState,
+                                                            deliveryAddress: event.target.value
+                                                        }))
+                                                        console.log(orderDetails);
+                                                    }}
+                                                />
+                                            </Form.Group>
+                                        }
                                         <Button style={{width: "100%"}} variant="primary" type="submit">
                                             Оформить заказ
                                         </Button>
@@ -188,12 +218,13 @@ const CheckoutPage = () => {
                     </Row>
                 }
             </Container>
+            <PaymentPage show={showModal} handleSubmit={handleSubmit} onHide={() => setShowModal(false)}/>
             <MyAlert show={showAlert} variant={successResponse ? "success" : "danger"}
                      handleHide={() => {
                          setShowAlert(false)
                          successResponse && navigate("/")
                      }} message={successResponse ? successResponse : errorResponse}
-                     header={"Ooops"}/>
+                     header={"Уведомление"}/>
         </>
     );
 };

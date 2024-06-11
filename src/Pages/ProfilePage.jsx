@@ -18,7 +18,7 @@ import {
     faWallet
 } from '@fortawesome/free-solid-svg-icons';
 import validator from "validator";
-import {format, parseISO} from "date-fns";
+import MyAlert from "../Components/MyAlert";
 
 const ProfilePage = () => {
     const [reload, setReload] = useState(false);
@@ -32,6 +32,8 @@ const ProfilePage = () => {
         areNotificationsEnabled: true,
         orderList: []
     });
+
+    const isVkUser = JSON.parse(localStorage.getItem("isVk"));
 
     const [orders, setOrders] = useState([])
 
@@ -52,29 +54,24 @@ const ProfilePage = () => {
     const [errorPasswordConfirm, setErrorPasswordConfirm] = useState(null);
     const [errorOldPassword, setErrorOldPassword] = useState(null);
     const [errorNewPassword, setErrorNewPassword] = useState(null);
+    const [showAlert, setShowAlert] = useState(false);
+    const [errorResponse, setErrorResponse] = useState(null);
+    const [successResponse, setSuccessResponse] = useState(null);
 
     useEffect(() => {
         getUserInfo()
             .then(data => {
                 setUser(data);
-                // const formattedOrders = data.orderList.map(order => ({
-                //     ...order,
-                //     creationDate: formatDate(order.creationDate)
-                // }));
                 setOrders(data.orderList);
                 localStorage.setItem("isChildModeEnabled", JSON.stringify(data.isChildModeEnabled));
                 console.log(data);
             })
             .catch(err => {
+                setErrorResponse(err.message);
+                setShowAlert(true);
             });
     }, [reload]);
 
-
-    const formatDate = (dateString) => {
-        if (!dateString) return;
-        const date = parseISO(dateString);
-        return format(date, 'dd.MM.yyyy HH:mm');
-    };
 
     useEffect(() => {
         setFormData({
@@ -180,9 +177,12 @@ const ProfilePage = () => {
                 .then(data => {
                     setReload(prev => !prev);
                     console.log('Изменения сохранены!');
+                    setSuccessResponse(data.message);
+                    setShowAlert(true);
                 })
                 .catch(err => {
-                    console.log(err.message);
+                    setErrorResponse(err.message);
+                    setShowAlert(true);
                 });
             setConfirmMode(false);
         }
@@ -195,18 +195,21 @@ const ProfilePage = () => {
         console.log(`passwordError:${passwordConfirmError}`)
         if (formErrors.every(error => !error) && Object.values(formData).every(value => value.trim() !== '') && !passwordConfirmError) {
             const updUser = {
-                firstname: user.firstName,
-                lastname: user.lastName,
-                patronymic: user.patronymic,
+                firstname: formData.firstName,
+                lastname: formData.lastName,
+                patronymic: formData.patronymic,
                 password: passwordConfirm
             }
             console.log("User с новыми данными: " + updUser);
             changeUserData(updUser)
                 .then(data => {
                     setReload(prev => !prev);
+                    setSuccessResponse(data.message);
+                    setShowAlert(true);
                 })
                 .catch(err => {
-                    console.log(err.message);
+                    setErrorResponse(err.message);
+                    setShowAlert(true);
                 });
             setEditMode(false);
         }
@@ -232,10 +235,12 @@ const ProfilePage = () => {
                     //setUser(data);
                     setReload(prev => !prev);
                     console.log('Пароль изменен:', oldPassword, newPassword);
-                    //console.log('Сохраненные данные:', user);
+                    setSuccessResponse(data.message);
+                    setShowAlert(true);
                 })
                 .catch(err => {
-                    console.log(err.message);
+                    setErrorResponse(err.message);
+                    setShowAlert(true);
                 });
             setChangePasswordMode(false);
         }
@@ -279,18 +284,20 @@ const ProfilePage = () => {
                                 <Card.Body>
                                     <Card.Title><FontAwesomeIcon icon={faCog} className="me-2"/>Настройки</Card.Title>
                                     <Form>
-                                        <Form.Check
-                                            type="switch"
-                                            id="two-factor-switch"
-                                            label={
-                                                <>
-                                                    <FontAwesomeIcon icon={faShieldAlt} className="me-2"/>
-                                                    Двухфакторная аутентификация
-                                                </>
-                                            }
-                                            checked={user.twoFactorEnabled}
-                                            onChange={() => handleToggle('twoFactorEnabled')}
-                                        />
+                                        {!isVkUser &&
+                                            <Form.Check
+                                                type="switch"
+                                                id="two-factor-switch"
+                                                label={
+                                                    <>
+                                                        <FontAwesomeIcon icon={faShieldAlt} className="me-2"/>
+                                                        Двухфакторная аутентификация
+                                                    </>
+                                                }
+                                                checked={user.twoFactorEnabled}
+                                                onChange={() => handleToggle('twoFactorEnabled')}
+                                            />
+                                        }
                                         <Form.Check
                                             type="switch"
                                             id="child-mode-switch"
@@ -459,6 +466,11 @@ const ProfilePage = () => {
                         </Form>
                     </Modal.Body>
                 </Modal>
+                <MyAlert show={showAlert} variant={successResponse ? "success" : "danger"}
+                         handleHide={() => {
+                             setShowAlert(false)
+                         }} message={successResponse ? successResponse : errorResponse}
+                         header={"Уведомление"}/>
             </Container>
         </>
     );

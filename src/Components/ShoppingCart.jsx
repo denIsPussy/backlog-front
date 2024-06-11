@@ -9,13 +9,18 @@ import {
 import {Button, Col, Container, Form, Image, Row} from 'react-bootstrap';
 import '../css/shoppingCart.css';
 import Skeleton from "react-loading-skeleton";
-import { useNavigate } from "react-router-dom"; // Убедитесь, что путь к Header корректен
+import { useNavigate } from "react-router-dom";
+import MyAlert from "./MyAlert"; // Убедитесь, что путь к Header корректен
 
 const ShoppingCart = ({ username }) => {
-    const [cart, setCart] = useState(null);
+    const [cart, setCart] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const [showAlert, setShowAlert] = useState(false);
+    const [errorResponse, setErrorResponse] = useState(null);
+    const [successResponse, setSuccessResponse] = useState(null);
+    const [reload, setReload] = useState(false);
 
     useEffect(() => {
         const fetchCart = async () => {
@@ -24,13 +29,15 @@ const ShoppingCart = ({ username }) => {
                 setCart(data);
             } catch (error) {
                 setError(error);
+                setErrorResponse(error.message);
+                setShowAlert(true);
             } finally {
                 setLoading(false);
             }
         };
 
         fetchCart();
-    }, [username]);
+    }, [username, reload]);
 
     if (loading) {
         return (
@@ -62,16 +69,16 @@ const ShoppingCart = ({ username }) => {
         );
     }
     if (error) return <p>Error: {error.message}</p>;
-    if (!cart || cart.cartItems.length === 0) return <p>Корзина пуста.</p>;
+    if (!cart || cart.cartItems?.length === 0) return <p>Корзина пуста.</p>;
 
     function calculateTotalAmount() {
-        return cart.cartItems.reduce((total, item) => {
-            return total + (calculateProductPriceWithDiscounts(item.product) * item.quantity);
+        return cart?.cartItems?.reduce((total, item) => {
+            return total + (CalculateProductPriceWithDiscounts(item.product) * item.quantity);
         }, 0);
     }
 
     function calculateTotalAmountWithoutDiscounts() {
-        return cart.cartItems.reduce((total, item) => {
+        return cart?.cartItems?.reduce((total, item) => {
             return total + (item.product.price * item.quantity);
         }, 0);
     }
@@ -84,14 +91,6 @@ const ShoppingCart = ({ username }) => {
         return product.storeList.reduce((total, item) => {
             return total + 1;
         }, 0)
-    }
-
-    function calculateProductPriceWithDiscounts(product) {
-        let priceWithDiscount = product.price;
-        product.discountList.forEach((item) => {
-            priceWithDiscount = priceWithDiscount * (1 - item.discountAmountPercentage / 100);
-        })
-        return priceWithDiscount;
     }
 
     function getStoreCountText(count) {
@@ -118,7 +117,14 @@ const ShoppingCart = ({ username }) => {
         removeFromCart(productId)
             .then(data => {
                 setCart(data);
+                setReload(!reload);
+                setShowAlert(true);
+                setSuccessResponse(data.message);
             })
+            .catch(err =>{
+                setShowAlert(true);
+                setErrorResponse(err.message);
+        })
     }
 
     function handleChangeQuantityProduct(productId, isReduce){
@@ -126,12 +132,26 @@ const ShoppingCart = ({ username }) => {
             reduceProductQuantityInCart(productId)
                 .then(data => {
                     setCart(data);
+                    setReload(!reload);
+                    setShowAlert(true);
+                    setSuccessResponse(data.message);
+                })
+                .catch(err =>{
+                    setShowAlert(true);
+                    setErrorResponse(err.message);
                 })
         }
         else{
             increaseProductQuantityInCart(productId)
                 .then(data => {
                     setCart(data);
+                    setReload(!reload);
+                    setShowAlert(true);
+                    setSuccessResponse(data.message);
+                })
+                .catch(err =>{
+                    setShowAlert(true);
+                    setErrorResponse(err.message);
                 })
         }
     }
@@ -142,7 +162,7 @@ const ShoppingCart = ({ username }) => {
             <Container>
                 <Row className="shopping-cart">
                     <Col xs={12} lg={8} className="order-2 order-lg-1">
-                        {cart.cartItems.map((item, index) => (
+                        {cart?.cartItems?.map((item, index) => (
                             <Container className="rounded-3" style={{boxShadow:"0 4px 16px rgba(0, 0, 0, 0.1)", backgroundColor: '#FFFFFF', border: '0px solid #007bff' }}>
                                 <Row key={index} className="px-3 py-3 mb-3 product-card">
                                     <Col className="product-image" sm={4} md={3}>
@@ -213,7 +233,7 @@ const ShoppingCart = ({ username }) => {
                                                 {item.product.price.toLocaleString('ru-RU')} ₽
                                             </Row>
                                             <Row className="pb-2" style={{display:"flex", justifyContent:"end", fontSize: "medium", fontWeight: "650", textWrap: "nowrap", flexGrow: 1}}>
-                                                {calculateProductPriceWithDiscounts(item.product).toLocaleString('ru-RU')} ₽
+                                                {CalculateProductPriceWithDiscounts(item.product).toLocaleString('ru-RU')} ₽
                                             </Row>
                                             <Row>
                                                 <Button className="rounded-3" variant={'outline-dark'}>Купить</Button>
@@ -242,15 +262,15 @@ const ShoppingCart = ({ username }) => {
                                             Итого
                                         </div>
                                         <div className="text rounded-1 py-1 px-2 text-nowrap text-start fs-6">
-                                            Товаров: {cart.cartItems.length}
+                                            Товаров: {cart?.cartItems?.length}
                                         </div>
                                 </Col>
                                 <Col xs={12} md={6} className="total-amount-container">
-                                    <div style={{color: "#9d9d9d", fontSize: "small", maxWidth:"100%"}} className="total-amount-discount text-end text rounded-1 pb-0 pt-1 px-2  text-decoration-line-through">
-                                        {calculateTotalAmountWithoutDiscounts().toLocaleString('ru-RU')} ₽
+                                    <div style={{color: "#9d9d9d", fontSize: "small", maxWidth:"100%"}} className="total-amount-discount text-end rounded-1 pb-0 pt-1 px-2 text-decoration-line-through">
+                                        {calculateTotalAmountWithoutDiscounts()?.toLocaleString('ru-RU')} ₽
                                     </div>
                                     <div style={{maxWidth:"fit-content"}} className="text rounded-1 text-nowrap py-1 px-2 fs-6">
-                                        Сумма: {calculateTotalAmount().toLocaleString('ru-RU')} ₽
+                                        Сумма: {calculateTotalAmount()?.toLocaleString('ru-RU')} ₽
                                     </div>
                                 </Col>
                             </Row>
@@ -262,9 +282,36 @@ const ShoppingCart = ({ username }) => {
                         </Container>
                     </Col>
                 </Row>
+                <MyAlert show={showAlert} variant={successResponse ? "success" : "danger"}
+                         handleHide={() => {
+                             setShowAlert(false)
+                         }} message={successResponse ? successResponse : errorResponse}
+                         header={"Уведомление"}/>
             </Container>
         </>
     );
 };
+
+const Total = ({ price, priceWithDiscount }) => {
+    return (
+        <Row className="m-0 order-2 pricing-actions-container">
+            <Row className="text-decoration-line-through" style={{ color: "#9d9d9d", display:"flex", justifyContent:"end", fontSize: "small", fontWeight: "normal"}}>
+                {price?.toLocaleString('ru-RU')} ₽
+            </Row>
+            <Row style={{display:"flex", justifyContent:"end", fontSize: "medium", fontWeight: "650", textWrap: "nowrap", flexGrow: 1}}>
+                {priceWithDiscount?.toLocaleString('ru-RU')} ₽
+            </Row>
+        </Row>
+    );
+};
+function CalculateProductPriceWithDiscounts(product) {
+    let priceWithDiscount = product.price;
+    product.discountList.forEach((item) => {
+        priceWithDiscount = priceWithDiscount * (1 - item.discountAmountPercentage / 100);
+    })
+    return priceWithDiscount;
+}
+
+export { Total, CalculateProductPriceWithDiscounts, ShoppingCart }
 
 export default ShoppingCart;

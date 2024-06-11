@@ -17,10 +17,12 @@ const TwoFactorAuthPage = () => {
         event.preventDefault();
         try {
             const response = await APIService.verifyTwoFactorCode({ username, code });
+            console.log({ username, code });
             if (response.success){
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('username', username);
-                localStorage.setItem('isChildModeEnabled', response.isChildModeEnabled);
+                localStorage.setItem('isChildModeEnabled', JSON.stringify(response.isChildModeEnabled));
+                localStorage.setItem('isVk', JSON.stringify(response.isVk));
                 navigate('/');
             }
         } catch (error) {
@@ -53,7 +55,7 @@ const TwoFactorAuthPage = () => {
                         </Form>
                     </div>
                 </Container>
-                <MyAlert show={showAlert} variant={"danger"} handleHide={() => setShowAlert(false)} message={errorResponse} header={"Ooops"}/>
+                <MyAlert show={showAlert} variant={"danger"} handleHide={() => setShowAlert(false)} message={errorResponse} header={"Уведомление"}/>
             </div>
         </>
     );

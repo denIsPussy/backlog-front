@@ -1,5 +1,6 @@
 import {Card, ListGroup, ListGroupItem, Button, Modal, Row} from 'react-bootstrap';
 import {useState} from "react";
+import {CalculateProductPriceWithDiscounts} from "./ShoppingCart";
 
 const OrderSummary = ({ cartItems }) => {
     const [showAll, setShowAll] = useState(false);
@@ -10,7 +11,7 @@ const OrderSummary = ({ cartItems }) => {
     const visibleItems = showAll ? cartItems : cartItems.slice(0, 2);
 
     const calculateTotal = () => {
-        return cartItems.reduce((total, item) => total + item.quantity * item.product.price, 0);
+        return cartItems.reduce((total, item) => total + item.quantity * CalculateProductPriceWithDiscounts(item.product), 0);
     };
 
     return (
@@ -24,10 +25,10 @@ const OrderSummary = ({ cartItems }) => {
                                 <div>
                                     <h6 className="mb-1">{item.product.name}</h6>
                                     <div>Количество: {item.quantity}</div>
-                                    <div>Цена за шт.: {item.product.price.toLocaleString('ru-RU')} ₽</div>
+                                    <div>Цена за шт.: {CalculateProductPriceWithDiscounts(item.product).toLocaleString('ru-RU')} ₽</div>
                                 </div>
                                 <h5 className="text-nowrap">
-                                    Всего: { (item.quantity * item.product.price).toLocaleString('ru-RU')} ₽
+                                    Всего: { (item.quantity * CalculateProductPriceWithDiscounts(item.product)).toLocaleString('ru-RU')} ₽
                                 </h5>
                             </Row>
                         </ListGroupItem>
@@ -49,14 +50,17 @@ const OrderSummary = ({ cartItems }) => {
                     <ListGroup variant="flush">
                         {cartItems.map((item, index) => (
                             <ListGroupItem key={index}>
-                                <Row style={{width:"100%"}} className="d-flex justify-content-between align-items-start">
+                                <Row style={{width: "100%"}}
+                                     className="d-flex justify-content-between align-items-start">
                                     <div>
                                         <h6 className="mb-1">{item.product.name}</h6>
                                         <div>Количество: {item.quantity}</div>
-                                        <div>Цена за шт.: {item.product.price.toLocaleString('ru-RU')} ₽</div>
+                                        <div>Цена за
+                                            шт.: {CalculateProductPriceWithDiscounts(item.product).toLocaleString('ru-RU')} ₽
+                                        </div>
                                     </div>
                                     <h5 className="text-nowrap">
-                                        Всего: { (item.quantity * item.product.price).toLocaleString('ru-RU')} ₽
+                                        Всего: {(item.quantity * CalculateProductPriceWithDiscounts(item.product)).toLocaleString('ru-RU')} ₽
                                     </h5>
                                 </Row>
                             </ListGroupItem>

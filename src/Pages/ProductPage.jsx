@@ -14,6 +14,8 @@ import {
 import StarRatings from 'react-star-ratings';
 // import "leaflet/dist/leaflet.css";
 import MyYandexMap from "../Components/MyYandexMap";
+import MyAlert from "../Components/MyAlert";
+import {CalculateProductPriceWithDiscounts, Total} from "../Components/ShoppingCart";
 
 const ProductPage = () => {
     const {productId} = useParams();
@@ -31,47 +33,78 @@ const ProductPage = () => {
     const [reload, setReload] = useState(false);
     const isChildModeEnabled = JSON.parse(localStorage.getItem('isChildModeEnabled'));
     const navigate = useNavigate();
+    const [showAlert, setShowAlert] = useState(false);
+    const [errorResponse, setErrorResponse] = useState(null);
+    const [successResponse, setSuccessResponse] = useState(null);
 
     const username = localStorage.getItem("username");
 
     useEffect(() => {
-        getProductById(productId)
-            .then(data => {
-                setProduct(data);
-                setReviews(data.reviewList);
-            })
-            .catch(err => {
-            });
-        containsInCart(productId).then((res) => {
-            if (res.success) setIsContain(true);
-            else setIsContain(false);
-        })
-    }, [reload]);
+        let isMounted = true;  // Для предотвращения утечки памяти и ошибок обновления состояния
+
+        const fetchProductData = async () => {
+            try {
+                const productData = await getProductById(productId);
+                if (isMounted) {
+                    setProduct(productData);
+                    setReviews(productData.reviewList);
+                }
+
+                const cartStatus = await containsInCart(productId);
+                if (isMounted) {
+                    setIsContain(cartStatus.success);
+                }
+            } catch (err) {
+                if (isMounted) {
+                    setErrorResponse(err.message);
+                    setShowAlert(true);
+                }
+            }
+        };
+
+        fetchProductData();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [productId, reload]);  // Убедитесь, что productId и reload — правильные зависимости
+
 
     useEffect(() => {
-        checkingForReviewUser(productId)
-            .then(data => {
-                if (data.success) setReviewPresent(+data.message);
-                console.log(+data.message);
-            })
-            .catch(err =>{
-                console.log(err);
-            })
+        const fetchReviewData = async () => {
+            try {
+                const reviewData = await checkingForReviewUser(productId);
+                if (reviewData.success) {
+                    setReviewPresent(+reviewData.message);
+                    console.log(reviewData.success);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchReviewData();
+
         if (reviews && reviews.length > 0) {
             const sortedReviews = [...reviews].sort((a, b) => {
-                if (!reviewPresent && a.id === reviewPresent && b.id !== reviewPresent) return -1;
-                if (!reviewPresent && b.id === reviewPresent && a.id !== reviewPresent) return 1;
+                if (!reviewPresent && a.id === reviewPresent) return -1;
+                if (!reviewPresent && b.id === reviewPresent) return 1;
                 return new Date(b.createdAt) - new Date(a.createdAt);
             });
             setSortedReviews(sortedReviews);
         }
-    }, [reviews]);
+    }, [reviews, productId]);
 
     function handleAddToCartProduct(product) {
         addToCart({product: product, quantity: 1})
-            .then(() => {
+            .then(data => {
                 setReload(!reload);
-                alert("Reload сделан");
+                setSuccessResponse(data.message);
+                setShowAlert(true);
+            })
+            .catch(err => {
+                setErrorResponse(err.message);
+                setShowAlert(true);
             })
     }
 
@@ -99,12 +132,15 @@ const ProductPage = () => {
         };
 
         updateReview(reviewData)
-            .then(() => getProductById(productId))
             .then(data => {
                 setReload(!reload);
                 setEditingReview(null);
+                setSuccessResponse(data.message);
+                setShowAlert(true);
             })
             .catch(err => {
+                setErrorResponse(err.message);
+                setShowAlert(true);
                 console.error("Error updating or fetching product:", err);
             });
     };
@@ -118,9 +154,12 @@ const ProductPage = () => {
         deleteReview(reviewId)
             .then(data => {
                 setReload(!reload);
-                alert("Отзыв удалён");
+                setSuccessResponse(data.message);
+                setShowAlert(true);
             })
             .catch(error => {
+                setErrorResponse(error.message);
+                setShowAlert(true);
                 console.error('Ошибка удаления отзыва:', error);
             });
     };
@@ -153,10 +192,13 @@ const ProductPage = () => {
                 setEditingReview(null);
                 setNewReview(false);
                 setReload(!reload);
+                setSuccessResponse(data.message);
+                setShowAlert(true);
                 handleCloseModal();
-                alert('Отзыв сохранён');
             })
             .catch(error => {
+                setErrorResponse(error.message);
+                setShowAlert(true);
                 console.error('Ошибка сохранения отзыва:', error);
             });
     };
@@ -201,6 +243,11 @@ const ProductPage = () => {
                                 alignItems: "center"
                             }}>
                                 <Col style={{maxHeight: "min-content"}}>
+                                    {product.discountList.length > 0 &&
+                                        <h5 className="text-decoration-line-through ms-3" style={{ color: "#9d9d9d", display:"flex", justifyContent:"start", fontSize: "medium"}}>
+                                            {CalculateProductPriceWithDiscounts(product).toLocaleString('ru-RU')} ₽
+                                        </h5>
+                                    }
                                     <h5 style={{textWrap: "nowrap"}}>{product.price.toLocaleString('ru-RU')} ₽</h5>
                                 </Col>
                                 {!isChildModeEnabled &&
@@ -379,6 +426,11 @@ const ProductPage = () => {
                             )}
                         </Col>
                     </Row>
+                    <MyAlert show={showAlert} variant={successResponse ? "success" : "danger"}
+                             handleHide={() => {
+                                 setShowAlert(false)
+                             }} message={successResponse ? successResponse : errorResponse}
+                             header={"Уведомление"}/>
                 </Container>
             ) : (
                 <div>Товар не найден.</div>

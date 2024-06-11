@@ -51,9 +51,17 @@ const getProductsByCategory = (categoryId, page, size) => {
     return fetchWithToken(`/products/byCategory/${categoryId}?page=${page - 1}&size=${size}`, 'GET');
 };
 
-    const addToCart = (data) => {
-        return fetchWithToken(`/cart/addToCart`, 'POST', data, true);
-    };
+const getSortProductsByPrice = (categoryId, direction, page, size) => {
+    return fetchWithToken(`/products/sortByPrice/${categoryId}?page=${page - 1}&size=${size}&direction=${direction}`, 'GET');
+};
+
+const getProductsBySearch = (name, categoryId, direction, page, size) => {
+    return fetchWithToken(`/products/search/${categoryId}?name=${name}&page=${page - 1}&size=${size}&direction=${direction}`, 'GET');
+};
+
+const addToCart = (data) => {
+    return fetchWithToken(`/cart/addToCart`, 'POST', data, true);
+};
 
 const removeFromCart = (productId) => {
     return fetchWithToken(`/cart/removeFromCart/${productId}`, 'DELETE', null, true);
@@ -160,6 +168,10 @@ const topUpDeposit = (amount) => {
     return fetchWithToken(`/user/topUpDeposit?amount=${amount}`, 'POST', null, true);
 };
 
+const resetPassword = (amount) => {
+    return fetchWithToken(`/resetPassword`, 'POST', null, false);
+};
+
 
 const getSettingsPath = (parameter) => {
     switch (parameter) {
@@ -175,6 +187,9 @@ const getSettingsPath = (parameter) => {
 };
 
 export {
+    resetPassword,
+    getSortProductsByPrice,
+    getProductsBySearch,
     getStores,
     topUpDeposit,
     checkingForReviewUser,

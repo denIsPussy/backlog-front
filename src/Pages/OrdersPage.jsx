@@ -9,12 +9,15 @@ import {Link} from "react-router-dom";
 import "../css/ordersPage.css"
 import OrderReceipt from "../Components/OrderReceipt";
 import {useReactToPrint} from "react-to-print";
+import MyAlert from "../Components/MyAlert";
 
 const OrdersPage = () => {
     const [orders, setOrders] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [showReceiptModal, setShowReceiptModal] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
+    const [errorResponse, setErrorResponse] = useState(null);
 
     useEffect(() => {
         fetchOrders();
@@ -45,6 +48,8 @@ const OrdersPage = () => {
                 }
             )
         } catch (error) {
+            setErrorResponse(error.message);
+            setShowAlert(true);
             console.error('Error fetching orders:', error);
         }
     };
@@ -67,6 +72,7 @@ const OrdersPage = () => {
                 <OrderDetailsModal show={showModal} onHide={() => setShowModal(false)} order={selectedOrder}/>
                 <OrderReceiptModal show={showReceiptModal} onHide={() => setShowReceiptModal(false)} on
                                    order={selectedOrder} handlePrint={handlePrint} componentRef={componentRef} formatDate={formatDate}/>
+                <MyAlert show={showAlert} variant={"danger"} handleHide={() => setShowAlert(false)} message={errorResponse} header={"Уведомление"}/>
             </Container>
         </>
     );

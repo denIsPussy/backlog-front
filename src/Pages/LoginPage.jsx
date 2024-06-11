@@ -81,6 +81,7 @@ const LoginPage = () => {
                     localStorage.setItem('username', response.username);
                     localStorage.setItem('token', response.token);
                     localStorage.setItem('isChildModeEnabled', JSON.stringify(response.isChildModeEnabled));
+                    localStorage.setItem('isVk', JSON.stringify(response.isVk));
                     console.log(response.isChildModeEnabled);
                     console.log(response);
                     navigate('/');
@@ -134,10 +135,15 @@ const LoginPage = () => {
                             {loading ? <Spinner as="span" animation="border" size="sm" role="status"
                                                 aria-hidden="true"/> : "Войти"}
                         </Button>
+                        <Button variant="primary" type="submit" className="w-100 mb-3"
+                                disabled={loading}>
+                            {loading ? <Spinner as="span" animation="border" size="sm" role="status"
+                                                aria-hidden="true"/> : "Сбросить пароль"}
+                        </Button>
                         <div className="w-100" id="VkIdSdkOneTap"></div>
                     </Form>
                 </div>
-                <MyAlert show={showAlert} variant={"danger"} handleHide={() => setShowAlert(false)} message={errorResponse} header={"Ooops"}/>
+                <MyAlert show={showAlert} variant={"danger"} handleHide={() => setShowAlert(false)} message={errorResponse} header={"Уведомление"}/>
             </Container>
         </>
     );

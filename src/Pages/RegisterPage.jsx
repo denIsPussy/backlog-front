@@ -6,6 +6,7 @@ import {useLocation, useNavigate} from 'react-router-dom';
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 import validator from 'validator';
+import MyAlert from "../Components/MyAlert";
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({
@@ -19,6 +20,8 @@ const RegisterPage = () => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
+    const [showAlert, setShowAlert] = useState(false);
+    const [errorResponse, setErrorResponse] = useState(null);
 
     const validateField = (name, value) => {
         let error = '';
@@ -80,7 +83,8 @@ const RegisterPage = () => {
                     alert(response.message);
                 }
             } catch (error) {
-                alert(error.message);
+                setErrorResponse(error.message);
+                setShowAlert(true);
             } finally {
                 setLoading(false);
             }
@@ -185,6 +189,7 @@ const RegisterPage = () => {
                         </Button>
                     </Form>
                 </div>
+                <MyAlert show={showAlert} variant={"danger"} handleHide={() => setShowAlert(false)} message={errorResponse} header={"Уведомление"}/>
             </Container>
         </div>
         </>

@@ -18,6 +18,8 @@ const VkAuthPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
+    const [showAlert, setShowAlert] = useState(false);
+    const [errorResponse, setErrorResponse] = useState(null);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -35,12 +37,10 @@ const VkAuthPage = () => {
                 localStorage.setItem('username', response.username);
                 navigate('/');
             }
-            else{
-                alert(response.message);
-            }
             setIsLoading(false); // Выключаем индикатор загрузки
         } catch (error) {
-            alert(error.message);
+            setErrorResponse(error.message);
+            setShowAlert(true);
             setIsLoading(false); // Выключаем индикатор загрузки в случае ошибки
         }
     };
