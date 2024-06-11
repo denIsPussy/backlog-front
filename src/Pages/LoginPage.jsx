@@ -135,11 +135,6 @@ const LoginPage = () => {
                             {loading ? <Spinner as="span" animation="border" size="sm" role="status"
                                                 aria-hidden="true"/> : "Войти"}
                         </Button>
-                        <Button variant="primary" type="submit" className="w-100 mb-3"
-                                disabled={loading}>
-                            {loading ? <Spinner as="span" animation="border" size="sm" role="status"
-                                                aria-hidden="true"/> : "Сбросить пароль"}
-                        </Button>
                         <div className="w-100" id="VkIdSdkOneTap"></div>
                     </Form>
                 </div>
