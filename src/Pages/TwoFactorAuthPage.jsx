@@ -17,7 +17,7 @@ const TwoFactorAuthPage = () => {
         event.preventDefault();
         try {
             const response = await APIService.verifyTwoFactorCode({ username, code });
-            console.log({ username, code });
+            //
             if (response.success){
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('username', username);

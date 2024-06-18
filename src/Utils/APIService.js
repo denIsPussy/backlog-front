@@ -18,16 +18,18 @@ const fetchWithToken = async (url, method, data = null, tokenRequired = false) =
 
     if (data !== null) {
         config.body = JSON.stringify(data);
+        console.log("Данные для отправки: " + data);
     }
 
-    console.log(API_BASE_URL);
+    //
     const fullUrl = `${API_BASE_URL}${url}`;
-    console.log("Отправка запроса на:", fullUrl);  // Вывод URL в консоль
+    //  // Вывод URL в консоль
     const response = await fetch(fullUrl, config);
     const responseData = await response.json();
     if (!response.ok) {
         throw new Error(responseData.message || 'Что-то пошло не так');
     }
+    console.log("Полученные данные: " + responseData);
     return responseData;
 };
 

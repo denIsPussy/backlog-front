@@ -53,7 +53,7 @@ const CheckoutPage = () => {
                 const stores = await getStores();
                 setStores(stores);
 
-                console.log(stores);
+                //
 
                 setOrderDetails(prev => ({
                     ...prev,
@@ -87,7 +87,7 @@ const CheckoutPage = () => {
                     ? paymentMethods.find(item => item.id === selectedValue)
                     : stores.find(item => item.id === selectedValue) // Добавляем выбор магазина
         }));
-        console.log(orderDetails);
+        //
     };
 
     const handleSubmit = (e) => {
@@ -196,7 +196,7 @@ const CheckoutPage = () => {
                                                             ...prevState,
                                                             deliveryAddress: event.target.value
                                                         }))
-                                                        console.log(orderDetails);
+                                                        //
                                                     }}
                                                 />
                                             </Form.Group>

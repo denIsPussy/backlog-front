@@ -73,7 +73,7 @@ const RegisterPage = () => {
         // Проверка всех полей на валидацию перед отправкой
         const formErrors = Object.keys(formData).map(key => validateField(key, formData[key]));
         if (formErrors.every(error => !error) && Object.values(formData).every(value => value.trim() !== '')) {
-            console.log('Форма валидна, отправляем данные...');
+            //
             setLoading(true);
             try {
                 const response = await APIService.register(formData);
@@ -89,7 +89,7 @@ const RegisterPage = () => {
                 setLoading(false);
             }
         } else {
-            console.log('Форма содержит ошибки:', errors);
+            //
         }
     };
 

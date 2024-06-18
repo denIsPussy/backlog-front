@@ -46,25 +46,25 @@ const VkAuthPage = () => {
     };
 
     useEffect(() => {
-        console.log('Текущий URL:', window.location.href);
+        //
         const fetchData = async () => {
-            console.log('Текущий URL:', window.location.href);
+            //
             const url = new URL(window.location.href);
             const payloadEncoded = url.searchParams.get('payload');
             const state = url.searchParams.get('state');
 
             if (payloadEncoded) {
                 const payloadDecoded = decodeURIComponent(payloadEncoded);
-                console.log('Декодированный payload:', payloadDecoded);
+                //
                 setIsLoading(false); // Выключаем индикатор загрузки
                 try {
                     const payload = JSON.parse(payloadDecoded);
                     const silentToken = payload.token;
                     const type = payload.type;
                     const uuid = payload.uuid;
-                    console.log('Token:', payload.token);
-                    console.log('Type:', payload.type);
-                    console.log('UUID:', payload.uuid);
+                    //
+                    //
+                    //
                     setIsLoading(true); // Включаем индикатор загрузки
                     const response = await APIService.exchangeToken({ silentToken, type, uuid });
                     if ('username' in response && response.success) {
@@ -74,10 +74,10 @@ const VkAuthPage = () => {
                     }
                     setIsLoading(false);
                     setFormData(prev => ({ ...prev, lastName: response.lastName, firstName: response.firstName, vkId: response.vkId}));
-                    console.log('lastName:', response.lastName);
-                    console.log('firstName:', response.firstName);
-                    console.log('vkId:', response.vkId);
-                    console.log('formdata:', formData);
+                    //
+                    //
+                    //
+                    //
                 } catch (error) {
                     console.error('Ошибка при обмене токена:', error);
                     setIsLoading(false); // Выключаем индикатор загрузки

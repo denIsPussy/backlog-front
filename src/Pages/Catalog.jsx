@@ -41,7 +41,7 @@ export default function Catalog() {
             .then(data => {
                 setProducts(data.content);
                 setTotalPages(data.totalPages);
-                console.log(data.totalPages);
+                //
             })
             .catch(error => {
                 setErrorResponse(error.message);
@@ -74,7 +74,7 @@ export default function Catalog() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log("ТЫК");
+        //
         setReload(!reload);
     };
 

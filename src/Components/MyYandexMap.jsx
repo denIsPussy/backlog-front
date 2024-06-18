@@ -3,7 +3,7 @@ import {YMaps, Map, Placemark} from "@pbe/react-yandex-maps";
 // import { YMaps, Map, Placemark } from 'react-yandex-maps';
 
 const MyYandexMap = ({ data }) => {
-    //console.log(data); // Для отладки: проверьте вывод данных в консоль.
+    //// // Для отладки: проверьте вывод данных в консоль.
     const getMapCenter = (data) => {
         let totalLat = 0;
         let totalLon = 0;
@@ -30,7 +30,7 @@ const MyYandexMap = ({ data }) => {
                         console.error(`Invalid coordinates for item at index ${index}:`, item);
                         return null; // Пропускаем места без корректных координат
                     }
-                    console.log(`lat ${lat} lon ${lon}`)
+                    //
 
                     return (
                         <Placemark

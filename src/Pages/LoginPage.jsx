@@ -103,8 +103,8 @@ const LoginPage = () => {
                     localStorage.setItem('token', response.token);
                     localStorage.setItem('isChildModeEnabled', JSON.stringify(response.isChildModeEnabled));
                     localStorage.setItem('isVk', JSON.stringify(response.isVk));
-                    console.log(response.isChildModeEnabled);
-                    console.log(response);
+                    //
+                    //
                     navigate('/');
                 }
             } catch (error) {

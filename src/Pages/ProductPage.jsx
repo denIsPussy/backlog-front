@@ -76,7 +76,7 @@ const ProductPage = () => {
                 const reviewData = await checkingForReviewUser(productId);
                 if (reviewData.success) {
                     setReviewPresent(+reviewData.message);
-                    console.log(reviewData.success);
+                    //
                 }
             } catch (err) {
                 console.error(err);
@@ -147,7 +147,7 @@ const ProductPage = () => {
 
     const handleChangeRating = (newRating) => {
         setEditRating(newRating);
-        console.log(editRating);
+        //
     }
 
     const handleDeleteClick = (reviewId) => {
@@ -175,8 +175,8 @@ const ProductPage = () => {
         setEditContent("");
         setEditRating(0);
         handleShowModal();
-        console.log("Нажата кнопка оставить отзыв");
-        console.log(showModal);
+        //
+        //
     };
 
     const handleSaveCreateClick = () => {

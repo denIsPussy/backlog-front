@@ -8,12 +8,12 @@ const Notifications = () => {
     const [notifications, setNotifications] = useState([]);
 
     const fetchAndUpdateNotifications = () => {
-        console.log('Отправка запроса для проверки уведомлений');
+        //
         getNotifications()
             .then(data => {
                 if (data) {
                     setNotifications(data);  // Обновляем состояние уведомлений
-                    console.log(data);
+                    //
                 }
             })
             .catch(error => {
@@ -30,10 +30,10 @@ const Notifications = () => {
     }, []);
 
     const handleMouseOver = (notificationId) => {
-        console.log(`Mouse over notification with id: ${notificationId}`);
+        //
         readNotification(notificationId).then(data => {
             fetchAndUpdateNotifications();
-            console.log(`Прочитано уведомление с id: ${notificationId}`);
+            //
         })
     };
 

@@ -64,7 +64,7 @@ const ProfilePage = () => {
                 setUser(data);
                 setOrders(data.orderList);
                 localStorage.setItem("isChildModeEnabled", JSON.stringify(data.isChildModeEnabled));
-                console.log(data);
+                //
             })
             .catch(err => {
                 setErrorResponse(err.message);
@@ -92,7 +92,7 @@ const ProfilePage = () => {
         setNewPassword("");
         setErrorOldPassword(null);
         setErrorNewPassword(null);
-        console.log("ПРОВЕРКА");
+        //
     }, [changePasswordMode]);
 
     const validatePassword = (name, value) => {
@@ -101,8 +101,8 @@ const ProfilePage = () => {
             minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1
         })) {
             error = 'Пароль должен быть длиннее 8 символов и содержать хотя бы одну заглавную букву, одну строчную букву, одну цифру и один специальный символ';
-            console.log("Пароль не прошел");
-            console.log(`name: ${name}, value: ${value}, error: ${error}`);
+            //
+            //
         }
         else error = null;
         if (name === "passwordConfirm"){
@@ -111,7 +111,7 @@ const ProfilePage = () => {
         } else if (name === "oldPassword"){
             setErrorOldPassword(error);
             setOldPassword(value);
-            console.log("сюдаааа")
+            //
         } else if (name === "newPassword"){
             setErrorNewPassword(error);
             setNewPassword(value);
@@ -153,7 +153,7 @@ const ProfilePage = () => {
     const handleFormChange = (event) => {
         const {name, value} = event.target;
         setFormData({...formData, [name]: value});
-        console.log(name + " " + value);
+        //
         validateField(name, value);
     };
 
@@ -166,17 +166,17 @@ const ProfilePage = () => {
         e.preventDefault();  // Предотвращение стандартной отправки формы
         const passwordError = validatePassword("passwordConfirm", passwordConfirm);
         setErrorPasswordConfirm(passwordError)
-        console.log(`passwordError:${passwordError}`)
+        //
         if (!passwordError) {
             const updSetting = {
                 isEnabled: !user[currentSetting],
                 password: passwordConfirm
             }
-            console.log("Новые данные: " + updSetting);
+            //
             changeSettings(updSetting, currentSetting)
                 .then(data => {
                     setReload(prev => !prev);
-                    console.log('Изменения сохранены!');
+                    //
                     setSuccessResponse(data.message);
                     setShowAlert(true);
                 })
@@ -192,7 +192,7 @@ const ProfilePage = () => {
         e.preventDefault();
         const passwordConfirmError = validatePassword("passwordConfirm", passwordConfirm)
         const formErrors = Object.keys(formData).map(key => validateField(key, formData[key]));
-        console.log(`passwordError:${passwordConfirmError}`)
+        //
         if (formErrors.every(error => !error) && Object.values(formData).every(value => value.trim() !== '') && !passwordConfirmError) {
             const updUser = {
                 firstname: formData.firstName,
@@ -200,7 +200,7 @@ const ProfilePage = () => {
                 patronymic: formData.patronymic,
                 password: passwordConfirm
             }
-            console.log("User с новыми данными: " + updUser);
+            //
             changeUserData(updUser)
                 .then(data => {
                     setReload(prev => !prev);
@@ -222,19 +222,19 @@ const ProfilePage = () => {
         // console.log(`validatePassword '': ${!validator.isStrongPassword('', {
         //     minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1
         // })}`);
-        console.log(`oldPasswordError:${oldPasswordError}, newPasswordError:${newPasswordError}, !oldPasswordError && !newPasswordError:${!oldPasswordError && !newPasswordError}`)
-        console.log(`oldPassword:${oldPassword},  newPassword:${newPassword}`)
+        //
+        //
         if (!oldPasswordError && !newPasswordError) {
             const updPassword = {
                 oldPassword: oldPassword,
                 newPassword: newPassword
             }
-            console.log("Новый пароль: " + updPassword);
+            //
             changePassword(updPassword)
                 .then(data => {
                     //setUser(data);
                     setReload(prev => !prev);
-                    console.log('Пароль изменен:', oldPassword, newPassword);
+                    //
                     setSuccessResponse(data.message);
                     setShowAlert(true);
                 })
