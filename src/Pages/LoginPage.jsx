@@ -36,13 +36,13 @@ const LoginPage = () => {
         }
     }, []);
 
-    // useEffect(() => {
-    //     const timer = setTimeout(() => {
-    //         setShowAlert(false);
-    //     }, 10000); // Alert исчезнет через 3000 мс (3 секунды)
-    //
-    //     return () => clearTimeout(timer);
-    // }, [showAlert]);
+
+
+
+
+
+
+
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -103,8 +103,8 @@ const LoginPage = () => {
                     localStorage.setItem('token', response.token);
                     localStorage.setItem('isChildModeEnabled', JSON.stringify(response.isChildModeEnabled));
                     localStorage.setItem('isVk', JSON.stringify(response.isVk));
-                    //
-                    //
+
+
                     navigate('/');
                 }
             } catch (error) {

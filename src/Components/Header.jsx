@@ -20,7 +20,7 @@ const Header = () => {
         localStorage.removeItem('username');
         localStorage.removeItem('token');
         navigate("/");
-        // window.location.reload();
+
     };
 
     useEffect(() => {
@@ -46,7 +46,7 @@ const Header = () => {
 
         fetchNotifications();
         fetchDeposit();
-        //const intervalId = setInterval(fetchNotifications, 5000);
+
         const resizeListener = () => {
             setIsLargeScreen(window.innerWidth >= 992);
         };
@@ -54,7 +54,7 @@ const Header = () => {
         window.addEventListener('resize', resizeListener);
 
         return () => {
-            //clearInterval(intervalId);
+
             window.removeEventListener('resize', resizeListener);
         };
     }, []);

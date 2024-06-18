@@ -21,9 +21,9 @@ const fetchWithToken = async (url, method, data = null, tokenRequired = false) =
         console.log("Данные для отправки: " + data);
     }
 
-    //
+
     const fullUrl = `${API_BASE_URL}${url}`;
-    //  // Вывод URL в консоль
+
     const response = await fetch(fullUrl, config);
     const responseData = await response.json();
     if (!response.ok) {

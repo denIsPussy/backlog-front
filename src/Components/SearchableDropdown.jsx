@@ -5,7 +5,7 @@ const SearchableDropdown = ({ items, handleSelect}) => {
     const [filter, setFilter] = useState(''); // Использование строки для фильтра
     const [show, setShow] = useState(false);
 
-    // Фильтрация с учётом регистра
+
     const filteredItems = items.filter(item =>
         item.name.toLowerCase().includes(filter.toLowerCase())
     );

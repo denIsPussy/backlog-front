@@ -12,7 +12,7 @@ import {
     updateReview
 } from "../Utils/APIService";
 import StarRatings from 'react-star-ratings';
-// import "leaflet/dist/leaflet.css";
+
 import MyYandexMap from "../Components/MyYandexMap";
 import MyAlert from "../Components/MyAlert";
 import {CalculateProductPriceWithDiscounts, Total} from "../Components/ShoppingCart";
@@ -76,7 +76,7 @@ const ProductPage = () => {
                 const reviewData = await checkingForReviewUser(productId);
                 if (reviewData.success) {
                     setReviewPresent(+reviewData.message);
-                    //
+
                 }
             } catch (err) {
                 console.error(err);
@@ -147,7 +147,7 @@ const ProductPage = () => {
 
     const handleChangeRating = (newRating) => {
         setEditRating(newRating);
-        //
+
     }
 
     const handleDeleteClick = (reviewId) => {
@@ -175,8 +175,8 @@ const ProductPage = () => {
         setEditContent("");
         setEditRating(0);
         handleShowModal();
-        //
-        //
+
+
     };
 
     const handleSaveCreateClick = () => {

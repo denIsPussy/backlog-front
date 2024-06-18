@@ -1,4 +1,4 @@
-// src/pages/CartPage.js
+
 import React from 'react';
 import ShoppingCart from '../Components/ShoppingCart';
 import Header from '../Components/Header';

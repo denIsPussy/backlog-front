@@ -21,7 +21,7 @@ function CategoriesPage() {
                 setCategories(data);
                 setSelectedCategory(data[0]);
                 setIsLoading(false);
-                //
+
             })
             .catch(err => {
                 setErrorResponse(err.message);

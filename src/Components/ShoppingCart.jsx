@@ -1,4 +1,4 @@
-// src/components/ShoppingCart.js
+
 import React, {useEffect, useState} from 'react';
 import {
     getShoppingCart,

@@ -1,4 +1,4 @@
-// components/Catalog.js
+
 
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
@@ -41,7 +41,7 @@ export default function Catalog() {
             .then(data => {
                 setProducts(data.content);
                 setTotalPages(data.totalPages);
-                //
+
             })
             .catch(error => {
                 setErrorResponse(error.message);
@@ -74,7 +74,7 @@ export default function Catalog() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        //
+
         setReload(!reload);
     };
 

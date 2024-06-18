@@ -1,4 +1,4 @@
-// RegisterPage.jsx
+
 import React, {useEffect, useState} from 'react';
 import {Form, Button, Container, Alert} from 'react-bootstrap';
 import * as APIService from '../Utils/APIService';
@@ -70,10 +70,10 @@ const RegisterPage = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        // Проверка всех полей на валидацию перед отправкой
+
         const formErrors = Object.keys(formData).map(key => validateField(key, formData[key]));
         if (formErrors.every(error => !error) && Object.values(formData).every(value => value.trim() !== '')) {
-            //
+
             setLoading(true);
             try {
                 const response = await APIService.register(formData);
@@ -89,7 +89,7 @@ const RegisterPage = () => {
                 setLoading(false);
             }
         } else {
-            //
+
         }
     };
 

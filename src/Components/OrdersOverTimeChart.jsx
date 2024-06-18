@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const aggregateOrdersByMonth = (orders, startYear, endYear, selectedMonth) => {
     const ordersByDate = {};
 
-    // Инициализация всех месяцев или дней
+
     for (let year = startYear; year <= endYear; year++) {
         if (selectedMonth) {
             const monthIndex = selectedMonth.split('-')[1];
@@ -23,7 +23,7 @@ const aggregateOrdersByMonth = (orders, startYear, endYear, selectedMonth) => {
         }
     }
 
-    // Считаем заказы
+
     orders.forEach(order => {
         const orderDate = order.creationDate;
         const key = selectedMonth ? orderDate.substring(0, 10) : orderDate.substring(0, 7);
